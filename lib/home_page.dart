@@ -11,12 +11,58 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: Column(
+            children: [
+              Container(
+                color: Colors.blue,
+                child: Image.asset(
+                  "assets/images/sample_picture.jpg",
+                  fit: BoxFit.fill,
+                ),
+                height: 200,
+                width: double.infinity,
+              ),
+              Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 2.0, horizontal: 30.0),
+                  color: Colors.lightBlue,
+                  child: const ListTile(
+                    title: Text("title"),
+                  )),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text("add note"),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                height: 150,
+                width: double.infinity,
+                child: const Text(""),
+                color: Colors.grey,
+              )
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        padding: const EdgeInsets.all(14.0),
+        child: const Text(
+          "تقویم",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Negar",
+          ),
+        ),
       ),
     );
   }

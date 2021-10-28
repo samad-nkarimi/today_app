@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Today',
       theme: ThemeData(
+        fontFamily: "ANegar",
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
