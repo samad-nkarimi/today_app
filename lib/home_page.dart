@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:today_app/note_item_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,13 +51,10 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 width: double.infinity,
               ),
-              Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 2.0, horizontal: 30.0),
-                  color: Colors.lightBlue,
-                  child: const ListTile(
-                    title: Text("title"),
-                  )),
+              NoteItem(Color(0xFFFFFFFF)),
+              // NoteItem(labelColor: Colors.green),
+              // NoteItem(labelColor: Colors.red),
+              // NoteItem(),
               ElevatedButton(
                 onPressed: () {
                   showModalBottomSheet(
@@ -70,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                             height: 300,
                             color: Colors.transparent,
                             child: Column(
-                              children: [
+                              children: const [
                                 Text("note"),
                               ],
                             ));
