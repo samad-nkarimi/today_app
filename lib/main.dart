@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "ANegar",
         primarySwatch: Colors.blue,
+        // canvasColor: Colors.transparent,
       ),
       home: const HomePage(),
     );

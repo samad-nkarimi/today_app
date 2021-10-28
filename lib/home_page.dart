@@ -11,8 +11,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Drawer(
+        child: Container(
+          color: Colors.white,
+          height: double.infinity,
+          child: Column(
+            children: [
+              Container(
+                height: 150,
+                color: Colors.red,
+              ),
+              Container(
+                height: 300,
+                child: ListView(
+                  children: [
+                    Container(
+                        color: Colors.amber,
+                        child: ListTile(title: Text("title"), onTap: () {})),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
+          color: Colors.white,
           padding: const EdgeInsets.only(bottom: 50),
           child: Column(
             children: [
@@ -33,7 +58,24 @@ class _HomePageState extends State<HomePage> {
                     title: Text("title"),
                   )),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0))),
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                            height: 300,
+                            color: Colors.transparent,
+                            child: Column(
+                              children: [
+                                Text("note"),
+                              ],
+                            ));
+                      });
+                },
                 child: const Text("add note"),
               ),
               Container(
