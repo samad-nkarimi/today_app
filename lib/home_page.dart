@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today_app/note_item_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,56 +38,68 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: Column(
-            children: [
-              Container(
-                color: Colors.blue,
-                child: Image.asset(
-                  "assets/images/sample_picture.jpg",
-                  fit: BoxFit.fill,
+        child: Stack(children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(bottom: 50),
+            child: Column(
+              children: [
+                Container(
+                  color: Colors.blue,
+                  child: Image.asset(
+                    "assets/images/sample_picture.jpg",
+                    fit: BoxFit.fill,
+                  ),
+                  height: 200,
+                  width: double.infinity,
                 ),
-                height: 200,
-                width: double.infinity,
-              ),
-              NoteItem(Color(0xFFFFFFFF)),
-              // NoteItem(labelColor: Colors.green),
-              // NoteItem(labelColor: Colors.red),
-              // NoteItem(),
-              ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0))),
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                            height: 300,
-                            color: Colors.transparent,
-                            child: Column(
-                              children: const [
-                                Text("note"),
-                              ],
-                            ));
-                      });
-                },
-                child: const Text("add note"),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                height: 150,
-                width: double.infinity,
-                child: const Text(""),
-                color: Colors.grey,
-              )
-            ],
+                NoteItem(labelColor: Colors.orange),
+                NoteItem(labelColor: Colors.green),
+                NoteItem(labelColor: Colors.red),
+                // NoteItem(),
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0))),
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                              height: 300,
+                              color: Colors.transparent,
+                              child: Column(
+                                children: const [
+                                  Text("note"),
+                                ],
+                              ));
+                        });
+                  },
+                  child: const Text("add note"),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                  height: 150,
+                  width: double.infinity,
+                  child: const Text(""),
+                  color: Colors.grey,
+                )
+              ],
+            ),
           ),
-        ),
+          Positioned(
+            right: 20,
+            top: 20,
+            child: IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: SvgPicture.asset("assets/images/menu_icon.svg"),
+            ),
+          )
+        ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: Container(

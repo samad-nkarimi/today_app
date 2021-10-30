@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class NoteItem extends StatelessWidget {
   Color? labelColor;
-  NoteItem(labelColor);
+  NoteItem({Key? key, @required labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -66,6 +66,7 @@ flutter:
     - assets/images/label_green.svg
     - assets/images/label_orange.svg
     - assets/images/arrow.svg
+    - assets/images/menu_icon.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
