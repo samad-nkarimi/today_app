@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:today_app/calender_page.dart';
 import './home_page.dart';
 
 void main() {
@@ -18,7 +19,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         // canvasColor: Colors.transparent,
       ),
-      home: const HomePage(),
+      // home: const HomePage(),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const HomePage(),
+        CalenderPage.routeName: (context) => const CalenderPage(),
+      },
     );
   }
 }

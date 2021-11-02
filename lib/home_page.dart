@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:today_app/Form_widget.dart';
+import 'package:today_app/calender_page.dart';
 import 'package:today_app/note_item_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -60,21 +62,21 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   onPressed: () {
                     showModalBottomSheet(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0))),
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                              height: 300,
-                              color: Colors.transparent,
-                              child: Column(
-                                children: const [
-                                  Text("note"),
-                                ],
-                              ));
-                        });
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          // height: 300,
+                          color: Colors.transparent,
+                          child: const FormWidget(),
+                        );
+                      },
+                    );
                   },
                   child: const Text("add note"),
                 ),
@@ -102,18 +104,21 @@ class _HomePageState extends State<HomePage> {
         ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        padding: const EdgeInsets.all(14.0),
-        child: const Text(
-          "تقویم",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: "Negar",
+      floatingActionButton: InkWell(
+        onTap: () => Navigator.pushNamed(context, CalenderPage.routeName),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          padding: const EdgeInsets.all(14.0),
+          child: const Text(
+            "تقویم",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: "Negar",
+            ),
           ),
         ),
       ),
