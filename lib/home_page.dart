@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: InkWell(
-        onTap: () => Navigator.pushNamed(context, CalenderPage.routeName),
+        onTap: () => Navigator.pushNamed(context, CalendarPage.routeName),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.green,

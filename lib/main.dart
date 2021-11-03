@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       // home: const HomePage(),
       initialRoute: "/",
       routes: {
-        "/": (context) => const HomePage(),
-        CalenderPage.routeName: (context) => const CalenderPage(),
+        "/": (context) => const CalendarPage(),
+        CalendarPage.routeName: (context) => const HomePage(),
       },
     );
   }
