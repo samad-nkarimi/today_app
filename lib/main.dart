@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:today_app/calender_page.dart';
+import 'package:today_app/mood_page.dart';
 import './home_page.dart';
 
 void main() {
@@ -22,8 +23,9 @@ class MyApp extends StatelessWidget {
       // home: const HomePage(),
       initialRoute: "/",
       routes: {
-        "/": (context) => const CalendarPage(),
-        CalendarPage.routeName: (context) => const HomePage(),
+        "/": (context) => const HomePage(),
+        CalendarPage.routeName: (context) => const CalendarPage(),
+        MoodPage.routeName:(context)=> const MoodPage(),
       },
     );
   }

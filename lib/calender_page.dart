@@ -25,9 +25,9 @@ class _CalendarPageState extends State<CalendarPage> {
           context: context,
           builder: (context) {
             return Container(
-              // height: 300,
+              height: 400,
               color: Colors.transparent,
-              child: const FormWidget(),
+              child:  const FormWidget(isCalendarPage: true ),
             );
           },
         );
