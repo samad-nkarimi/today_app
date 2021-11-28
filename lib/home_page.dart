@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today_app/Form_widget.dart';
 import 'package:today_app/calender_page.dart';
+import 'package:today_app/draw_arc.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/note_item_widget.dart';
 
@@ -47,12 +50,27 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 100 / 2 + 20),
-                  color: Colors.blue,
-                  child: Image.asset(
-                    "assets/images/sample_picture.jpg",
-                    fit: BoxFit.fill,
+                  // color: Colors.blue,
+                  child: ShaderMask(
+                    shaderCallback: (rect) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [
+                          0.6,
+                          1.3,
+
+                        ],
+                        colors: [Colors.black, Colors.transparent],
+                      ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: Image.asset(
+                      "assets/images/fall.gif",
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                  height: 200,
+                  height: 300,
                   width: double.infinity,
                 ),
                 const NoteItem(labelColor: Colors.orange),
@@ -101,7 +119,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 200 - 100 / 2),
+            padding: const EdgeInsets.only(top: 300 - 100 / 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
@@ -117,25 +135,35 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: const Text("40%", style: TextStyle(fontFamily: "ANegar")),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+                Stack(alignment: Alignment.center, children: [
+                  ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
-                    // border: Border.all(width: 5.0,color: Colors.blue),
+                    clipBehavior: Clip.antiAlias,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          // color: Colors.blue.withOpacity(.5),
+                          borderRadius: BorderRadius.circular(50.0),
+                          // border: Border.all(width: 5.0,color: Colors.blue),
 
-                    gradient: RadialGradient(
-                      colors: [Colors.lightBlueAccent, Colors.blue.withOpacity(0.5)],
-                      radius: .7,
+                          gradient: RadialGradient(
+                            colors: [Colors.purple.withOpacity(0.3), Colors.blue.withOpacity(0.3)],
+                            radius: .8,
+                          ),
+                        ),
+                        child: const Text(
+                          "1399.2.3 \n سه شنبه",
+                          style: TextStyle(fontFamily: "Negar", color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    "1399.2.3 \n سه شنبه",
-                    style: TextStyle(fontFamily: "Negar", color: Colors.white),
-                  ),
-                ),
+                  const ForPainting(),
+                ]),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, MoodPage.routeName),
                   child: Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jalali_calendar/jalali_calendar.dart';
 import 'package:today_app/form_widget.dart';
 import 'package:today_app/note_item_widget.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   static const routeName = "/calender_route";
@@ -65,11 +66,18 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+
           children: [
+
             Container(
               color: Colors.blue,
-              height: 200,
+              // height: 200,
               width: double.infinity,
+              child: TableCalendar(
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: DateTime.now(),
+              ),
             ),
             NoteItem(labelColor: Colors.orange),
             NoteItem(labelColor: Colors.green),

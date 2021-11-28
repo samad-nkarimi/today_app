@@ -32,6 +32,7 @@ dependencies:
     
   flutter_svg: ^0.23.0+1
   jalali_calendar: ^1.0.4
+  table_calendar: ^3.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,6 +69,7 @@ flutter:
     - assets/images/label_orange.svg
     - assets/images/arrow.svg
     - assets/images/menu_icon.svg
+    - assets/images/fall.gif
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
