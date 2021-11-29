@@ -2,6 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:today_app/constants.dart';
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:equatable/equatable.dart';
+import 'package:bloc/bloc.dart';
+
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({

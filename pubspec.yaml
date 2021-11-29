@@ -29,7 +29,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
+
+  bloc: ^8.0.0
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.3
+  flutter_email_sender: ^5.0.2
+  share_plus: ^3.0.4
+  store_redirect: ^2.0.0
+  flutter_local_notifications: ^9.1.4
   flutter_svg: ^0.23.0+1
   jalali_calendar: ^1.0.4
   table_calendar: ^3.0.3
