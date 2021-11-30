@@ -4,14 +4,19 @@ import 'package:equatable/equatable.dart';
 
 class Note extends Equatable{
 
-  final String title;
-  final String subTitle;
+   String? title;
+   String? subTitle;
 
-  const Note(this.title,this.subTitle);
+   Note(this.title,this.subTitle);
 
-
+  void setTitle(String? title){
+    this.title=title;
+  }
+   void setSubTitle(String? subTitle){
+     this.subTitle=subTitle;
+   }
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 
 }

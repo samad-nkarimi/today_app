@@ -15,3 +15,11 @@ class NewNoteIsAdded extends NoteState {
   @override
   List<Object> get props => [note];
 }
+class NoNote extends NoteState {
+  const NoNote(Note note) : super(note);
+
+
+
+  @override
+  List<Object> get props => [note];
+}
