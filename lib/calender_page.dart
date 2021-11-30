@@ -79,9 +79,9 @@ class _CalendarPageState extends State<CalendarPage> {
                 focusedDay: DateTime.now(),
               ),
             ),
-            NoteItem(labelColor: Colors.orange),
-            NoteItem(labelColor: Colors.green),
-            NoteItem(labelColor: Colors.red),
+            // NoteItem(labelColor: Colors.orange),
+            // NoteItem(labelColor: Colors.green),
+            // NoteItem(labelColor: Colors.red),
             // NoteItem(),
             addNoteButtonWidget(),
             // ElevatedButton(

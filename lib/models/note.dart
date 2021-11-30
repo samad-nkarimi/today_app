@@ -17,6 +17,12 @@ class Note extends Equatable{
    }
   @override
   // TODO: implement props
-  List<Object?> get props => [];
+  List<Object?> get props => [title,subTitle];
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "Note title: $title , subTitle: $subTitle";
+  }
 
 }

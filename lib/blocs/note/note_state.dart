@@ -6,14 +6,14 @@ abstract class NoteState extends Equatable {
   const NoteState(this.note);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [note];
 }
 
 class NewNoteIsAdded extends NoteState {
   const NewNoteIsAdded(Note note) : super(note);
 
   @override
-  List<Object> get props => [note];
+  List<Object> get props =>[note];
 }
 class NoNote extends NoteState {
   const NoNote(Note note) : super(note);

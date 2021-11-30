@@ -49,7 +49,7 @@ class _FormWidgetState extends State<FormWidget> {
                       // label: const Text("عنوان", style: TextStyle(fontFamily: "ANegar")),
                     ),
                     validator: (title) {
-                      note.setTitle(title);
+                      note.setTitle(title!);
                       if (title == null || title.isEmpty) {
                         return "please enter some text!";
                       }
@@ -79,7 +79,7 @@ class _FormWidgetState extends State<FormWidget> {
                       // focusColor: Colors.blue.withOpacity(0.5),
                     ),
                     validator: (subTitle) {
-                      note.setSubTitle(subTitle);
+                      note.setSubTitle(subTitle!);
                       if (subTitle == null || subTitle.isEmpty) {
                         return "please enter some text!";
                       }

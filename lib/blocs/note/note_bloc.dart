@@ -7,27 +7,15 @@ import './note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(NoNote(Note("", ""))) {
-    // @override
-    // Stream<NoteState> mapEventToState(NoteEvent event) async* {
-    //   super.onEvent(event);
-    //   if(event is NewNoteWasSent){
-    //     print("title: ${event.note.title}");
-    //     yield NewNoteIsAdded(event.note);
-    //   }
-    // }
-    on<NewNoteWasSent>((event, emit) {
-      print(event.note.title);
-    });
+
+    on<NewNoteWasSent>(
+      (event, emit) {
+        print(event.note.title);
+        emit(NewNoteIsAdded(event.note));
+      },
+    );
   }
 
-// @override
-//   void onEvent(NoteEvent event) {
-//   if(event is NewNoteWasSent){
-//     print("title: ${event.note.title}");
-//     emit( NewNoteIsAdded(event.note));
-//   }
-//     super.onEvent(event);
-//   }
 
   @override
   Future<void> close() {
