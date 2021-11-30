@@ -13,7 +13,7 @@ class NoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.of(context).size.width;
-    print(labelColor.toString());
+    // print(labelColor.toString());
     return Container(
       margin: const EdgeInsets.all(1.0),
       child: Stack(children: [

@@ -10,6 +10,7 @@ import 'package:today_app/calender_page.dart';
 import 'package:today_app/draw_arc.dart';
 import 'package:today_app/drawer_widget.dart';
 import 'package:today_app/models/models.dart';
+import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/note_item_widget.dart';
 
@@ -33,21 +34,21 @@ class _HomePageState extends State<HomePage> {
             children: [
               BlocBuilder<NoteBloc, NoteState>(
                 builder: (context, state) {
-                  Note note = state.note;
-                  print("state $note");
-                  if(state is NewNoteIsAdded)
-                    noteCount++;
+                  Notes notes = state.notes;
+                  // print("state $notes");
+                  // if(state is NewNoteIsAdded)
+                    // noteCount++;
                   return Container(
                     color: Colors.white,
                     padding: const EdgeInsets.only(bottom: 50),
                     child: Column(
                       children: [
                         topPicture(),
-                        if (noteCount == 0) noNoteWidget(),
-                        for (int i = 0; i < noteCount; i++)
+                        if (notes.getNotesCount == 0) noNoteWidget(),
+                        for (int i = 0; i < notes.getNotesCount; i++)
                            NoteItem(
-                            note.title,
-                            note.subTitle,
+                            notes.notesList[i].title,
+                            notes.notesList[i].subTitle,
                             labelColor: Colors.orange,
                           ),
                         addNoteWidgetButton(),
