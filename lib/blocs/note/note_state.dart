@@ -5,31 +5,38 @@ import 'package:today_app/models/notes.dart';
 abstract class NoteState extends Equatable {
   final Note note;
   final Notes notes;
-  const NoteState(this.note,this.notes);
+
+  const NoteState(this.note, this.notes);
 
   @override
-  List<Object> get props => [note];
+  List<Object> get props => [note, notes];
 }
 
 class NewNoteIsAdded extends NoteState {
-  const NewNoteIsAdded(Note note,Notes notes) : super(note,notes);
+  const NewNoteIsAdded(Note note, Notes notes) : super(note, notes);
 
   @override
-  List<Object> get props =>[note];
+  List<Object> get props => [note, notes];
 }
+
+//when app is started
+class StateInitialized extends NoteState {
+  const StateInitialized(Note note, Notes notes) : super(note, notes);
+
+  @override
+  List<Object> get props => [note, notes];
+}
+
 class NoNote extends NoteState {
-  const NoNote(Note note,Notes notes) : super(note,notes);
-
-
+  const NoNote(Note note, Notes notes) : super(note, notes);
 
   @override
   List<Object> get props => [note];
 }
 
 class NotesUpdated extends NoteState {
-
-   const NotesUpdated(Note note, notes) : super(note,notes);
+  const NotesUpdated(Note note, notes) : super(note, notes);
 
   @override
-  List<Object> get props =>[note,notes];
+  List<Object> get props => [note, notes];
 }

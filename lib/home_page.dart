@@ -13,6 +13,7 @@ import 'package:today_app/models/models.dart';
 import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/note_item_widget.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,22 +35,36 @@ class _HomePageState extends State<HomePage> {
             children: [
               BlocBuilder<NoteBloc, NoteState>(
                 builder: (context, state) {
-                  Notes notes = state.notes;
-                  // print("state $notes");
+                  List<Note> notes = state.notes.getTodayNotes;
+                  print("notes: $notes");
+                  print("state: $state");
                   // if(state is NewNoteIsAdded)
-                    // noteCount++;
+                  // noteCount++;
                   return Container(
                     color: Colors.white,
                     padding: const EdgeInsets.only(bottom: 50),
                     child: Column(
                       children: [
                         topPicture(),
-                        if (notes.getNotesCount == 0) noNoteWidget(),
-                        for (int i = 0; i < notes.getNotesCount; i++)
-                           NoteItem(
-                            notes.notesList[i].title,
-                            notes.notesList[i].subTitle,
-                            labelColor: Colors.orange,
+                        if (notes.isEmpty) noNoteWidget(),
+                        for (int i = 0; i < notes.length; i++)
+                          Dismissible(
+                            key: Key(notes[i].id.toString()),
+                            confirmDismiss: (direction) async{
+                              if(direction == DismissDirection.endToStart) {
+                                BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
+                                return true;
+                              }else{
+                                return false;
+                              }
+                            },
+                            background:Container(color: Colors.red),
+
+                            child: NoteItem(
+                              notes[i].title,
+                              notes[i].subTitle,
+                              labelColor: Colors.orange,
+                            ),
                           ),
                         addNoteWidgetButton(),
                         Container(

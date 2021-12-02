@@ -8,7 +8,12 @@ class NoteItem extends StatelessWidget {
   final String? title;
   final String? subTitle;
 
-  const NoteItem(this.title, this.subTitle, {Key? key, @required this.labelColor}) : super(key: key);
+  const NoteItem(
+    this.title,
+    this.subTitle, {
+    Key? key,
+    @required this.labelColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class NoteItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:  [
+                  children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                       child: Text(

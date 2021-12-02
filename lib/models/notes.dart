@@ -8,10 +8,20 @@ class Notes extends Equatable {
     return notesList.length;
   }
 
+  void setAllNotes(List<Note> notes){
+    notesList = notes;
+  }
+
   void addToNotes(Note newNote) {
     notesList.add(newNote);
   }
 
+  List<Note> get getTodayNotes=> notesList.where((element) => !element.isTodayNote).toList();
+  List<Note> get getCalenderNotes=> notesList.where((element) => element.isTodayNote).toList();
+
+  void removeFromNotes(Note newNote) {
+    notesList.remove(newNote);
+  }
   @override
   List<Object?> get props => [notesList, getNotesCount];
 

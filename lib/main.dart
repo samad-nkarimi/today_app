@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:today_app/blocs/blocs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:today_app/blocs/note/note.dart';
 import 'package:today_app/calender_page.dart';
+import 'package:today_app/database/database_provider.dart';
+import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
-import 'package:bloc/bloc.dart';
+
 import './home_page.dart';
 
-void main() {
+void main() async {
   // Bloc.observer = SimpleBlocObserver();
-
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final databasePath=join(await getDatabasesPath(), 'notes_database.db');
+  // await deleteDatabase(databasePath);
+  print(databasePath);
+  final database = await openDatabase(
+    databasePath,
+    onCreate: (db, version) async{
+      await db.execute('CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT)');
+    },
+    version: 1,
+  );
+  DatabaseProvider databaseProvider = DatabaseProvider(database);
+  Notes notes;
+  try {
+    notes = await databaseProvider.notes();
+  } catch (e) {
+    notes = Notes();
+  }
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,12 +46,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-        BlocProvider(create: (context) => NoteBloc()),
-
-    ],
-    child:MaterialApp(
+    return MaterialApp(
       title: 'Today',
       theme: ThemeData(
         fontFamily: "ANegar",
@@ -36,8 +58,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => const HomePage(),
         CalendarPage.routeName: (context) => const CalendarPage(),
-        MoodPage.routeName:(context)=> const MoodPage(),
-      },),
+        MoodPage.routeName: (context) => const MoodPage(),
+      },
     );
   }
 }

@@ -139,6 +139,7 @@ class _FormWidgetState extends State<FormWidget> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("done!")),
                     );
+                    note.isTodayNote= widget.isCalendarPage;
                     BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
                   }
                 },
