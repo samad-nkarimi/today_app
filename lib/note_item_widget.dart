@@ -50,12 +50,12 @@ class NoteItem extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                       child: Text(
                         title!,
-                        style: const TextStyle(fontFamily: "Negar"),
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
                     Text(
                       subTitle!,
-                      style: const TextStyle(fontFamily: "Negar"),
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ],
                 ),
