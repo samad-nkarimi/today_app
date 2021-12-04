@@ -1,8 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:today_app/blocs/note/note.dart';
+import 'package:today_app/custom_calendar.dart';
+import 'package:today_app/drawer_widget.dart';
 import 'package:today_app/form_widget.dart';
 import 'package:today_app/models/models.dart';
 import 'package:today_app/note_item_widget.dart';
@@ -64,6 +67,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  // repeated
   Widget noNoteWidget() {
     return Container(
       height: 50,
@@ -86,10 +90,30 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+  // repeated
+  Widget menuButton() {
+    return Positioned(
+      right: 0,
+      top: 20,
+      child: Container(
+        height: 70,
+        width: 70,
+        child: IconButton(
+          onPressed: () {
+            print("pressed");
+            Scaffold.of(context).openEndDrawer();
+          },
+          icon: SvgPicture.asset("assets/images/menu_icon.svg"),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const DrawerWidget(),
+
       body: SingleChildScrollView(
         child: BlocBuilder<NoteBloc, NoteState>(
           builder: (context, state) {
@@ -104,11 +128,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   color: Colors.blue,
                   // height: 200,
                   width: double.infinity,
-                  child: TableCalendar(
-                    firstDay: DateTime.utc(2010, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
-                    focusedDay: DateTime.now(),
-                  ),
+                  child: const CustomCalendar(),
                 ),
                 if (notes.isEmpty) noNoteWidget(),
                 for (int i = 0; i < notes.length; i++)
