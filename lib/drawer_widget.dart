@@ -1,5 +1,7 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:today_app/blocs/blocs.dart';
 import 'package:today_app/constants.dart';
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -65,10 +67,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ColorItem(Colors.red,0),
-                          ColorItem(Colors.blue,1),
+                          ColorItem(Colors.white70,0),
+                          ColorItem(Colors.black45,1),
                           ColorItem(Colors.green,2),
-                          ColorItem(Colors.orange,3),
+                          ColorItem(Colors.blue,3),
                         ],
                       ),
                     ),
@@ -111,6 +113,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         setState(() {
           currentTheme=i;
         });
+        BlocProvider.of<ThemeSettingBloc>(context).add(ThemeChanged(currentTheme));
       },
       child: Card(
         elevation: 5,

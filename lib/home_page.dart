@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   // if(state is NewNoteIsAdded)
                   // noteCount++;
                   return Container(
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     padding: const EdgeInsets.only(bottom: 50),
                     child: Column(
                       children: [

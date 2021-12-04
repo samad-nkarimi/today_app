@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:today_app/models/models.dart';
 
 import '../size/size_config.dart';
 
@@ -20,10 +21,35 @@ class AppTheme {
     fontFamily: 'Negar',
   );
 
+  static ThemeData setTheme(Themes theme) {
+    switch (theme) {
+      case Themes.light:
+        return lightTheme;
+      case Themes.dark:
+        return darkTheme;
+      case Themes.green:
+        return greenTheme;
+      case Themes.blue:
+        return blueTheme;
+    }
+  }
+
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.black,
-    brightness: Brightness.dark,
+    scaffoldBackgroundColor: Colors.black26,
+    // brightness: Brightness.dark,
     textTheme: darkTextTheme,
+  );
+
+  static final ThemeData greenTheme = ThemeData(
+    scaffoldBackgroundColor: Colors.lightGreen,
+    // brightness: Brightness.dark,
+    textTheme: blueTextTheme,
+  );
+
+  static final ThemeData blueTheme = ThemeData(
+    scaffoldBackgroundColor: Colors.blueAccent,
+    // brightness: Brightness.dark,
+    textTheme: greenTextTheme,
   );
 
   static final TextTheme lightTextTheme = TextTheme(
@@ -45,6 +71,24 @@ class AppTheme {
     headline3: _searchDark,
     bodyText1: _selectedTabDark,
     bodyText2: _unSelectedTabDark,
+  );
+  static final TextTheme greenTextTheme = TextTheme(
+    headline6: _titleGreen,
+    subtitle2: _subTitleGreen,
+    button: _buttonGreen,
+    headline4: _greetingGreen,
+    headline3: _searchGreen,
+    bodyText1: _selectedTabGreen,
+    bodyText2: _unSelectedTabGreen,
+  );
+  static final TextTheme blueTextTheme = TextTheme(
+    headline6: _titleBlue,
+    subtitle2: _subTitleBlue,
+    button: _buttonBlue,
+    headline4: _greetingBlue,
+    headline3: _searchBlue,
+    bodyText1: _selectedTabBlue,
+    bodyText2: _unSelectedTabBlue,
   );
 
   static final TextStyle _titleLight = TextStyle(
@@ -87,21 +131,35 @@ class AppTheme {
   );
 
   static final TextStyle _unSelectedTabLight = TextStyle(
-    color: Color(0xFF75C28C),
+    color: const Color(0xFF75C28C),
     fontSize: 2.5 * SizeConfig.textMultiplier,
   );
 
+  // dark text theme
   static final TextStyle _titleDark = _titleLight.copyWith(color: Colors.white);
-
   static final TextStyle _subTitleDark = _subTitleLight.copyWith(color: Colors.white70);
-
   static final TextStyle _buttonDark = _buttonLight.copyWith(color: Colors.black);
-
   static final TextStyle _greetingDark = _greetingLight.copyWith(color: Colors.black);
-
-  static final TextStyle _searchDark = _searchDark.copyWith(color: Colors.black);
-
-  static final TextStyle _selectedTabDark = _selectedTabDark.copyWith(color: Colors.white);
-
+  static final TextStyle _searchDark = _searchLight.copyWith(color: Colors.black);
+  static final TextStyle _selectedTabDark = _selectedTabLight.copyWith(color: Colors.white);
   static final TextStyle _unSelectedTabDark = _selectedTabDark.copyWith(color: Colors.white70);
+
+  // green text theme
+  static final TextStyle _titleGreen = _titleLight.copyWith(color: Colors.white);
+  static final TextStyle _subTitleGreen = _subTitleLight.copyWith(color: Colors.white70);
+  static final TextStyle _buttonGreen = _buttonLight.copyWith(color: Colors.black);
+  static final TextStyle _greetingGreen = _greetingLight.copyWith(color: Colors.black);
+  static final TextStyle _searchGreen = _searchLight.copyWith(color: Colors.black);
+  static final TextStyle _selectedTabGreen = _selectedTabLight.copyWith(color: Colors.white);
+  static final TextStyle _unSelectedTabGreen = _selectedTabGreen.copyWith(color: Colors.white70);
+
+// blue text theme
+  static final TextStyle _titleBlue = _titleLight.copyWith(color: Colors.white);
+  static final TextStyle _subTitleBlue = _subTitleLight.copyWith(color: Colors.white70);
+  static final TextStyle _buttonBlue = _buttonLight.copyWith(color: Colors.black);
+  static final TextStyle _greetingBlue = _greetingLight.copyWith(color: Colors.black);
+  static final TextStyle _searchBlue = _searchLight.copyWith(color: Colors.black);
+  static final TextStyle _selectedTabBlue = _selectedTabLight.copyWith(color: Colors.white);
+  static final TextStyle _unSelectedTabBlue = _selectedTabBlue.copyWith(color: Colors.white70);
+
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:today_app/blocs/blocs.dart';
 import 'package:today_app/blocs/note/note.dart';
 import 'package:today_app/calender_page.dart';
 import 'package:today_app/database/database_provider.dart';
+import 'package:today_app/models/models.dart';
 import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/size/size_config.dart';
@@ -36,6 +38,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
+        BlocProvider(create: (context)=> ThemeSettingBloc()),
       ],
       child: const MyApp(),
     ),
@@ -53,16 +56,22 @@ class MyApp extends StatelessWidget {
         return OrientationBuilder(
           builder: (context, orient) {
             SizeConfig().init(constraints, orient);
-            return MaterialApp(
-              title: 'Today',
-              theme: AppTheme.lightTheme,
-              // home: const HomePage(),
-              initialRoute: "/",
-              routes: {
-                "/": (context) => const HomePage(),
-                CalendarPage.routeName: (context) => const CalendarPage(),
-                MoodPage.routeName: (context) => const MoodPage(),
-              },
+            return BlocBuilder<ThemeSettingBloc,ThemeSettingState>(
+              builder: (context,themeState) {
+                // if(themeState is ThemeLoaded)
+
+                return MaterialApp(
+                  title: 'Today',
+                  theme:  AppTheme.setTheme(themeState.theme),
+                  // home: const HomePage(),
+                  initialRoute: "/",
+                  routes: {
+                    "/": (context) => const HomePage(),
+                    CalendarPage.routeName: (context) => const CalendarPage(),
+                    MoodPage.routeName: (context) => const MoodPage(),
+                  },
+                );
+              }
             );
           },
         );
