@@ -10,12 +10,26 @@ class Note extends Equatable {
   Color labelColor;
   bool isTodayNote;
 
-  Note(this.title, this.subTitle, {this.id="0", this.labelColor = Colors.orange,this.isTodayNote=false}) {
-    id = getRandomString();
-  }
+  // int isTodayNote_intFormat = 0;
+
+  Note(
+    this.title,
+    this.subTitle, {
+    this.id = "0",
+    this.labelColor = Colors.orange,
+    this.isTodayNote = false,
+  }) ;
+  // {
+  //   // id = getRandomString();
+  //   // isTodayNote_intFormat = isTodayNote ? 1 : 0;
+  // }
 
   void setTitle(String title) {
     this.title = title;
+  }
+
+  void setId(String id) {
+    this.id = id;
   }
 
   void setSubTitle(String subTitle) {
@@ -26,13 +40,18 @@ class Note extends Equatable {
     labelColor = color;
   }
 
-  // Convert a Dog into a Map. The keys must correspond to the names of the
+  String get getId {
+    return id;
+  }
+
+  // Convert a Note into a Map. The keys must correspond to the names of the
   // columns in the database.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'subtitle': subTitle,
+      'istoday': isTodayNote ? 1 : 0,
     };
   }
 
@@ -46,11 +65,11 @@ class Note extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [title, subTitle, labelColor];
+  List<Object?> get props => [title, subTitle, labelColor, isTodayNote];
 
   @override
   String toString() {
     // TODO: implement toString
-    return "Note title: $title , subTitle: $subTitle";
+    return "Note title: $title , subTitle: $subTitle , isToday: $isTodayNote";
   }
 }

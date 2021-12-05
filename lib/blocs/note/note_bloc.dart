@@ -18,8 +18,9 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
         Notes notes = state.notes;
         notes.addToNotes(event.note);
-        print("isToday: ${event.note.isTodayNote}");
+        // print("isToday: ${event.note.isTodayNote}");
         await _databaseProvider.insertNote(event.note);
+        print("before: ${event.note.isTodayNote}");
         emit(NewNoteIsAdded(event.note, notes));
       },
     );
@@ -28,7 +29,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       (event, emit) async{
         Notes notes = state.notes;
         notes.removeFromNotes(event.note);
-        print(notes);
+        print("notes id: ${event.note.getId}");
         await _databaseProvider.deleteNote(event.note);
         emit(NotesUpdated(event.note, notes));
       },

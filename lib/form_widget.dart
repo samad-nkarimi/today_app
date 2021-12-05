@@ -20,6 +20,7 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print("what day: ${widget.isCalendarPage}");
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
         return Form(
@@ -140,6 +141,7 @@ class _FormWidgetState extends State<FormWidget> {
                       const SnackBar(content: Text("done!")),
                     );
                     note.isTodayNote= widget.isCalendarPage;
+                    note.setId( note.getRandomString());
                     BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
                   }
                 },
