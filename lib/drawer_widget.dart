@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:today_app/blocs/blocs.dart';
 import 'package:today_app/constants.dart';
@@ -29,6 +28,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Drawer(
       child: Container(
         // color: Colors.black12,
+        // color: Theme.of(context).scaffoldBackgroundColor,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+            stops: const [0.5, 1.0],
+            colors: [
+              // Colors.green,
+              // Colors.red,
+              Theme.of(context).scaffoldBackgroundColor,
+              Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+            ],
+          ),
+        ),
         height: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -36,10 +49,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             Container(
               padding: const EdgeInsets.all(20),
               height: 250,
-              color: Colors.lightBlueAccent,
+              // color: Colors.lightBlueAccent,
               child: Image.asset("assets/images/tick8_logo.png"),
             ),
-            // const Divider(color: Colors.black45),
+            const Divider(color: Colors.black45),
             _showAboutUs ? _aboutUsSection() : _drawerBottomSection(),
           ],
         ),
@@ -68,13 +81,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     });
                   },
                 ),
-                const Text("نوتیفیکیشنها", style: TextStyle(fontFamily: "Negar", fontSize: 20)),
+                 Text("نوتیفیکیشنها", style:  Theme.of(context).textTheme.bodyText2),
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-            child: Text("رنگها", style: TextStyle(fontFamily: "Negar", fontSize: 20)),
+           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            child: Text("رنگها", style:  Theme.of(context).textTheme.bodyText2),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -108,19 +121,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget drawerItem(String title, Function function) {
     return Material(
+      color: Colors.transparent,
       child: InkWell(
         // splashColor: Colors.blue,
-        child: Ink(
-          color: Colors.white,
-          child: Container(
-            alignment: Alignment.centerRight,
-            // color: Colors.blue,
-            // height: SizeConfig.responsiveHeight(7.0, 8.0),
-            height: 45,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(title, style: const TextStyle(fontFamily: "Negar", fontSize: 20)),
-            ),
+        child: Container(
+          alignment: Alignment.centerRight,
+          // color: Colors.blue,
+          // height: SizeConfig.responsiveHeight(7.0, 8.0),
+          height: 45,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(title, style: Theme.of(context).textTheme.bodyText2),
           ),
         ),
         onTap: () => function(),
@@ -168,8 +179,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             style: Theme.of(context).textTheme.bodyText1,
             textAlign: TextAlign.center,
           ),
-
-
           Container(
             // color: Colors.yellow,
 

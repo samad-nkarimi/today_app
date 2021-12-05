@@ -98,7 +98,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
             ),
           ),
           Container(
-            height: 300,
+            height: 250,
+
             child: PageView.builder(
               // itemCount: 12,
               onPageChanged: (i) {
@@ -173,7 +174,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
     getThisYear();
     getFirstDayInMonth();
     return Container(
-      color: Colors.white,
+      // color: Colors.white,
+
       padding: const EdgeInsets.all(20.0),
       child: buildCalendar(),
     );

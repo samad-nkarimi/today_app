@@ -10,10 +10,8 @@ import 'package:today_app/calender_page.dart';
 import 'package:today_app/draw_arc.dart';
 import 'package:today_app/drawer_widget.dart';
 import 'package:today_app/models/models.dart';
-import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/note_item_widget.dart';
-import 'package:sqflite/sqflite.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
       body: Builder(builder: (BuildContext context) {
         return SingleChildScrollView(
@@ -41,8 +39,21 @@ class _HomePageState extends State<HomePage> {
                   // if(state is NewNoteIsAdded)
                   // noteCount++;
                   return Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    // color: Theme.of(context).scaffoldBackgroundColor,
                     padding: const EdgeInsets.only(bottom: 50),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        stops: const [0.5,1.0],
+                        colors: [
+                          // Colors.green,
+                          // Colors.red,
+                          Theme.of(context).scaffoldBackgroundColor,
+                          Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                        ],
+                      ),
+                    ),
                     child: Column(
                       children: [
                         topPicture(),
@@ -50,16 +61,15 @@ class _HomePageState extends State<HomePage> {
                         for (int i = 0; i < notes.length; i++)
                           Dismissible(
                             key: Key(notes[i].id.toString()),
-                            confirmDismiss: (direction) async{
-                              if(direction == DismissDirection.endToStart) {
+                            confirmDismiss: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
                                 BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
                                 return true;
-                              }else{
+                              } else {
                                 return false;
                               }
                             },
-                            background:Container(color: Colors.red),
-
+                            background: Container(color: Colors.red),
                             child: NoteItem(
                               notes[i].title,
                               notes[i].subTitle,

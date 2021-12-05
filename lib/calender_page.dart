@@ -112,6 +112,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
 
       body: SingleChildScrollView(
@@ -122,68 +123,78 @@ class _CalendarPageState extends State<CalendarPage> {
             // print("state: $state");
             // if(state is NewNoteIsAdded)
             // noteCount++;
-            return Column(
-              children: [
-                Container(
-                  color: Colors.blue,
-                  // height: 200,
-                  width: double.infinity,
-                  child: const CustomCalendar(),
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: const [0.5,1.0],
+                  colors: [
+                    // Colors.green,
+                    // Colors.red,
+                    Theme.of(context).scaffoldBackgroundColor,
+                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                  ],
                 ),
-                if (notes.isEmpty) noNoteWidget(),
-                for (int i = 0; i < notes.length; i++)
-                  Dismissible(
-                    key: Key(notes[i].id.toString()),
-                    confirmDismiss: (direction) async{
-                      if(direction == DismissDirection.endToStart) {
-                        BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
-                        return true;
-                      }else{
-                        return false;
-                      }
-                    },
-                    background:Container(color: Colors.red),
+              ),
+              child: Column(
+                children: [
+                  const CustomCalendar(),
+                  if (notes.isEmpty) noNoteWidget(),
+                  for (int i = 0; i < notes.length; i++)
+                    Dismissible(
+                      key: Key(notes[i].id.toString()),
+                      confirmDismiss: (direction) async{
+                        if(direction == DismissDirection.endToStart) {
+                          BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
+                          return true;
+                        }else{
+                          return false;
+                        }
+                      },
+                      background:Container(color: Colors.red),
 
-                    child: NoteItem(
-                      notes[i].title,
-                      notes[i].subTitle,
-                      labelColor: Colors.orange,
+                      child: NoteItem(
+                        notes[i].title,
+                        notes[i].subTitle,
+                        labelColor: Colors.orange,
+                      ),
                     ),
-                  ),
-                // NoteItem(labelColor: Colors.orange),
-                // NoteItem(labelColor: Colors.green),
-                // NoteItem(labelColor: Colors.red),
-                // NoteItem(),
-                addNoteButtonWidget(),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     showModalBottomSheet(
-                //       shape: const RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.only(
-                //           topLeft: Radius.circular(30.0),
-                //           topRight: Radius.circular(30.0),
-                //         ),
-                //       ),
-                //       context: context,
-                //       builder: (context) {
-                //         return Container(
-                //           // height: 300,
-                //           color: Colors.transparent,
-                //           child: const FormWidget(),
-                //         );
-                //       },
-                //     );
-                //   },
-                //   child: const Text("add note"),
-                // ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                  height: 150,
-                  width: double.infinity,
-                  child: const Text(""),
-                  color: Colors.grey,
-                )
-              ],
+                  // NoteItem(labelColor: Colors.orange),
+                  // NoteItem(labelColor: Colors.green),
+                  // NoteItem(labelColor: Colors.red),
+                  // NoteItem(),
+                  addNoteButtonWidget(),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     showModalBottomSheet(
+                  //       shape: const RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.only(
+                  //           topLeft: Radius.circular(30.0),
+                  //           topRight: Radius.circular(30.0),
+                  //         ),
+                  //       ),
+                  //       context: context,
+                  //       builder: (context) {
+                  //         return Container(
+                  //           // height: 300,
+                  //           color: Colors.transparent,
+                  //           child: const FormWidget(),
+                  //         );
+                  //       },
+                  //     );
+                  //   },
+                  //   child: const Text("add note"),
+                  // ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                    height: 150,
+                    width: double.infinity,
+                    child: const Text(""),
+                    color: Colors.grey,
+                  )
+                ],
+              ),
             );
           },
         ),

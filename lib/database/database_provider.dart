@@ -24,7 +24,7 @@ class DatabaseProvider {
       whereArgs: [note.getId],
     );
 
-    print("count: ${note.getId}");
+    // print("count: ${note.getId}");
 
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:today_app/models/models.dart';
-
 import '../size/size_config.dart';
 
 class AppTheme {
@@ -13,13 +12,7 @@ class AppTheme {
   static const Color subTitleTextColor = Color(0xFF75C28C);
   static const Color subTitleSmallTextColor = Color(0x99000000);
 
-  static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: AppTheme.appBackgroundColor,
-    brightness: Brightness.light,
-    textTheme: lightTextTheme,
-    // appBarTheme: const AppBarTheme(color: Colors.red, brightness: Brightness.light),
-    fontFamily: 'Negar',
-  );
+
 
   static ThemeData setTheme(Themes theme) {
     switch (theme) {
@@ -34,22 +27,34 @@ class AppTheme {
     }
   }
 
+  static final ThemeData lightTheme = ThemeData(
+    scaffoldBackgroundColor: AppTheme.appBackgroundColor,
+    brightness: Brightness.light,
+    textTheme: lightTextTheme,
+    // appBarTheme: const AppBarTheme(color: Colors.red, brightness: Brightness.light),
+    fontFamily: 'Negar',
+  );
+
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.black26,
-    // brightness: Brightness.dark,
-    textTheme: darkTextTheme,
+    scaffoldBackgroundColor: Colors.black54,
+    brightness: Brightness.light,
+    textTheme: lightTextTheme,
+    // appBarTheme: const AppBarTheme(color: Colors.red, brightness: Brightness.light),
+    fontFamily: 'Negar',
   );
 
   static final ThemeData greenTheme = ThemeData(
     scaffoldBackgroundColor: Colors.lightGreen,
     // brightness: Brightness.dark,
     textTheme: blueTextTheme,
+    fontFamily: 'Negar',
   );
 
   static final ThemeData blueTheme = ThemeData(
     scaffoldBackgroundColor: Colors.blueAccent,
     // brightness: Brightness.dark,
     textTheme: greenTextTheme,
+    fontFamily: 'Negar',
   );
 
   static final TextTheme lightTextTheme = TextTheme(
@@ -132,6 +137,7 @@ class AppTheme {
 
   static final TextStyle _unSelectedTabLight = TextStyle(
     color: const Color(0xFF75C28C),
+    fontWeight: FontWeight.bold,
     fontSize: 2.5 * SizeConfig.textMultiplier,
   );
 
@@ -142,7 +148,7 @@ class AppTheme {
   static final TextStyle _greetingDark = _greetingLight.copyWith(color: Colors.black);
   static final TextStyle _searchDark = _searchLight.copyWith(color: Colors.black);
   static final TextStyle _selectedTabDark = _selectedTabLight.copyWith(color: Colors.white);
-  static final TextStyle _unSelectedTabDark = _selectedTabDark.copyWith(color: Colors.white70);
+  static final TextStyle _unSelectedTabDark = _unSelectedTabLight.copyWith(color: Colors.white70);
 
   // green text theme
   static final TextStyle _titleGreen = _titleLight.copyWith(color: Colors.white);
@@ -151,7 +157,7 @@ class AppTheme {
   static final TextStyle _greetingGreen = _greetingLight.copyWith(color: Colors.black);
   static final TextStyle _searchGreen = _searchLight.copyWith(color: Colors.black);
   static final TextStyle _selectedTabGreen = _selectedTabLight.copyWith(color: Colors.white);
-  static final TextStyle _unSelectedTabGreen = _selectedTabGreen.copyWith(color: Colors.white70);
+  static final TextStyle _unSelectedTabGreen = _unSelectedTabLight.copyWith(color: Colors.white70);
 
 // blue text theme
   static final TextStyle _titleBlue = _titleLight.copyWith(color: Colors.white);
@@ -160,6 +166,6 @@ class AppTheme {
   static final TextStyle _greetingBlue = _greetingLight.copyWith(color: Colors.black);
   static final TextStyle _searchBlue = _searchLight.copyWith(color: Colors.black);
   static final TextStyle _selectedTabBlue = _selectedTabLight.copyWith(color: Colors.white);
-  static final TextStyle _unSelectedTabBlue = _selectedTabBlue.copyWith(color: Colors.white70);
+  static final TextStyle _unSelectedTabBlue = _unSelectedTabLight.copyWith(color: Colors.white70);
 
 }
