@@ -69,11 +69,11 @@ class _HomePageState extends State<HomePage> {
                                 return false;
                               }
                             },
-                            background: Container(color: Colors.red),
+                            background: Container(color: Colors.grey),
                             child: NoteItem(
                               notes[i].title,
                               notes[i].subTitle,
-                              labelColor: Colors.orange,
+                              labelColor: notes[i].labelColor,
                             ),
                           ),
                         addNoteWidgetButton(),
@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
   Widget addNoteWidgetButton() {
     return ElevatedButton(
       onPressed: () {
-        showModalBottomSheet(
+        showModalBottomSheet(isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0),

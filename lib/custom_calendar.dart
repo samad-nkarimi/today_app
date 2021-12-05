@@ -39,10 +39,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
   List<String> months = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
 
   Widget rowText(String text, [bool isTitle = false]) {
+
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isTitle == false ? Colors.blue.withOpacity(0.3) : Colors.red,
+        color:isTitle ? Colors.red : Colors.blue.withOpacity(0.3),
         borderRadius: BorderRadius.circular(2.0),
       ),
       padding: const EdgeInsets.all(10.0),
@@ -99,7 +100,6 @@ class _CustomCalendarState extends State<CustomCalendar> {
           ),
           Container(
             height: 250,
-
             child: PageView.builder(
               // itemCount: 12,
               onPageChanged: (i) {
@@ -123,7 +123,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                   }
                   // after updating thisYear
                   isFullYear = (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
-                  isPreviousYearFullYear = (thisYear-1 - 1399).abs().remainder(4) == 0 ? true : false;
+                  isPreviousYearFullYear = (thisYear - 1 - 1399).abs().remainder(4) == 0 ? true : false;
                   esfandLength = isFullYear ? 30 : 29;
                   esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
                   currentMonth = modifiedI;
@@ -189,7 +189,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
       list.add(rowText(""));
     }
 
-    if ((startDay <= 4) || (startDay == 5 && month > 6) || (startDay == 6 && month == 11 )) {
+    if ((startDay <= 4) || (startDay == 5 && month > 6) || (startDay == 6 && month == 11)) {
       //35
 
     }
@@ -211,7 +211,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
       //42
       rowCount = 6;
     }
-    if (startDay == 6 && month == 11 && isFullYear)  rowCount = 6;
+    if (startDay == 6 && month == 11 && isFullYear) rowCount = 6;
     print("rowCount $rowCount , endDay $endDay , isFullYear $isFullYear");
     int correction = 0;
     for (int row = 1; row <= rowCount; row++) {
@@ -272,7 +272,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
   }
 
   List<int> _getTodayInShamsi() {
-    List<int> todayDate = []; //day,month
+    List<int> todayDate = []; //day number nth in month ,month number nth in year
     int dayCount = (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
 
     int monthInYear = 1;
@@ -311,7 +311,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
     // int dayInSeven = dayInMonth - (dayInMonth / 7).floor();
     // print("dayInSeven: $dayInSeven");
-    int month = todayDate[1];
+    // int month = todayDate[1];
 
     // 1:sat 2:sun 3:mon 4:...
     int dayInSeven =

@@ -36,8 +36,14 @@ class Note extends Equatable {
     this.subTitle = subTitle;
   }
 
-  void setLabelColor(Color color) {
-    labelColor = color;
+  void setLabelColor(int colorIndex) {
+    switch(colorIndex){
+      case 0: labelColor = Colors.red; break;
+      case 1: labelColor = Colors.blueGrey; break;
+      case 2: labelColor = Colors.green; break;
+      default: labelColor=Colors.orange;
+    }
+    // labelColor = color;
   }
 
   String get getId {

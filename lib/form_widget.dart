@@ -17,6 +17,7 @@ class FormWidget extends StatefulWidget {
 class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
   Note note = Note("", "");
+  int noteColorIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -110,47 +111,84 @@ class _FormWidgetState extends State<FormWidget> {
                     const Text("1399.2.2"),
                   ],
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3.0)),
-                    width: 20,
-                    height: 20,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(3.0)),
-                    width: 20,
-                    height: 20,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(3.0)),
-                    width: 20,
-                    height: 20,
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    coloredItem(Colors.red, 0),
+                    coloredItem(Colors.blueGrey, 1),
+                    coloredItem(Colors.green, 2),
+                    // Container(
+                    //   margin: const EdgeInsets.all(3.0),
+                    //   decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3.0)),
+                    //   width: 40,
+                    //   height: 40,
+                    // ),
+                    // Container(
+                    //   margin: const EdgeInsets.all(3.0),
+                    //   decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(3.0)),
+                    //   width: 40,
+                    //   height: 40,
+                    // ),
+                    // Container(
+                    //   margin: const EdgeInsets.all(3.0),
+                    //   decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(3.0)),
+                    //   width: 40,
+                    //   height: 40,
+                    // ),
+                  ],
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("done!")),
-                    );
-                    note.isTodayNote= widget.isCalendarPage;
-                    note.setId( note.getRandomString());
-                    BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
-                  }
-                },
-                child: const Text("Submit"),
+              Container(
+                width: double.infinity,
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pop(context);
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   const SnackBar(content: Text("done!")),
+                      // );
+                      note.isTodayNote = widget.isCalendarPage;
+                      note.setId(note.getRandomString());
+                      note.setLabelColor(noteColorIndex);
+                      BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
+                    }
+                  },
+                  child: const Text("ثبت"),
+                ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  // repeated
+  Widget coloredItem(Color color, int i) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          noteColorIndex = i;
+        });
+        // BlocProvider.of<ThemeSettingBloc>(context).add(ThemeChanged(currentTheme));
+      },
+      child: Card(
+        elevation: 5,
+        color: noteColorIndex == i ? Colors.white : color,
+        child: Container(
+          margin: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(3),
+            color: color,
+          ),
+          height: 40,
+          width: 40,
+        ),
+      ),
     );
   }
 

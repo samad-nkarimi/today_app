@@ -24,6 +24,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
+          isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0),
@@ -152,12 +153,12 @@ class _CalendarPageState extends State<CalendarPage> {
                           return false;
                         }
                       },
-                      background:Container(color: Colors.red),
+                      background:Container(color: Colors.grey),
 
                       child: NoteItem(
                         notes[i].title,
                         notes[i].subTitle,
-                        labelColor: Colors.orange,
+                        labelColor: notes[i].labelColor,
                       ),
                     ),
                   // NoteItem(labelColor: Colors.orange),
