@@ -7,7 +7,6 @@ import 'package:today_app/blocs/note/note.dart';
 import 'package:today_app/calender_page.dart';
 import 'package:today_app/database/database_provider.dart';
 import 'package:today_app/models/models.dart';
-import 'package:today_app/models/notes.dart';
 import 'package:today_app/mood_page.dart';
 import 'package:today_app/size/size_config.dart';
 import 'package:today_app/theme/styling.dart';

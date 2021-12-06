@@ -81,13 +81,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     });
                   },
                 ),
-                 Text("نوتیفیکیشنها", style:  Theme.of(context).textTheme.bodyText2),
+                Text(
+                  "نوتیفیکیشنها",
+                  style: Theme.of(context).textTheme.bodyText2,
+                  textAlign: TextAlign.right,
+                ),
               ],
             ),
           ),
-           Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-            child: Text("رنگها", style:  Theme.of(context).textTheme.bodyText2),
+            child: Text(
+              "رنگها",
+              style: Theme.of(context).textTheme.bodyText2,
+              textAlign: TextAlign.right,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -131,7 +139,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           height: 45,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(title, style: Theme.of(context).textTheme.bodyText2),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyText2,
+              textAlign: TextAlign.right,
+            ),
           ),
         ),
         onTap: () => function(),

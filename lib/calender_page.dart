@@ -2,7 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:today_app/blocs/note/note.dart';
 import 'package:today_app/custom_calendar.dart';
 import 'package:today_app/drawer_widget.dart';
@@ -34,7 +33,7 @@ class _CalendarPageState extends State<CalendarPage> {
           context: context,
           builder: (context) {
             return Container(
-              height: 400,
+              // height: 400,
               color: Colors.transparent,
               child: const FormWidget(isCalendarPage: true),
             );
@@ -56,9 +55,9 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Text("افزودن یادداشت", style: TextStyle(color: Colors.white, fontFamily: "Negar")),
-            Padding(
+          children: [
+            Text("افزودن یادداشت", style: Theme.of(context).textTheme.button),
+            const Padding(
               padding: EdgeInsets.only(left: 5.0),
               child: Icon(Icons.add_circle_outline, color: Colors.white),
             ),
@@ -91,6 +90,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
   // repeated
   Widget menuButton() {
     return Positioned(
@@ -115,7 +115,6 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
-
       body: SingleChildScrollView(
         child: BlocBuilder<NoteBloc, NoteState>(
           builder: (context, state) {
@@ -129,7 +128,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: const [0.5,1.0],
+                  stops: const [0.5, 1.0],
                   colors: [
                     // Colors.green,
                     // Colors.red,
@@ -142,25 +141,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 children: [
                   const CustomCalendar(),
                   if (notes.isEmpty) noNoteWidget(),
-                  for (int i = 0; i < notes.length; i++)
-                    Dismissible(
-                      key: Key(notes[i].id.toString()),
-                      confirmDismiss: (direction) async{
-                        if(direction == DismissDirection.endToStart) {
-                          BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
-                          return true;
-                        }else{
-                          return false;
-                        }
-                      },
-                      background:Container(color: Colors.grey),
+                  for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
 
-                      child: NoteItem(
-                        notes[i].title,
-                        notes[i].subTitle,
-                        labelColor: notes[i].labelColor,
-                      ),
-                    ),
                   // NoteItem(labelColor: Colors.orange),
                   // NoteItem(labelColor: Colors.green),
                   // NoteItem(labelColor: Colors.red),

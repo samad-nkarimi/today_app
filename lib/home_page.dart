@@ -21,11 +21,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int noteCount = 0;
+  // int noteCount = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
       body: Builder(builder: (BuildContext context) {
         return SingleChildScrollView(
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        stops: const [0.5,1.0],
+                        stops: const [0.5, 1.0],
                         colors: [
                           // Colors.green,
                           // Colors.red,
@@ -58,24 +59,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         topPicture(),
                         if (notes.isEmpty) noNoteWidget(),
-                        for (int i = 0; i < notes.length; i++)
-                          Dismissible(
-                            key: Key(notes[i].id.toString()),
-                            confirmDismiss: (direction) async {
-                              if (direction == DismissDirection.endToStart) {
-                                BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(notes[i]));
-                                return true;
-                              } else {
-                                return false;
-                              }
-                            },
-                            background: Container(color: Colors.grey),
-                            child: NoteItem(
-                              notes[i].title,
-                              notes[i].subTitle,
-                              labelColor: notes[i].labelColor,
-                            ),
-                          ),
+                        for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
                         addNoteWidgetButton(),
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -248,7 +232,8 @@ class _HomePageState extends State<HomePage> {
   Widget addNoteWidgetButton() {
     return ElevatedButton(
       onPressed: () {
-        showModalBottomSheet(isScrollControlled: true,
+        showModalBottomSheet(
+          isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0),
@@ -265,7 +250,19 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-      child: const Text("add note"),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "افزودن یادداشت",
+            style: Theme.of(context).textTheme.button,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Icon(Icons.add_circle_outline),
+          ),
+        ],
+      ),
     );
   }
 }
