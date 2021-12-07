@@ -33,7 +33,7 @@ class NoteItem extends StatelessWidget {
         },
         secondaryBackground: Container(
           color: Colors.red,
-          child: Center(
+          child: const Center(
             child: Text("delete"),
           ),
         ),

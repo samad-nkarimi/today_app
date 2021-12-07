@@ -38,12 +38,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   List<String> months = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
 
-  Widget rowText(String text, [bool isTitle = false]) {
-
+  Widget rowText(String text, {bool isTitle = false, bool isToday = false}) {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color:isTitle ? Colors.red : Colors.blue.withOpacity(0.3),
+        color: isToday?Colors.blue:isTitle ? Colors.red : Colors.blue.withOpacity(0.3),
         borderRadius: BorderRadius.circular(2.0),
       ),
       padding: const EdgeInsets.all(10.0),
@@ -153,13 +152,13 @@ class _CustomCalendarState extends State<CustomCalendar> {
         // border: TableBorder.all(color: Colors.black.withOpacity(0.2)),
         children: [
           TableRow(children: [
-            rowText('ش', true),
-            rowText('ی', true),
-            rowText('د', true),
-            rowText('س', true),
-            rowText('چ', true),
-            rowText('پ', true),
-            rowText('ج', true),
+            rowText('ش', isTitle: true),
+            rowText('ی', isTitle: true),
+            rowText('د', isTitle: true),
+            rowText('س', isTitle: true),
+            rowText('چ', isTitle: true),
+            rowText('پ', isTitle: true),
+            rowText('ج', isTitle: true),
           ]),
           // ..._tableContentRows(),
           ..._tableRows(_tableContentRows(currentStartDay, currentMonth))
@@ -182,6 +181,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
   }
 
   List<Widget> _tableContentRows(int startDay, int month) {
+    List<int> todayDate = _getTodayInShamsi();
+    int dayInMonth = todayDate[0];
+    int monthInYear = todayDate[1];
     List<Widget> list = [];
     int rowCount = 5;
     int endDay = month == 11 ? esfandLength : (month > 5 ? 30 : 31);
@@ -221,7 +223,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
           correction++;
           continue;
         }
-        list.add(rowText((day <= endDay) ? '$day' : ""));
+        // do not forget to apply year too!!
+        (day == dayInMonth && month == monthInYear-1) ? list.add(rowText((day <= endDay) ? '$day' : "",isToday: true)) : list.add(rowText((day <= endDay) ? '$day' : ""));
       }
     }
 
