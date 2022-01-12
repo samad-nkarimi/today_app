@@ -25,151 +25,165 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // int noteCount = 0;
+  final double showBoardSize = 130;
+  final double topPictureHeight = 300;
 
   @override
   Widget build(BuildContext context) {
-    print("today: ${DateTime.now().weekday}");
-    print(gregorianToJalali(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day));
     return Scaffold(
-      backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
       body: Builder(builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Stack(
-            children: [
-              BlocBuilder<NoteBloc, NoteState>(
-                builder: (context, state) {
-                  List<Note> notes = state.notes.getTodayNotes;
-                  // print("notes: $notes");
-                  // print("state: $state");
-                  // if(state is NewNoteIsAdded)
-                  // noteCount++;
-                  return Container(
-                    // color: Theme.of(context).scaffoldBackgroundColor,
-                    padding: const EdgeInsets.only(bottom: 50),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: const [0.5, 1.0],
-                        colors: [
-                          // Colors.green,
-                          // Colors.red,
-                          Theme.of(context).scaffoldBackgroundColor,
-                          Theme.of(context)
-                              .scaffoldBackgroundColor
-                              .withOpacity(0.3),
-                        ],
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        topPicture(),
-                        if (notes.isEmpty) noNoteWidget(),
-                        for (int i = 0; i < notes.length; i++)
-                          NoteItem(notes[i]),
-                        addNoteWidgetButton(),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 30),
-                          height: 150,
-                          width: double.infinity,
-                          child: const Text(""),
-                          color: Colors.grey,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-              menuButton(),
-              Padding(
-                padding: const EdgeInsets.only(top: 300 - 100 / 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.all(20.0),
-                      height: 40,
-                      width: 40,
+        return Container(
+          color: Colors.blue.shade100,
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                BlocBuilder<NoteBloc, NoteState>(
+                  builder: (context, state) {
+                    List<Note> notes = state.notes.getTodayNotes;
+                    // print("notes: $notes");
+                    // print("state: $state");
+                    // if(state is NewNoteIsAdded)
+                    // noteCount++;
+                    return Container(
+                      // color: Theme.of(context).scaffoldBackgroundColor,
+                      padding: EdgeInsets.only(bottom: showBoardSize / 2),
                       decoration: BoxDecoration(
-                        color: Colors.lightGreenAccent,
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      child: const Text("40%",
-                          style: TextStyle(fontFamily: "ANegar")),
-                    ),
-                    Stack(alignment: Alignment.center, children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        clipBehavior: Clip.antiAlias,
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 130,
-                            width: 130,
-                            padding: const EdgeInsets.symmetric(vertical: 20.0),
-                            decoration: BoxDecoration(
-                              // color: Colors.blue.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(100.0),
-                              // border: Border.all(width: 5.0,color: Colors.blue),
-
-                              gradient: RadialGradient(
-                                colors: [
-                                  Colors.purple.withOpacity(0.3),
-                                  Colors.blue.withOpacity(0.3)
-                                ],
-                                radius: .8,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  getWeekdayInShamsi(),
-                                  style: const TextStyle(
-                                    fontFamily: "Negar",
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  getTodayDateStringInShamsi(),
-                                  style: const TextStyle(
-                                    fontFamily: "Negar",
-                                    color: Colors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
+                        // color: Colors.red,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          stops: const [0.5, 1.0],
+                          colors: [
+                            // Colors.green,
+                            // Colors.red,
+                            Theme.of(context).scaffoldBackgroundColor,
+                            Theme.of(context)
+                                .scaffoldBackgroundColor
+                                .withOpacity(0.3),
+                          ],
                         ),
                       ),
-                      const ForPainting(),
-                    ]),
-                    GestureDetector(
-                      onTap: () =>
-                          Navigator.pushNamed(context, MoodPage.routeName),
-                      child: Container(
+                      child: Column(
+                        children: [
+                          topPicture(),
+                          SizedBox(height: showBoardSize / 2 + 30),
+                          if (notes.isEmpty) noNoteWidget(),
+                          for (int i = 0; i < notes.length; i++)
+                            NoteItem(notes[i]),
+                          addNoteWidgetButton(),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 30),
+                            height: 150,
+                            width: double.infinity,
+                            child: const Text(""),
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                menuButton(),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: topPictureHeight - showBoardSize / 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
                         margin: const EdgeInsets.all(20.0),
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: Colors.lightBlueAccent,
+                          color: Colors.lightGreenAccent,
                           borderRadius: BorderRadius.circular(50.0),
                         ),
+                        child: Text(
+                          "${(getHourPercent() * 100).toStringAsFixed(0)}%",
+                          style: const TextStyle(fontFamily: "ANegar"),
+                        ),
                       ),
-                    ),
-                  ],
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100.0),
+                            clipBehavior: Clip.antiAlias,
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: showBoardSize,
+                                width: showBoardSize,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
+                                decoration: BoxDecoration(
+                                  // color: Colors.blue.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  // border: Border.all(width: 5.0,color: Colors.blue),
+
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      Colors.purple.withOpacity(0.3),
+                                      Colors.blue.withOpacity(0.3)
+                                    ],
+                                    radius: .8,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      getWeekdayInShamsi(),
+                                      style: const TextStyle(
+                                        fontFamily: "Negar",
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      getTodayDateStringInShamsi(),
+                                      style: const TextStyle(
+                                        fontFamily: "Negar",
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          ForPainting(
+                            radius: showBoardSize / 2,
+                            fillPercent: getHourPercent(),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.pushNamed(context, MoodPage.routeName),
+                        child: Container(
+                          margin: const EdgeInsets.all(20.0),
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.lightBlueAccent,
+                            borderRadius: BorderRadius.circular(50.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
@@ -220,7 +234,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget topPicture() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 100 / 2 + 20),
+      // margin: const EdgeInsets.only(bottom: 100 / 2 + 20),
       // color: Colors.blue,
       child: ShaderMask(
         shaderCallback: (rect) {
@@ -240,7 +254,7 @@ class _HomePageState extends State<HomePage> {
           fit: BoxFit.fill,
         ),
       ),
-      height: 300,
+      height: topPictureHeight,
       width: double.infinity,
     );
   }
@@ -298,5 +312,14 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  double getHourPercent() {
+    int hour = DateTime.now().hour;
+    int min = DateTime.now().minute;
+    int totalMinute = 24 * 60;
+    int spendedMinute = hour * 60 + min;
+    double hourPercent = 1.0 - spendedMinute / totalMinute;
+    return hourPercent;
   }
 }

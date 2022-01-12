@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ForPainting extends StatefulWidget {
-  const ForPainting({Key? key}) : super(key: key);
+  final double radius;
+  final double fillPercent;
+  const ForPainting({Key? key, this.radius = 50, this.fillPercent = 1})
+      : super(key: key);
 
   @override
   _ForPaintingState createState() => _ForPaintingState();
@@ -21,7 +24,7 @@ class _ForPaintingState extends State<ForPainting> {
       // height: 50.0,
       child: CustomPaint(
         size: size,
-        painter: Painter(),
+        painter: Painter(widget.radius, widget.fillPercent),
       ),
     );
   }
@@ -30,6 +33,10 @@ class _ForPaintingState extends State<ForPainting> {
 class Painter extends CustomPainter {
   // Paint cloudPaint;
   // Painter(this.cloudPaint);
+  final double radius;
+  final double fillPercent;
+
+  Painter(this.radius, this.fillPercent);
   @override
   void paint(Canvas canvas, Size size) {
     // double rectTop = 110.0;
@@ -39,7 +46,7 @@ class Painter extends CustomPainter {
     // double figureCenter = size.width / 2;
 
     Rect cloudBaseRect =
-        Rect.fromCircle(center: const Offset(50.0, 50.0), radius: 50);
+        Rect.fromCircle(center: const Offset(50.0, 50.0), radius: radius);
     // RRect cloudBase = RRect.fromRectAndRadius(
     //   cloudBaseRect,
     //   Radius.circular(10.0),
@@ -56,12 +63,12 @@ class Painter extends CustomPainter {
     // );
     Gradient gradient = SweepGradient(
       colors: [
-        Colors.red.shade500,
-        Colors.yellow,
+        Colors.blue,
         Colors.lightGreen,
+        Colors.yellow,
         Colors.red.shade500,
       ],
-      stops: [0.0, 0.3, 0.6, 1.0],
+      stops: const [0.0, 0.3, 0.6, 1.0],
     );
     Gradient gradient1 = RadialGradient(
       colors: [
@@ -88,6 +95,14 @@ class Painter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect)
       ..shader = gradient1.createShader(cloudBaseRect);
+
+    Paint _paintBrush3 = Paint()
+          ..color = Colors.white24
+          ..strokeWidth = 15.0
+          ..strokeCap = StrokeCap.round
+          ..style = PaintingStyle.stroke
+        // ..shader = gradient.createShader(cloudBaseRect)
+        ;
     // canvas.drawCircle(
     //   Offset(120.0, 100.0),
     //   85.0,
@@ -99,8 +114,12 @@ class Painter extends CustomPainter {
     //   _paintBrush,
     // );
     // canvas.drawColor(Colors.black, BlendMode.exclusion);
-    canvas.drawArc(cloudBaseRect, 0, 1.5 * pi, false, _paintBrush2);
-    canvas.drawArc(cloudBaseRect, 0, 2.0 * pi, false, _paintBrush1);
+    //background
+    canvas.drawArc(cloudBaseRect, 0, 2 * pi, false, _paintBrush3);
+    canvas.drawArc(
+        cloudBaseRect, -pi / 2, -fillPercent * 2 * pi, false, _paintBrush2);
+    canvas.drawArc(
+        cloudBaseRect, -pi / 2, -fillPercent * 2 * pi, false, _paintBrush1);
     // canvas.drawLine(const Offset(200, 200), const Offset(220, 200), _paintBrush1);
     // cloudPaint.strokeWidth = 3.0;
     // cloudPaint.color = Colors.white;
