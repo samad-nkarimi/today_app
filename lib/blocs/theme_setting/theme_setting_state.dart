@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:today_app/models/models.dart';
+import '../../models/models.dart';
 
 abstract class ThemeSettingState extends Equatable {
   final Themes theme;

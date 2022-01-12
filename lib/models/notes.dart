@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:today_app/models/models.dart';
+import './models.dart';
 
 class Notes extends Equatable {
   List<Note> notesList = [];

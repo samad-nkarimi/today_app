@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:today_app/blocs/blocs.dart';
-import 'package:today_app/models/models.dart';
+import './blocs/blocs.dart';
+import './models/models.dart';
 
 class NoteItem extends StatelessWidget {
   final Note note;

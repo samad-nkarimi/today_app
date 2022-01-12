@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:today_app/blocs/blocs.dart';
-import 'package:today_app/blocs/note/note.dart';
-import 'package:today_app/calender_page.dart';
-import 'package:today_app/database/database_provider.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/mood_page.dart';
-import 'package:today_app/size/size_config.dart';
-import 'package:today_app/theme/styling.dart';
+import './blocs/blocs.dart';
+import './calender_page.dart';
+import './database/database_provider.dart';
+import './models/models.dart';
+import './mood_page.dart';
+import './size/size_config.dart';
+import './theme/styling.dart';
 
 import './home_page.dart';
 
@@ -22,7 +21,8 @@ void main() async {
   final database = await openDatabase(
     databasePath,
     onCreate: (db, version) async {
-      await db.execute('CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER)');
+      await db.execute(
+          'CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER)');
     },
     version: 1,
   );
@@ -37,7 +37,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
-        BlocProvider(create: (context)=> ThemeSettingBloc()),
+        BlocProvider(create: (context) => ThemeSettingBloc()),
       ],
       child: const MyApp(),
     ),
@@ -55,23 +55,22 @@ class MyApp extends StatelessWidget {
         return OrientationBuilder(
           builder: (context, orient) {
             SizeConfig().init(constraints, orient);
-            return BlocBuilder<ThemeSettingBloc,ThemeSettingState>(
-              builder: (context,themeState) {
-                // if(themeState is ThemeLoaded)
+            return BlocBuilder<ThemeSettingBloc, ThemeSettingState>(
+                builder: (context, themeState) {
+              // if(themeState is ThemeLoaded)
 
-                return MaterialApp(
-                  title: 'Today',
-                  theme:  AppTheme.setTheme(themeState.theme),
-                  // home: const HomePage(),
-                  initialRoute: "/",
-                  routes: {
-                    "/": (context) => const HomePage(),
-                    CalendarPage.routeName: (context) => const CalendarPage(),
-                    MoodPage.routeName: (context) => const MoodPage(),
-                  },
-                );
-              }
-            );
+              return MaterialApp(
+                title: 'Today',
+                theme: AppTheme.setTheme(themeState.theme),
+                // home: const HomePage(),
+                initialRoute: "/",
+                routes: {
+                  "/": (context) => const HomePage(),
+                  CalendarPage.routeName: (context) => const CalendarPage(),
+                  MoodPage.routeName: (context) => const MoodPage(),
+                },
+              );
+            });
           },
         );
       },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:today_app/models/models.dart';
+import '../models/models.dart';
 import '../size/size_config.dart';
 
 class AppTheme {

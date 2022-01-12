@@ -2,12 +2,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:today_app/blocs/note/note.dart';
-import 'package:today_app/custom_calendar.dart';
-import 'package:today_app/drawer_widget.dart';
-import 'package:today_app/form_widget.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/note_item_widget.dart';
+import './blocs/note/note.dart';
+import './custom_calendar.dart';
+import './drawer_widget.dart';
+import './form_widget.dart';
+import './models/models.dart';
+import './note_item_widget.dart';
 
 class CalendarPage extends StatefulWidget {
   static const routeName = "/calender_route";

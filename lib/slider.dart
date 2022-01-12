@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:today_app/size/size_config.dart';
+import './size/size_config.dart';
 
 import '../../blocs/blocs.dart';
 

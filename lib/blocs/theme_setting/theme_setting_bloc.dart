@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:today_app/blocs/theme_setting/theme_setting.dart';
-import 'package:today_app/blocs/theme_setting/theme_setting_event.dart';
-import 'package:today_app/models/models.dart';
+import '../../blocs/theme_setting/theme_setting.dart';
+
+import '../../models/models.dart';
 
 class ThemeSettingBloc extends Bloc<ThemeSettingEvent, ThemeSettingState> {
   ThemeSettingBloc() : super(const ThemeInitialized(Themes.light)) {

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/models/notes.dart';
+import '../../models/models.dart';
+
 
 abstract class NoteState extends Equatable {
   final Note note;

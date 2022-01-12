@@ -3,8 +3,8 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:today_app/blocs/note/note.dart';
-import 'package:today_app/models/models.dart';
+import './blocs/note/note.dart';
+import './models/models.dart';
 
 class FormWidget extends StatefulWidget {
   final bool isCalendarPage;

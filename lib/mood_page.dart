@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:today_app/drawer_widget.dart';
-import 'package:today_app/slider.dart';
+import './drawer_widget.dart';
+import './slider.dart';
 
 class MoodPage extends StatelessWidget {
   static const routeName = "/mood_page";

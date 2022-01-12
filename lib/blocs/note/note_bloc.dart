@@ -1,8 +1,8 @@
 // import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:today_app/database/database_provider.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/models/notes.dart';
+import '../../database/database_provider.dart';
+import '../../models/models.dart';
+
 
 import './note_event.dart';
 import './note_state.dart';

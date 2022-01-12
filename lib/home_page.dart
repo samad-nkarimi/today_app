@@ -4,14 +4,14 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:today_app/Form_widget.dart';
-import 'package:today_app/blocs/note/note.dart';
-import 'package:today_app/calender_page.dart';
-import 'package:today_app/draw_arc.dart';
-import 'package:today_app/drawer_widget.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/mood_page.dart';
-import 'package:today_app/note_item_widget.dart';
+import './Form_widget.dart';
+import './blocs/note/note.dart';
+import './calender_page.dart';
+import './draw_arc.dart';
+import './drawer_widget.dart';
+import './models/models.dart';
+import './mood_page.dart';
+import './note_item_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

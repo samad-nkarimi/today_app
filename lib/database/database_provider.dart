@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:today_app/models/models.dart';
-import 'package:today_app/models/notes.dart';
+import '../models/models.dart';
+
 
 class DatabaseProvider {
   Database database;

@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:store_redirect/store_redirect.dart';
-import 'package:today_app/blocs/blocs.dart';
-import 'package:today_app/constants.dart';
-import 'package:today_app/size/size_config.dart';
+import './blocs/blocs.dart';
+import './constants.dart';
+import './notification_api.dart';
+import './size/size_config.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
@@ -23,6 +24,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   int currentTheme = 0;
   bool _showAboutUs = false;
 
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    NotificationApi.init();
+    listenNotifications();
+  }
+  void listenNotifications()=>NotificationApi.onNotification.stream.listen(onClickedNotification);
+  void onClickedNotification(String? payload) => print("done!");
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -75,7 +87,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               children: [
                 Switch(
                   value: notifValue,
-                  onChanged: (value) {
+                  onChanged: (value) async{
+                    await NotificationApi.showNotification(
+                      title:"neagr",
+                      body:"how are you samad",
+                      payload:"salam",
+                    );
                     setState(() {
                       notifValue = value;
                     });
