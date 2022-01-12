@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import './blocs/blocs.dart';
-import './calender_page.dart';
+import 'screens/calender_page.dart';
 import './database/database_provider.dart';
 import './models/models.dart';
-import './mood_page.dart';
+import 'screens/mood_page.dart';
 import './size/size_config.dart';
 import './theme/styling.dart';
 
-import './home_page.dart';
+import 'screens/home_page.dart';
 
 void main() async {
   // Bloc.observer = SimpleBlocObserver();

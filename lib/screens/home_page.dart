@@ -3,15 +3,18 @@ import 'dart:ui';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import './Form_widget.dart';
-import './blocs/note/note.dart';
-import './calender_page.dart';
-import './draw_arc.dart';
-import './drawer_widget.dart';
-import './models/models.dart';
-import './mood_page.dart';
-import './note_item_widget.dart';
+import 'package:today/utils/date_converter.dart';
+import 'package:today/widgets/form_widget.dart';
+
+import '../blocs/note/note.dart';
+import 'calender_page.dart';
+import '../utils/draw_arc.dart';
+import 'drawer_widget.dart';
+import '../models/models.dart';
+import 'mood_page.dart';
+import '../widgets/note_item_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,6 +28,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("today: ${DateTime.now().weekday}");
+    print(gregorianToJalali(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day));
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: const DrawerWidget(),
@@ -51,7 +57,9 @@ class _HomePageState extends State<HomePage> {
                           // Colors.green,
                           // Colors.red,
                           Theme.of(context).scaffoldBackgroundColor,
-                          Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                          Theme.of(context)
+                              .scaffoldBackgroundColor
+                              .withOpacity(0.3),
                         ],
                       ),
                     ),
@@ -59,10 +67,12 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         topPicture(),
                         if (notes.isEmpty) noNoteWidget(),
-                        for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
+                        for (int i = 0; i < notes.length; i++)
+                          NoteItem(notes[i]),
                         addNoteWidgetButton(),
                         Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 30),
                           height: 150,
                           width: double.infinity,
                           child: const Text(""),
@@ -89,7 +99,8 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.lightGreenAccent,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      child: const Text("40%", style: TextStyle(fontFamily: "ANegar")),
+                      child: const Text("40%",
+                          style: TextStyle(fontFamily: "ANegar")),
                     ),
                     Stack(alignment: Alignment.center, children: [
                       ClipRRect(
@@ -99,21 +110,43 @@ class _HomePageState extends State<HomePage> {
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
                             alignment: Alignment.center,
-                            height: 100,
-                            width: 100,
+                            height: 130,
+                            width: 130,
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
                             decoration: BoxDecoration(
                               // color: Colors.blue.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(50.0),
+                              borderRadius: BorderRadius.circular(100.0),
                               // border: Border.all(width: 5.0,color: Colors.blue),
 
                               gradient: RadialGradient(
-                                colors: [Colors.purple.withOpacity(0.3), Colors.blue.withOpacity(0.3)],
+                                colors: [
+                                  Colors.purple.withOpacity(0.3),
+                                  Colors.blue.withOpacity(0.3)
+                                ],
                                 radius: .8,
                               ),
                             ),
-                            child: const Text(
-                              "1399.2.3 \n سه شنبه",
-                              style: TextStyle(fontFamily: "Negar", color: Colors.white),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  getWeekdayInShamsi(),
+                                  style: const TextStyle(
+                                    fontFamily: "Negar",
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  getTodayDateStringInShamsi(),
+                                  style: const TextStyle(
+                                    fontFamily: "Negar",
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -121,7 +154,8 @@ class _HomePageState extends State<HomePage> {
                       const ForPainting(),
                     ]),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, MoodPage.routeName),
+                      onTap: () =>
+                          Navigator.pushNamed(context, MoodPage.routeName),
                       child: Container(
                         margin: const EdgeInsets.all(20.0),
                         height: 40,
@@ -160,8 +194,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
 
   Widget noNoteWidget() {
     return Container(

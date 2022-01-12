@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './drawer_widget.dart';
-import './slider.dart';
+import 'drawer_widget.dart';
+import '../widgets/slider.dart';
 
 class MoodPage extends StatelessWidget {
   static const routeName = "/mood_page";
@@ -66,7 +66,8 @@ class MoodPage extends StatelessWidget {
                           flex: 1,
                           child: Container(
                             alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: i * 10, bottom: 75, right: 1),
+                            margin: EdgeInsets.only(
+                                top: i * 10, bottom: 75, right: 1),
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 end: Alignment.topCenter,

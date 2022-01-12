@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import './blocs/blocs.dart';
-import './models/models.dart';
+import '../blocs/blocs.dart';
+import '../models/models.dart';
 
 class NoteItem extends StatelessWidget {
   final Note note;
@@ -57,10 +57,7 @@ class NoteItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - 135,
+                width: MediaQuery.of(context).size.width - 135,
                 // color: Colors.red,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -79,28 +76,24 @@ class NoteItem extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         // width: 170,
                         // color: Colors.yellow,
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.0),
                               child: Text(
                                 note.title,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .subtitle1,
+                                style: Theme.of(context).textTheme.subtitle1,
                                 textAlign: TextAlign.right,
                               ),
                             ),
                             Text(
                               note.subTitle,
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2,
                               textAlign: TextAlign.right,
                             ),
                           ],

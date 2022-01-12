@@ -1,16 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import './size/size_config.dart';
+import '../size/size_config.dart';
 
-import '../../blocs/blocs.dart';
+import '../../../blocs/blocs.dart';
 
 class SliderHeightWidget extends StatefulWidget {
-
   final fullWidth;
 
-   SliderHeightWidget({
-
+  SliderHeightWidget({
     this.fullWidth = true,
   });
 
@@ -23,8 +20,6 @@ class _SliderHeightWidgetState extends State<SliderHeightWidget> {
   // double _height = 150.0;
   final double sliderHeight = SizeConfig.responsiveHeight(5.0, 10.0);
 
-
-
   @override
   Widget build(BuildContext context) {
     double paddingFactor = .1;
@@ -34,23 +29,24 @@ class _SliderHeightWidgetState extends State<SliderHeightWidget> {
     return Container(
       width: widget.fullWidth ? double.infinity : sliderHeight * 5.5,
       height: sliderHeight,
-      decoration:  BoxDecoration(
-        borderRadius:  BorderRadius.all(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
           Radius.circular((sliderHeight * .15)),
         ),
-        gradient: const  LinearGradient(
+        gradient: const LinearGradient(
           colors: [
-             Color(0xaa00c6ff),
-             Color(0xFF00ddaa),
+            Color(0xaa00c6ff),
+            Color(0xFF00ddaa),
           ],
-          begin:  FractionalOffset(0.0, 0.0),
-          end:  FractionalOffset(1.0, 1.00),
+          begin: FractionalOffset(0.0, 0.0),
+          end: FractionalOffset(1.0, 1.00),
           stops: [0.0, 1.0],
           tileMode: TileMode.clamp,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(sliderHeight * paddingFactor, 2, sliderHeight * paddingFactor, 2),
+        padding: EdgeInsets.fromLTRB(
+            sliderHeight * paddingFactor, 2, sliderHeight * paddingFactor, 2),
         child: Row(
           children: <Widget>[
             Padding(
@@ -91,27 +87,25 @@ class _SliderHeightWidgetState extends State<SliderHeightWidget> {
                     // thumbColor: Colors.black,
                     activeTickMarkColor: Colors.white,
                     inactiveTickMarkColor: Colors.red.withOpacity(.7),
-                    valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                    valueIndicatorShape:
+                        const PaddleSliderValueIndicatorShape(),
                     valueIndicatorColor: Colors.blueAccent,
                     valueIndicatorTextStyle: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
-                  child:  Slider(
-                        value:_value ,
-                        divisions: 100,
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value;
-                          });
-
-
-                        },
-                      ),
-
+                  child: Slider(
+                    value: _value,
+                    divisions: 100,
+                    onChanged: (value) {
+                      setState(() {
+                        _value = value;
+                      });
+                    },
                   ),
                 ),
               ),
+            ),
 
             SizedBox(
               width: sliderHeight * .05,

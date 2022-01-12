@@ -3,8 +3,8 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import './blocs/note/note.dart';
-import './models/models.dart';
+import '../blocs/note/note.dart';
+import '../models/models.dart';
 
 class FormWidget extends StatefulWidget {
   final bool isCalendarPage;
@@ -33,11 +33,13 @@ class _FormWidgetState extends State<FormWidget> {
                 padding: EdgeInsets.all(10.0),
                 child: Text(
                   "یادداشت",
-                  style: TextStyle(fontFamily: "Negar", fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: "Negar", fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
@@ -63,7 +65,8 @@ class _FormWidgetState extends State<FormWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
@@ -163,7 +166,8 @@ class _FormWidgetState extends State<FormWidget> {
                       note.isTodayNote = widget.isCalendarPage;
                       note.setId(note.getRandomString());
                       note.setLabelColor(noteColorIndex);
-                      BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
+                      BlocProvider.of<NoteBloc>(context)
+                          .add(NewNoteWasSent(note));
                     }
                   },
                   child: const Text("ثبت"),

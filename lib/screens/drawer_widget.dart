@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:store_redirect/store_redirect.dart';
-import './blocs/blocs.dart';
-import './constants.dart';
-import './notification_api.dart';
-import './size/size_config.dart';
+import '../blocs/blocs.dart';
+import '../constants.dart';
+import '../utils/notification_api.dart';
+import '../size/size_config.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
@@ -24,8 +24,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   int currentTheme = 0;
   bool _showAboutUs = false;
 
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -33,7 +31,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     NotificationApi.init();
     listenNotifications();
   }
-  void listenNotifications()=>NotificationApi.onNotification.stream.listen(onClickedNotification);
+
+  void listenNotifications() =>
+      NotificationApi.onNotification.stream.listen(onClickedNotification);
   void onClickedNotification(String? payload) => print("done!");
   @override
   Widget build(BuildContext context) {
@@ -87,11 +87,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               children: [
                 Switch(
                   value: notifValue,
-                  onChanged: (value) async{
+                  onChanged: (value) async {
                     await NotificationApi.showNotification(
-                      title:"neagr",
-                      body:"how are you samad",
-                      payload:"salam",
+                      title: "neagr",
+                      body: "how are you samad",
+                      payload: "salam",
                     );
                     setState(() {
                       notifValue = value;
@@ -107,7 +107,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: Text(
               "رنگها",
               style: Theme.of(context).textTheme.bodyText2,
@@ -174,7 +175,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         setState(() {
           currentTheme = i;
         });
-        BlocProvider.of<ThemeSettingBloc>(context).add(ThemeChanged(currentTheme));
+        BlocProvider.of<ThemeSettingBloc>(context)
+            .add(ThemeChanged(currentTheme));
       },
       child: Card(
         elevation: 5,
@@ -194,7 +196,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   Widget _aboutUsSection() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: SizeConfig.responsiveWidth(5, 7.0)),
+      padding:
+          EdgeInsets.symmetric(horizontal: SizeConfig.responsiveWidth(5, 7.0)),
       color: Colors.black12,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

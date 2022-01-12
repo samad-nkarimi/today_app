@@ -3,9 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-
 class ForPainting extends StatefulWidget {
-  const  ForPainting({Key? key}) : super(key: key);
+  const ForPainting({Key? key}) : super(key: key);
 
   @override
   _ForPaintingState createState() => _ForPaintingState();
@@ -16,7 +15,7 @@ class _ForPaintingState extends State<ForPainting> {
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
 
-    Size size = const Size(100.0,100.0);
+    Size size = const Size(100.0, 100.0);
     return Container(
       // color: Colors.black12,
       // height: 50.0,
@@ -39,7 +38,8 @@ class Painter extends CustomPainter {
     // double figureRightEdge = size.width - 90.0;
     // double figureCenter = size.width / 2;
 
-    Rect cloudBaseRect = Rect.fromCircle(center:const  Offset(50.0, 50.0), radius: 50);
+    Rect cloudBaseRect =
+        Rect.fromCircle(center: const Offset(50.0, 50.0), radius: 50);
     // RRect cloudBase = RRect.fromRectAndRadius(
     //   cloudBaseRect,
     //   Radius.circular(10.0),
@@ -54,19 +54,14 @@ class Painter extends CustomPainter {
     //   60.0,
     //   cloudPaint,
     // );
-    Gradient gradient =  SweepGradient(
+    Gradient gradient = SweepGradient(
       colors: [
         Colors.red.shade500,
         Colors.yellow,
         Colors.lightGreen,
         Colors.red.shade500,
       ],
-      stops: [
-        0.0,
-        0.3,
-        0.6,
-        1.0
-      ],
+      stops: [0.0, 0.3, 0.6, 1.0],
     );
     Gradient gradient1 = RadialGradient(
       colors: [
@@ -80,14 +75,14 @@ class Painter extends CustomPainter {
     );
 
     Paint _paintBrush2 = Paint()
-    // ..color = Colors.red
+      // ..color = Colors.red
       ..strokeWidth = 15.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect);
 
     Paint _paintBrush1 = Paint()
-    // ..color = Colors.red
+      // ..color = Colors.red
       ..strokeWidth = 15.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke

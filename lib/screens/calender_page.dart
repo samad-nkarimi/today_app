@@ -2,12 +2,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import './blocs/note/note.dart';
-import './custom_calendar.dart';
-import './drawer_widget.dart';
-import './form_widget.dart';
-import './models/models.dart';
-import './note_item_widget.dart';
+import '../blocs/note/note.dart';
+import '../utils/custom_calendar.dart';
+import 'drawer_widget.dart';
+import '../widgets/form_widget.dart';
+import '../models/models.dart';
+import '../widgets/note_item_widget.dart';
 
 class CalendarPage extends StatefulWidget {
   static const routeName = "/calender_route";
@@ -170,7 +170,8 @@ class _CalendarPageState extends State<CalendarPage> {
                   //   child: const Text("add note"),
                   // ),
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 30),
                     height: 150,
                     width: double.infinity,
                     child: const Text(""),
