@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:today/blocs/blocs.dart';
 import '../blocs/note/note.dart';
 import '../utils/custom_calendar.dart';
 import 'drawer_widget.dart';
@@ -169,14 +170,34 @@ class _CalendarPageState extends State<CalendarPage> {
                   //   },
                   //   child: const Text("add note"),
                   // ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 30),
-                    height: 150,
-                    width: double.infinity,
-                    child: const Text(""),
-                    color: Colors.grey,
-                  )
+                  BlocBuilder<CalenderBloc, CalenderState>(
+                      builder: (context, state) {
+                    return state is MonthAdequaciesCalenderState
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 30),
+                            height: 500,
+                            width: double.infinity,
+                            child: ListView(
+                              children: [
+                                for (var i = 0;
+                                    i < state.adequacies.length;
+                                    i++)
+                                  Container(
+                                    color: Colors.white,
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 20),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 1),
+                                    child: Text(state.adequacies[i]),
+                                  )
+                              ],
+                            ),
+                            color: Colors.grey,
+                          )
+                        : const CircularProgressIndicator();
+                  })
                 ],
               ),
             );

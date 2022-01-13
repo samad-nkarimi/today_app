@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:today/blocs/blocs.dart';
 
 class CustomCalendar extends StatefulWidget {
   const CustomCalendar({Key? key}) : super(key: key);
@@ -28,6 +31,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   List<String> holidayTitles = [];
   List<String> holidayDates = [];
+  List<int> holidayCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   bool isLoading = true;
 
@@ -38,7 +42,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
     int initialPage = _getTodayInShamsi()[1] - 1;
     print("initialPage $initialPage");
     _pageController = PageController(
-        initialPage: initialPage + 600, keepPage: true, viewportFraction: 1);
+      initialPage: initialPage + 600,
+      keepPage: true,
+      viewportFraction: 1,
+    );
     currentMonth = initialPage;
     currentStartDay = getFirstDayInMonth();
     thisYear = getThisYear();
@@ -50,6 +57,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     loadJson().then((value) {
       setState(() {
         isLoading = false;
+        print(getAdequaciesList(0));
       });
     });
   }
@@ -142,8 +150,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
             height: 270,
             child: PageView.builder(
               // itemCount: 12,
+              dragStartBehavior: DragStartBehavior.start,
               onPageChanged: (i) {
                 int modifiedI = i - (i / 12).floor() * 12;
+
+                getAdequaciesList(modifiedI).then((value) {
+                  BlocProvider.of<CalenderBloc>(context)
+                      .add(MonthAdequaciesSentCalenderEvent(value));
+                });
 
                 setState(() {
                   if (currentMonth > modifiedI) {
@@ -454,13 +468,37 @@ class _CustomCalendarState extends State<CustomCalendar> {
     for (var i = 0; i < jsonResult.length; i++) {
       String title =
           jsonResult.elementAt(i)["title"] ?? "oooooooooooooooooooooooooo";
-      String date = jsonResult.elementAt(i)["date"] ?? "1111111111111111";
+      String date =
+          jsonResult.elementAt(i)["date"] ?? "1111111111111111"; //sample:"0101"
+
+      holidayCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
+
       holidayDates.add(date);
       title = title.trim();
       holidayTitles.add(title);
+      print(holidayCountPerMonth);
     }
 
     print(holidayTitles);
     print(holidayDates);
+  }
+
+  Future<List<String>> getAdequaciesList(int currentMonth) async {
+    List<String> adequacies = [];
+    // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
+    int startIndex = holidayCountPerMonth
+            .getRange(0, holidayCountPerMonth[currentMonth])
+            .reduce((value, element) => value + element) -
+        1;
+    int endIndex = holidayCountPerMonth[currentMonth] + startIndex;
+    print(startIndex);
+    print(endIndex);
+    if (startIndex == endIndex)
+      print(endIndex);
+    else
+      adequacies = holidayTitles.sublist(startIndex, endIndex);
+    // }
+
+    return adequacies;
   }
 }

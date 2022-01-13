@@ -37,6 +37,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
+        BlocProvider(create: (context) => CalenderBloc()),
         BlocProvider(create: (context) => ThemeSettingBloc()),
       ],
       child: const MyApp(),
