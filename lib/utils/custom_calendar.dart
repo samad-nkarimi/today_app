@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomCalendar extends StatefulWidget {
   const CustomCalendar({Key? key}) : super(key: key);
@@ -23,36 +26,74 @@ class _CustomCalendarState extends State<CustomCalendar> {
   int esfandLength = 29;
   int esfandLengthInPreviousYear = 29;
 
+  List<String> holidayTitles = [];
+  List<String> holidayDates = [];
+
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     int initialPage = _getTodayInShamsi()[1] - 1;
     print("initialPage $initialPage");
-    _pageController = PageController(initialPage: initialPage + 600, keepPage: true, viewportFraction: 1);
+    _pageController = PageController(
+        initialPage: initialPage + 600, keepPage: true, viewportFraction: 1);
     currentMonth = initialPage;
     currentStartDay = getFirstDayInMonth();
     thisYear = getThisYear();
     getStartDay();
     getEndDay();
+    // WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    //   await loadJson();
+    // });
+    loadJson().then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
-  List<String> months = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
+  List<String> months = [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+    "مهر",
+    "آبان",
+    "آذر",
+    "دی",
+    "بهمن",
+    "اسفند"
+  ];
 
-  Widget rowText(String text, {bool isTitle = false, bool isToday = false}) {
+  Widget rowText(String text,
+      {bool isTitle = false, bool isToday = false, bool isHoliday = false}) {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isToday?Colors.blue:isTitle ? Colors.red : Colors.blue.withOpacity(0.3),
+        color: isToday
+            ? Colors.blue
+            : isTitle
+                ? Colors.red
+                : Colors.blue.withOpacity(0.3),
         borderRadius: BorderRadius.circular(2.0),
+        // border: Border.all(
+        //   width: 3.0,
+        //   color: isHoliday ? Colors.orange : Colors.transparent,
+        //   style: BorderStyle.solid,
+        // ),
       ),
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.all(0.5),
       child: Text(
         text,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: "Negar",
-          color: Colors.white,
+          color: isHoliday ? Colors.red : Colors.white,
         ),
       ),
     );
@@ -98,7 +139,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
             ),
           ),
           Container(
-            height: 250,
+            height: 270,
             child: PageView.builder(
               // itemCount: 12,
               onPageChanged: (i) {
@@ -121,12 +162,17 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     currentStartDay = startDayPreviousMonth;
                   }
                   // after updating thisYear
-                  isFullYear = (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
-                  isPreviousYearFullYear = (thisYear - 1 - 1399).abs().remainder(4) == 0 ? true : false;
+                  isFullYear =
+                      (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
+                  isPreviousYearFullYear =
+                      (thisYear - 1 - 1399).abs().remainder(4) == 0
+                          ? true
+                          : false;
                   esfandLength = isFullYear ? 30 : 29;
                   esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
                   currentMonth = modifiedI;
-                  print("currentMonth $currentMonth , i=$modifiedI , isFullYear: $isFullYear");
+                  print(
+                      "currentMonth $currentMonth , i=$modifiedI , isFullYear: $isFullYear");
                   getStartDay();
                   getEndDay();
                   // currentStartDay++;
@@ -176,7 +222,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
       // color: Colors.white,
 
       padding: const EdgeInsets.all(20.0),
-      child: buildCalendar(),
+      child: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : buildCalendar(),
     );
   }
 
@@ -191,7 +239,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
       list.add(rowText(""));
     }
 
-    if ((startDay <= 4) || (startDay == 5 && month > 6) || (startDay == 6 && month == 11)) {
+    if ((startDay <= 4) ||
+        (startDay == 5 && month > 6) ||
+        (startDay == 6 && month == 11)) {
       //35
 
     }
@@ -216,15 +266,27 @@ class _CustomCalendarState extends State<CustomCalendar> {
     if (startDay == 6 && month == 11 && isFullYear) rowCount = 6;
     print("rowCount $rowCount , endDay $endDay , isFullYear $isFullYear");
     int correction = 0;
+    bool isHoliday = false;
     for (int row = 1; row <= rowCount; row++) {
       for (int cul = 1; cul <= 7; cul++) {
         int day = cul + (7 * (row - 1)) - correction;
+        String hol =
+            "${month.toString().length == 1 ? '0$month' : month}${day.toString().length == 1 ? '0$day' : day}";
+        if (cul == 7 || holidayDates.contains(hol)) {
+          isHoliday = true;
+        } else {
+          isHoliday = false;
+        }
         if (cul <= startDay && row == 1) {
           correction++;
           continue;
         }
         // do not forget to apply year too!!
-        (day == dayInMonth && month == monthInYear-1) ? list.add(rowText((day <= endDay) ? '$day' : "",isToday: true)) : list.add(rowText((day <= endDay) ? '$day' : ""));
+        (day == dayInMonth && month == monthInYear - 1)
+            ? list.add(rowText((day <= endDay) ? '$day' : "",
+                isToday: true, isHoliday: isHoliday))
+            : list.add(
+                rowText((day <= endDay) ? '$day' : "", isHoliday: isHoliday));
       }
     }
 
@@ -246,8 +308,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   //calculating today based on different to 2021/1/1 as Friday
   String _getToday() {
-    int todayNumber =
-        (DateTime.now().difference(DateTime(2021, 1, 1)).inDays) - (DateTime.now().difference(DateTime(2021, 1, 1)).inDays / 7).floor() * 7;
+    int todayNumber = (DateTime.now().difference(DateTime(2021, 1, 1)).inDays) -
+        (DateTime.now().difference(DateTime(2021, 1, 1)).inDays / 7).floor() *
+            7;
     String todayString = "";
     switch (todayNumber) {
       case 1:
@@ -275,8 +338,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
   }
 
   List<int> _getTodayInShamsi() {
-    List<int> todayDate = []; //day number nth in month ,month number nth in year
-    int dayCount = (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
+    List<int> todayDate =
+        []; //day number nth in month ,month number nth in year
+    int dayCount =
+        (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
 
     int monthInYear = 1;
     int dayInMonth = 1;
@@ -301,7 +366,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
   }
 
   int getThisYear() {
-    int daysCount = (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
+    int daysCount =
+        (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
     int thisYear = (daysCount / 364).floor() + 1400;
     print("thisYear $thisYear");
     return thisYear;
@@ -317,8 +383,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
     // int month = todayDate[1];
 
     // 1:sat 2:sun 3:mon 4:...
-    int dayInSeven =
-        (DateTime.now().difference(DateTime(2021, 1, 1)).inDays) - (DateTime.now().difference(DateTime(2021, 1, 1)).inDays / 7).floor() * 7;
+    int dayInSeven = (DateTime.now().difference(DateTime(2021, 1, 1)).inDays) -
+        (DateTime.now().difference(DateTime(2021, 1, 1)).inDays / 7).floor() *
+            7;
     // int diff = todayNumber - dayInSeven;
     // print("diff: $diff");
     int firstDay = dayInSeven - dayInMonth.remainder(7).toInt();
@@ -333,14 +400,18 @@ class _CustomCalendarState extends State<CustomCalendar> {
   int getEndDay() {
     int todayNumber = currentStartDay;
     int monthNumber = currentMonth;
-    int monthLength = monthNumber == 11 ? esfandLength : (monthNumber > 5 ? 30 : 31);
-    int currentEndDay = todayNumber + (monthLength - (monthLength / 7).floor() * 7 - 1);
+    int monthLength =
+        monthNumber == 11 ? esfandLength : (monthNumber > 5 ? 30 : 31);
+    int currentEndDay =
+        todayNumber + (monthLength - (monthLength / 7).floor() * 7 - 1);
     startDayNextMonth = currentEndDay + 1;
     currentEndDay = currentEndDay > 6 ? currentEndDay - 7 : currentEndDay;
     currentEndDay = currentEndDay < 0 ? currentEndDay + 7 : currentEndDay;
     // print("currentEndDay $currentEndDay");
-    startDayNextMonth = startDayNextMonth > 6 ? startDayNextMonth - 7 : startDayNextMonth;
-    startDayNextMonth = startDayNextMonth < 0 ? startDayNextMonth + 7 : startDayNextMonth;
+    startDayNextMonth =
+        startDayNextMonth > 6 ? startDayNextMonth - 7 : startDayNextMonth;
+    startDayNextMonth =
+        startDayNextMonth < 0 ? startDayNextMonth + 7 : startDayNextMonth;
     // print("startDayNextMonth $startDayNextMonth");
     // print("startDay $currentStartDay");
     print("-------------------------------");
@@ -351,19 +422,45 @@ class _CustomCalendarState extends State<CustomCalendar> {
     int todayNumber = currentStartDay;
     int previousMonthNumber = currentMonth - 1;
     if (previousMonthNumber < 0) previousMonthNumber = 11;
-    int monthLength = previousMonthNumber == 11 ? esfandLengthInPreviousYear : (previousMonthNumber > 5 ? 30 : 31);
+    int monthLength = previousMonthNumber == 11
+        ? esfandLengthInPreviousYear
+        : (previousMonthNumber > 5 ? 30 : 31);
     // int currentMonthLength = currentMonth == 11 ? 29 : (currentMonth > 5 ? 30 : 31);
     // int currentEndDay = todayNumber + (currentMonthLength - (currentMonthLength / 7).round() * 7 - 1);
     // currentEndDay = currentEndDay > 6 ? currentEndDay - 7 : currentEndDay;
     int previousMontEndDay = currentStartDay - 1;
-    previousMontEndDay = previousMontEndDay < 0 ? previousMontEndDay + 7 : previousMontEndDay;
-    previousMontEndDay = previousMontEndDay > 6 ? previousMontEndDay - 7 : previousMontEndDay;
+    previousMontEndDay =
+        previousMontEndDay < 0 ? previousMontEndDay + 7 : previousMontEndDay;
+    previousMontEndDay =
+        previousMontEndDay > 6 ? previousMontEndDay - 7 : previousMontEndDay;
     // print("previousMontEndDay $previousMontEndDay");
-    startDayPreviousMonth = previousMontEndDay - (monthLength - (monthLength / 7).floor() * 7 - 1);
-    startDayPreviousMonth = startDayPreviousMonth < 0 ? startDayPreviousMonth + 7 : startDayPreviousMonth;
-    startDayPreviousMonth = startDayPreviousMonth > 6 ? startDayPreviousMonth - 7 : startDayPreviousMonth;
+    startDayPreviousMonth =
+        previousMontEndDay - (monthLength - (monthLength / 7).floor() * 7 - 1);
+    startDayPreviousMonth = startDayPreviousMonth < 0
+        ? startDayPreviousMonth + 7
+        : startDayPreviousMonth;
+    startDayPreviousMonth = startDayPreviousMonth > 6
+        ? startDayPreviousMonth - 7
+        : startDayPreviousMonth;
     print("monthLength $monthLength");
     print("startDayPreviousMonth $startDayPreviousMonth");
     return 1;
+  }
+
+  Future<void> loadJson() async {
+    var data = await rootBundle.loadString('assets/json/shamsi_holiday.json');
+    List<dynamic> jsonResult = jsonDecode(data);
+
+    for (var i = 0; i < jsonResult.length; i++) {
+      String title =
+          jsonResult.elementAt(i)["title"] ?? "oooooooooooooooooooooooooo";
+      String date = jsonResult.elementAt(i)["date"] ?? "1111111111111111";
+      holidayDates.add(date);
+      title = title.trim();
+      holidayTitles.add(title);
+    }
+
+    print(holidayTitles);
+    print(holidayDates);
   }
 }
