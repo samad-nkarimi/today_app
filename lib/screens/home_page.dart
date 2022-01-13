@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,6 +29,44 @@ class _HomePageState extends State<HomePage> {
   // int noteCount = 0;
   final double showBoardSize = 130;
   final double topPictureHeight = 300;
+
+  Future<void> loadJson() async {
+    var data = await rootBundle.loadString('assets/json/shamsi_holiday.json');
+    List<dynamic> jsonResult = jsonDecode(data);
+    List<String> holidayTitles = [];
+    List<String> holidayDates = [];
+    for (var i = 0; i < jsonResult.length; i++) {
+      String title =
+          jsonResult.elementAt(i)["title"] ?? "oooooooooooooooooooooooooo";
+      String date = jsonResult.elementAt(i)["date"] ?? "1111111111111111";
+      holidayDates.add(date);
+      title = title.trim();
+      holidayTitles.add(title);
+
+      // final wordObject =
+      //     Word(title, meaning, definition, "no ex1", "no ex2", "no ex3");
+      // wordObjectList.add(wordObject);
+      // WordsDatabase().add(wordObject);
+      // print('$i: $word');
+    }
+
+    print(holidayTitles);
+    print(holidayDates);
+    // print(jsonResult.length);
+    // print(wordObjectList);
+    // print(wordObjectList.length);
+    // print("finished");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    //   await loadJson();
+    // });
+    this.loadJson();
+  }
 
   @override
   Widget build(BuildContext context) {

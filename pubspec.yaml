@@ -85,6 +85,7 @@ flutter:
     - assets/images/fall.gif
     - assets/images/tick8_logo.svg
     - assets/images/tick8_logo.png
+    - assets/json/shamsi_holiday.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
