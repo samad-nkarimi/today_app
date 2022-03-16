@@ -33,6 +33,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
   List<String> holidayDates = [];
   List<int> holidayCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+  //shamsi adequacy
+  List<String> shamsiAdequacyTitles = [];
+  List<String> shamsiAdequacyDates = [];
+  List<int> shamsiAdequacyCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
   bool isLoading = true;
 
   @override
@@ -55,6 +60,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
     //   await loadJson();
     // });
     loadJson().then((value) {
+      setState(() {
+        isLoading = false;
+        print(getAdequaciesList(0));
+      });
+    });
+
+    //shamsi adequacy
+    loadShamsiAdequacyJson().then((value) {
       setState(() {
         isLoading = false;
         print(getAdequaciesList(0));
@@ -284,8 +297,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
     for (int row = 1; row <= rowCount; row++) {
       for (int cul = 1; cul <= 7; cul++) {
         int day = cul + (7 * (row - 1)) - correction;
+        String myMonth = (month + 1).toString(); // in json: 1..12
         String hol =
-            "${month.toString().length == 1 ? '0$month' : month}${day.toString().length == 1 ? '0$day' : day}";
+            "${myMonth.length == 1 ? '0$myMonth' : myMonth}${day.toString().length == 1 ? '0$day' : day}";
         if (cul == 7 || holidayDates.contains(hol)) {
           isHoliday = true;
         } else {
@@ -483,20 +497,70 @@ class _CustomCalendarState extends State<CustomCalendar> {
     print(holidayDates);
   }
 
+  Future<void> loadShamsiAdequacyJson() async {
+    var data = await rootBundle.loadString('assets/json/shamsi_adequacy.json');
+    List<dynamic> jsonResult = jsonDecode(data);
+
+    for (var i = 0; i < jsonResult.length; i++) {
+      String date = (jsonResult.elementAt(i) as Map<String, dynamic>)
+          .keys
+          .toList()[0]
+          .toString();
+      String title = (jsonResult.elementAt(i) as Map<String, dynamic>)
+          .values
+          .toList()[0]
+          .toString(); //sample:"0101"
+
+      shamsiAdequacyCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
+
+      shamsiAdequacyDates.add(date);
+      title = title.trim();
+      shamsiAdequacyTitles.add(title);
+      print(shamsiAdequacyCountPerMonth);
+    }
+
+    print(shamsiAdequacyTitles);
+    print(shamsiAdequacyDates);
+  }
+
+  // Future<List<String>> getAdequaciesList(int currentMonth) async {
+  //   List<String> adequacies = [];
+  //   // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
+  //   int startIndex = 0;
+  //   for (var i = 0; i < currentMonth; i++) {
+  //     startIndex = startIndex + holidayCountPerMonth[i];
+  //   }
+
+  //   int endIndex = holidayCountPerMonth[currentMonth] + startIndex;
+  //   print(currentMonth);
+  //   print(startIndex);
+  //   print(endIndex);
+  //   // if (startIndex == endIndex)
+  //   //   print(endIndex);
+  //   // else
+  //   adequacies = holidayTitles.sublist(startIndex, endIndex);
+  //   // }
+
+  //   return adequacies;
+  // }
+
+  //shamsi adequacy
   Future<List<String>> getAdequaciesList(int currentMonth) async {
     List<String> adequacies = [];
     // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
-    int startIndex = holidayCountPerMonth
-            .getRange(0, holidayCountPerMonth[currentMonth])
-            .reduce((value, element) => value + element) -
-        1;
-    int endIndex = holidayCountPerMonth[currentMonth] + startIndex;
+    int startIndex = 0;
+    for (var i = 0; i < currentMonth; i++) {
+      startIndex = startIndex + shamsiAdequacyCountPerMonth[i];
+    }
+
+    int endIndex = shamsiAdequacyCountPerMonth[currentMonth] + startIndex;
+    print(currentMonth);
     print(startIndex);
     print(endIndex);
-    if (startIndex == endIndex)
-      print(endIndex);
-    else
-      adequacies = holidayTitles.sublist(startIndex, endIndex);
+    // if (startIndex == endIndex)
+    //   print(endIndex);
+    // else
+    adequacies = shamsiAdequacyTitles.sublist(startIndex, endIndex);
     // }
 
     return adequacies;

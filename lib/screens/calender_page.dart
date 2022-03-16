@@ -176,9 +176,12 @@ class _CalendarPageState extends State<CalendarPage> {
                         ? Container(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 30),
-                            height: 500,
+                            // height: 500,
                             width: double.infinity,
                             child: ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: const NeverScrollableScrollPhysics(),
                               children: [
                                 for (var i = 0;
                                     i < state.adequacies.length;
@@ -190,11 +193,14 @@ class _CalendarPageState extends State<CalendarPage> {
                                         horizontal: 40, vertical: 20),
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 1),
-                                    child: Text(state.adequacies[i]),
+                                    child: Text(
+                                      state.adequacies[i],
+                                      textAlign: TextAlign.right,
+                                    ),
                                   )
                               ],
                             ),
-                            color: Colors.grey,
+                            // color: Colors.grey,
                           )
                         : const CircularProgressIndicator();
                   })

@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     // WidgetsBinding.instance!.addPostFrameCallback((_) async {
     //   await loadJson();
     // });
-    this.loadJson();
+    // this.loadJson();
   }
 
   @override
