@@ -9,3 +9,11 @@ class MonthAdequaciesSentCalenderEvent extends CalenderEvent {
   @override
   List<Object?> get props => [adequacies];
 }
+
+class CalendarScrolledCalenderEvent extends CalenderEvent {
+  final int monthId;
+
+  CalendarScrolledCalenderEvent(this.monthId);
+  @override
+  List<Object?> get props => [monthId];
+}

@@ -48,7 +48,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     print("initialPage $initialPage");
     _pageController = PageController(
       initialPage: initialPage + 600,
-      keepPage: true,
+      keepPage: false,
       viewportFraction: 1,
     );
     currentMonth = initialPage;
@@ -154,7 +154,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
                       );
                     },
                     icon: const Icon(Icons.navigate_next)),
-                Expanded(child: Center(child: Text(months[currentMonth]))),
+                BlocBuilder<CalenderBloc, CalenderState>(
+                    builder: (context, state) {
+                  print(state);
+                  int monthId = state is MonthUpdatedCalenderState
+                      ? state.monthId
+                      : currentMonth;
+                  return Expanded(child: Center(child: Text(months[monthId])));
+                }),
                 Text("$thisYear"),
               ],
             ),
@@ -164,51 +171,39 @@ class _CustomCalendarState extends State<CustomCalendar> {
             child: PageView.builder(
               // itemCount: 12,
               dragStartBehavior: DragStartBehavior.start,
+
               onPageChanged: (i) {
-                int modifiedI = i - (i / 12).floor() * 12;
+                print("onChanged pageview");
 
-                getAdequaciesList(modifiedI).then((value) {
-                  BlocProvider.of<CalenderBloc>(context)
-                      .add(MonthAdequaciesSentCalenderEvent(value));
-                });
-
-                setState(() {
-                  if (currentMonth > modifiedI) {
-                    currentStartDay = startDayPreviousMonth;
-                  } else {
-                    currentStartDay = startDayNextMonth;
-                  }
-                  // for start new year
-                  if (currentMonth == 11 && modifiedI == 0) {
-                    thisYear++;
-                    currentStartDay = startDayNextMonth;
-                  }
-                  // for comeback to previous year
-                  if (currentMonth == 0 && modifiedI == 11) {
-                    thisYear--;
-                    currentStartDay = startDayPreviousMonth;
-                  }
-                  // after updating thisYear
-                  isFullYear =
-                      (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
-                  isPreviousYearFullYear =
-                      (thisYear - 1 - 1399).abs().remainder(4) == 0
-                          ? true
-                          : false;
-                  esfandLength = isFullYear ? 30 : 29;
-                  esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
-                  currentMonth = modifiedI;
-                  print(
-                      "currentMonth $currentMonth , i=$modifiedI , isFullYear: $isFullYear");
-                  getStartDay();
-                  getEndDay();
-                  // currentStartDay++;
-                });
+                //the month we are scrolling to go to it
+                int modifiedId = i - (i / 12).floor() * 12;
+                print("*******$currentMonth*****$modifiedId******");
+                int targetMonth;
+                if (currentMonth > modifiedId) {
+                  targetMonth = modifiedId;
+                } else {
+                  targetMonth = modifiedId - 1 < 0 ? 11 : modifiedId - 1;
+                }
+                print("target: $targetMonth");
+                // BlocProvider.of<CalenderBloc>(context)
+                //     .add(CalendarScrolledCalenderEvent(targetMonth));
               },
               controller: _pageController,
               itemBuilder: (BuildContext context, int itemIndex) {
                 // _pageController?.animateToPage(_getTodayInShamsi()[1]-1,duration: const Duration(milliseconds: 500),curve: Curves.bounceIn,);
-                return contentTable();
+                //why itemIndex change irregularly ????? -> cause of keepPage=true ???
+                // index is the target month
+                int index = (600 - itemIndex).abs() % 12;
+                print("item index: $itemIndex");
+                print("index: $index");
+                getAdequaciesList(index).then((value) {
+                  BlocProvider.of<CalenderBloc>(context)
+                      .add(MonthAdequaciesSentCalenderEvent(value));
+                });
+                BlocProvider.of<CalenderBloc>(context)
+                    .add(CalendarScrolledCalenderEvent(index));
+
+                return contentTable(index);
               },
             ),
           ),
@@ -218,7 +213,39 @@ class _CustomCalendarState extends State<CustomCalendar> {
     );
   }
 
-  Widget contentTable() {
+  Widget contentTable(int index) {
+    // setState(() {
+    getStartDay();
+    getEndDay();
+    print("$currentStartDay**");
+
+    if (currentMonth > index) {
+      currentStartDay = startDayPreviousMonth;
+    } else if (currentMonth < index) {
+      currentStartDay = startDayNextMonth;
+    }
+    // for start new year
+    if (currentMonth == 11 && index == 0) {
+      thisYear++;
+      currentStartDay = startDayNextMonth;
+    }
+    // for comeback to previous year
+    if (currentMonth == 0 && index == 11) {
+      thisYear--;
+      currentStartDay = startDayPreviousMonth;
+    }
+    // after updating thisYear
+    isFullYear = (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
+    isPreviousYearFullYear =
+        (thisYear - 1 - 1399).abs().remainder(4) == 0 ? true : false;
+    esfandLength = isFullYear ? 30 : 29;
+    esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
+    currentMonth = index;
+    print("$currentStartDay**");
+    print("currentMonth $currentMonth , i=$index , isFullYear: $isFullYear");
+
+    // currentStartDay++;
+    // });
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Table(

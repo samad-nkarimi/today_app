@@ -172,6 +172,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   // ),
                   BlocBuilder<CalenderBloc, CalenderState>(
                       builder: (context, state) {
+                    print("from page : $state");
                     return state is MonthAdequaciesCalenderState
                         ? Container(
                             margin: const EdgeInsets.symmetric(

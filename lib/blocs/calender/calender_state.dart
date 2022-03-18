@@ -14,3 +14,11 @@ class MonthAdequaciesCalenderState extends CalenderState {
   @override
   List<Object?> get props => [adequacies];
 }
+
+class MonthUpdatedCalenderState extends CalenderState {
+  final int monthId;
+
+  MonthUpdatedCalenderState(this.monthId);
+  @override
+  List<Object?> get props => [monthId];
+}
