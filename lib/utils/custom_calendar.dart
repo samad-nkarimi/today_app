@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -92,29 +93,43 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   Widget rowText(String text,
       {bool isTitle = false, bool isToday = false, bool isHoliday = false}) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: isToday
-            ? Colors.blue
-            : isTitle
-                ? Colors.red
-                : Colors.blue.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(2.0),
-        // border: Border.all(
-        //   width: 3.0,
-        //   color: isHoliday ? Colors.orange : Colors.transparent,
-        //   style: BorderStyle.solid,
-        // ),
-      ),
-      padding: const EdgeInsets.all(10.0),
-      margin: const EdgeInsets.all(0.5),
-      child: Text(
-        text,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontFamily: "Negar",
-          color: isHoliday ? Colors.red : Colors.white,
+    return ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isToday
+                ? Colors.green
+                : isTitle
+                    ? Colors.red
+                    : Colors.blue.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(isTitle
+                ? 10
+                : isToday
+                    ? 20
+                    : 2.0),
+            border: Border.all(
+              width: isToday ? 1.0 : 1.0,
+              color: (isHoliday && text.isNotEmpty)
+                  ? Colors.orange
+                  : isToday
+                      ? Colors.white
+                      : Colors.transparent,
+              style: BorderStyle.solid,
+            ),
+          ),
+          padding: const EdgeInsets.all(10.0),
+          margin: const EdgeInsets.all(0.5),
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontFamily: "Negar",
+              color: isHoliday ? Colors.red : Colors.white,
+            ),
+          ),
         ),
       ),
     );
@@ -123,93 +138,108 @@ class _CustomCalendarState extends State<CustomCalendar> {
   Widget buildCalendar() {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: Colors.blue.withOpacity(0.3),
+      child: Container(
+        // color: Colors.orange,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                child: Container(
+                  // alignment: Alignment.bottomCenter,
+                  // color: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.blue.withOpacity(0.3),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            _pageController?.animateToPage(
+                              currentMonth + 1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          icon: const Icon(Icons.chevron_left)),
+                      IconButton(
+                          onPressed: () {
+                            _pageController?.animateToPage(
+                              currentMonth - 1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          icon: const Icon(Icons.navigate_next)),
+                      BlocBuilder<CalenderBloc, CalenderState>(
+                          builder: (context, state) {
+                        print(state);
+                        int monthId = state is MonthUpdatedCalenderState
+                            ? state.monthId
+                            : currentMonth;
+                        return Expanded(
+                            child: Center(child: Text(months[monthId])));
+                      }),
+                      Text("$thisYear"),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      _pageController?.animateToPage(
-                        currentMonth + 1,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    icon: const Icon(Icons.chevron_left)),
-                IconButton(
-                    onPressed: () {
-                      _pageController?.animateToPage(
-                        currentMonth - 1,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    icon: const Icon(Icons.navigate_next)),
-                BlocBuilder<CalenderBloc, CalenderState>(
-                    builder: (context, state) {
-                  print(state);
-                  int monthId = state is MonthUpdatedCalenderState
-                      ? state.monthId
-                      : currentMonth;
-                  return Expanded(child: Center(child: Text(months[monthId])));
-                }),
-                Text("$thisYear"),
-              ],
-            ),
-          ),
-          Container(
-            height: 270,
-            child: PageView.builder(
-              // itemCount: 12,
-              dragStartBehavior: DragStartBehavior.start,
+            Container(
+              height: 275,
+              // color: Colors.black45,
+              alignment: Alignment.bottomCenter,
+              child: PageView.builder(
+                // itemCount: 12,
+                dragStartBehavior: DragStartBehavior.start,
 
-              onPageChanged: (i) {
-                print("onChanged pageview");
+                onPageChanged: (i) {
+                  print("onChanged pageview");
 
-                //the month we are scrolling to go to it
-                int modifiedId = i - (i / 12).floor() * 12;
-                print("*******$currentMonth*****$modifiedId******");
-                int targetMonth;
-                if (currentMonth > modifiedId) {
-                  targetMonth = modifiedId;
-                } else {
-                  targetMonth = modifiedId - 1 < 0 ? 11 : modifiedId - 1;
-                }
-                print("target: $targetMonth");
-                // BlocProvider.of<CalenderBloc>(context)
-                //     .add(CalendarScrolledCalenderEvent(targetMonth));
-              },
-              controller: _pageController,
-              itemBuilder: (BuildContext context, int itemIndex) {
-                // _pageController?.animateToPage(_getTodayInShamsi()[1]-1,duration: const Duration(milliseconds: 500),curve: Curves.bounceIn,);
-                //why itemIndex change irregularly ????? -> cause of keepPage=true ???
-                // index is the target month
-                // currentMonth is the month we are scrolling from
-                int index = (600 - itemIndex).abs() % 12;
-                print("item index: $itemIndex");
-                print("index: $index");
-                getAdequaciesList(index).then((value) {
+                  //the month we are scrolling to go to it
+                  int modifiedId = i - (i / 12).floor() * 12;
+                  print("*******$currentMonth*****$modifiedId******");
+                  int targetMonth;
+                  if (currentMonth > modifiedId) {
+                    targetMonth = modifiedId;
+                  } else {
+                    targetMonth = modifiedId - 1 < 0 ? 11 : modifiedId - 1;
+                  }
+                  print("target: $targetMonth");
+                  // BlocProvider.of<CalenderBloc>(context)
+                  //     .add(CalendarScrolledCalenderEvent(targetMonth));
+                },
+                controller: _pageController,
+                itemBuilder: (BuildContext context, int itemIndex) {
+                  // _pageController?.animateToPage(_getTodayInShamsi()[1]-1,duration: const Duration(milliseconds: 500),curve: Curves.bounceIn,);
+                  //why itemIndex change irregularly ????? -> cause of keepPage=true ???
+                  // index is the target month
+                  // currentMonth is the month we are scrolling from
+                  int index = (600 - itemIndex).abs() % 12;
+                  print("item index: $itemIndex");
+                  print("index: $index");
+                  getAdequaciesList(index).then((value) {
+                    BlocProvider.of<CalenderBloc>(context)
+                        .add(MonthAdequaciesSentCalenderEvent(value));
+                  });
                   BlocProvider.of<CalenderBloc>(context)
-                      .add(MonthAdequaciesSentCalenderEvent(value));
-                });
-                BlocProvider.of<CalenderBloc>(context)
-                    .add(CalendarScrolledCalenderEvent(index));
+                      .add(CalendarScrolledCalenderEvent(index));
 
-                return contentTable(index);
-              },
+                  return contentTable(index);
+                },
+              ),
             ),
-          ),
-          // Text(_getTodayInShamsi())
-        ],
+            // Text(_getTodayInShamsi())
+          ],
+        ),
       ),
     );
   }

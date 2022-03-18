@@ -113,119 +113,133 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      endDrawer: const DrawerWidget(),
-      body: SingleChildScrollView(
-        child: BlocBuilder<NoteBloc, NoteState>(
-          builder: (context, state) {
-            List<Note> notes = state.notes.getCalenderNotes;
-            // print("notes: $notes");
-            // print("state: $state");
-            // if(state is NewNoteIsAdded)
-            // noteCount++;
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: const [0.5, 1.0],
-                  colors: [
-                    // Colors.green,
-                    // Colors.red,
-                    Theme.of(context).scaffoldBackgroundColor,
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  const CustomCalendar(),
-                  if (notes.isEmpty) noNoteWidget(),
-                  for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
-
-                  // NoteItem(labelColor: Colors.orange),
-                  // NoteItem(labelColor: Colors.green),
-                  // NoteItem(labelColor: Colors.red),
-                  // NoteItem(),
-                  addNoteButtonWidget(),
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     showModalBottomSheet(
-                  //       shape: const RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.only(
-                  //           topLeft: Radius.circular(30.0),
-                  //           topRight: Radius.circular(30.0),
-                  //         ),
-                  //       ),
-                  //       context: context,
-                  //       builder: (context) {
-                  //         return Container(
-                  //           // height: 300,
-                  //           color: Colors.transparent,
-                  //           child: const FormWidget(),
-                  //         );
-                  //       },
-                  //     );
-                  //   },
-                  //   child: const Text("add note"),
-                  // ),
-                  BlocBuilder<CalenderBloc, CalenderState>(
-                      builder: (context, state) {
-                    print("from page : $state");
-                    return state is MonthAdequaciesCalenderState
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 30),
-                            // height: 500,
-                            width: double.infinity,
-                            child: ListView(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                for (var i = 0;
-                                    i < state.adequacies.length;
-                                    i++)
-                                  Container(
-                                    color: Colors.white,
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 40, vertical: 20),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 1),
-                                    child: Text(
-                                      state.adequacies[i],
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  )
-                              ],
-                            ),
-                            // color: Colors.grey,
-                          )
-                        : const CircularProgressIndicator();
-                  })
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: InkWell(
-        onTap: () => Navigator.pop(context),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(20.0),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        endDrawer: const DrawerWidget(),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              // begin: Alignment.topLeft,
+              // end: Alignment.bottomRight,
+              center: Alignment.topLeft,
+              radius: 1.4,
+              stops: const [0.5, 1.0],
+              colors: [
+                Color(0xFFB2AFFF),
+                Color(0xFF003AD9),
+                // Theme.of(context).scaffoldBackgroundColor,
+                // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+              ],
+            ),
           ),
-          padding: const EdgeInsets.all(14.0),
-          child: const Text(
-            "امروز",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Negar",
+          child: SingleChildScrollView(
+            child: BlocBuilder<NoteBloc, NoteState>(
+              builder: (context, state) {
+                List<Note> notes = state.notes.getCalenderNotes;
+                // print("notes: $notes");
+                // print("state: $state");
+                // if(state is NewNoteIsAdded)
+                // noteCount++;
+                return Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.amber,
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/rose.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      child: const CustomCalendar(),
+                    ),
+                    if (notes.isEmpty) noNoteWidget(),
+                    for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
+
+                    // NoteItem(labelColor: Colors.orange),
+                    // NoteItem(labelColor: Colors.green),
+                    // NoteItem(labelColor: Colors.red),
+                    // NoteItem(),
+                    addNoteButtonWidget(),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     showModalBottomSheet(
+                    //       shape: const RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.only(
+                    //           topLeft: Radius.circular(30.0),
+                    //           topRight: Radius.circular(30.0),
+                    //         ),
+                    //       ),
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return Container(
+                    //           // height: 300,
+                    //           color: Colors.transparent,
+                    //           child: const FormWidget(),
+                    //         );
+                    //       },
+                    //     );
+                    //   },
+                    //   child: const Text("add note"),
+                    // ),
+                    BlocBuilder<CalenderBloc, CalenderState>(
+                        builder: (context, state) {
+                      print("from page : $state");
+                      return state is MonthAdequaciesCalenderState
+                          ? Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 30),
+                              // height: 500,
+                              width: double.infinity,
+                              child: ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: [
+                                  for (var i = 0;
+                                      i < state.adequacies.length;
+                                      i++)
+                                    Container(
+                                      color: Colors.white,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40, vertical: 20),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 1),
+                                      child: Text(
+                                        state.adequacies[i],
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    )
+                                ],
+                              ),
+                              // color: Colors.grey,
+                            )
+                          : const CircularProgressIndicator();
+                    })
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            padding: const EdgeInsets.all(14.0),
+            child: const Text(
+              "امروز",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Negar",
+              ),
             ),
           ),
         ),
