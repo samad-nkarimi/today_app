@@ -193,6 +193,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 // _pageController?.animateToPage(_getTodayInShamsi()[1]-1,duration: const Duration(milliseconds: 500),curve: Curves.bounceIn,);
                 //why itemIndex change irregularly ????? -> cause of keepPage=true ???
                 // index is the target month
+                // currentMonth is the month we are scrolling from
                 int index = (600 - itemIndex).abs() % 12;
                 print("item index: $itemIndex");
                 print("index: $index");

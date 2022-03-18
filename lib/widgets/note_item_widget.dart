@@ -6,113 +6,181 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../blocs/blocs.dart';
 import '../models/models.dart';
 
-class NoteItem extends StatelessWidget {
+class NoteItem extends StatefulWidget {
   final Note note;
 
   const NoteItem(this.note, {Key? key}) : super(key: key);
 
   @override
+  State<NoteItem> createState() => _NoteItemState();
+}
+
+class _NoteItemState extends State<NoteItem> {
+  double cornerSize = 25;
+  Color backColor = Colors.red;
+  // bool isColorSet = false;
+  var oldDirection;
+  double crossOffset = .2;
+  @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.of(context).size.width;
     // print(labelColor.toString());
+
     return Container(
+      height: 80,
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(cornerSize),
+        // border: Border.all(width: 1, color: Colors.black),
+        color: backColor,
+        backgroundBlendMode: BlendMode.darken,
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 1.0),
+
       // padding: const EdgeInsets.only(right: 8.0, left: 14.0),
       child: Dismissible(
-        key: Key(note.getId.toString()),
+        key: Key(widget.note.getId.toString()),
         confirmDismiss: (direction) async {
+          print("confirm");
+
           if (direction == DismissDirection.endToStart) {
-            BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(note));
+            BlocProvider.of<NoteBloc>(context).add(NoteWasRemoved(widget.note));
             return true;
           } else {
             return false;
+          }
+        },
+        crossAxisEndOffset: crossOffset,
+        onUpdate: (d) {
+          print(d.direction);
+          if (oldDirection == null || oldDirection != d.direction) {
+            print("into iffff");
+            if (d.direction == DismissDirection.endToStart) {
+              setState(() {
+                backColor = Colors.red;
+                // crossOffset = -0.2;
+              });
+            } else {
+              setState(() {
+                backColor = Colors.grey;
+                // crossOffset = 0.2;
+              });
+            }
+            oldDirection = d.direction;
           }
         },
         onDismissed: (d) {
           print(d.index);
         },
         secondaryBackground: Container(
-          color: Colors.red,
-          child: const Center(
-            child: Text("delete"),
-          ),
-        ),
-        background: Container(color: Colors.grey),
-        child: Container(
-          // margin: const EdgeInsets.symmetric(vertical: 1.0),
-          padding: const EdgeInsets.only(right: 8.0, left: 14.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3.0),
-            gradient: const LinearGradient(
-              colors: [Color(0xFF68E0F3), Color(0xFFD1F6FC)],
-              begin: Alignment.centerRight,
-              end: Alignment.centerLeft,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                Text(""),
+                Text("delete"),
+              ],
             ),
-            // boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.35), spreadRadius: 1, blurRadius: 1, offset: const Offset(0, 3))],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width - 135,
-                // color: Colors.red,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: SvgPicture.asset("assets/images/arrow.svg"),
-                    ),
-                    // SvgPicture.asset("assets/images/tick.svg"),
-                    // const Text("15:25"),
-                    // const Spacer(),
-                    Flexible(
-                      flex: 3,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        // width: 170,
-                        // color: Colors.yellow,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 2.0),
-                              child: Text(
-                                note.title,
-                                style: Theme.of(context).textTheme.subtitle1,
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                            Text(
-                              note.subTitle,
-                              style: Theme.of(context).textTheme.subtitle2,
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: SvgPicture.asset(
-                  "assets/images/label_red.svg",
-                  color: note.labelColor,
-                ),
-              ),
-            ],
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(cornerSize),
+            color: Colors.red,
           ),
         ),
+        background: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(cornerSize),
+            color: Colors.grey,
+          ),
+        ),
+        child: _noteContentWidget(),
+      ),
+    );
+  }
+
+  Widget _noteContentWidget() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      // margin: const EdgeInsets.symmetric(vertical: 1.0),
+      padding: const EdgeInsets.only(right: 16.0, left: 14.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(cornerSize),
+        border: Border.all(width: 1, color: Colors.white),
+        gradient: RadialGradient(
+          colors: [
+            const Color(0xFFBC00AA).withOpacity(0.3),
+            const Color(0xFF00C8CF).withOpacity(0.3),
+          ],
+          center: Alignment.topRight,
+          radius: 2.8, focalRadius: 2,
+          // begin: Alignment.topRight,
+          // end: Alignment.bottomLeft,
+        ),
+        // boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.35), spreadRadius: 1, blurRadius: 1, offset: const Offset(0, 3))],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 135,
+            // color: Colors.red,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: SvgPicture.asset("assets/images/arrow.svg"),
+                ),
+                // SvgPicture.asset("assets/images/tick.svg"),
+                // const Text("15:25"),
+                // const Spacer(),
+                Flexible(
+                  flex: 3,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    // width: 170,
+                    // color: Colors.yellow,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Text(
+                            widget.note.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(color: Colors.white),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        Text(
+                          widget.note.subTitle,
+                          style: Theme.of(context).textTheme.subtitle2,
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: SvgPicture.asset(
+              "assets/images/label_red.svg",
+              color: widget.note.labelColor,
+            ),
+          ),
+        ],
       ),
     );
   }
