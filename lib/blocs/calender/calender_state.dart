@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:today/models/models.dart';
 
 abstract class CalenderState extends Equatable {}
 
@@ -8,7 +9,7 @@ class InitialCalenderState extends CalenderState {
 }
 
 class MonthAdequaciesCalenderState extends CalenderState {
-  final List<String> adequacies;
+  final List<Adequacy> adequacies;
 
   MonthAdequaciesCalenderState(this.adequacies);
   @override

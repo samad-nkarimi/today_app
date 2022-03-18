@@ -43,15 +43,15 @@ class _CalendarPageState extends State<CalendarPage> {
       },
       child: Container(
         // constraints: BoxConstraints(maxWidth: 100),
-        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.35),
-            spreadRadius: 2,
+            color: Colors.white.withOpacity(0.35),
+            spreadRadius: 1,
             blurRadius: 2,
-            offset: const Offset(0, 3),
+            offset: const Offset(0, 2),
           ),
-        ], color: Colors.blue, borderRadius: BorderRadius.circular(3.0)),
+        ], color: Colors.blue, borderRadius: BorderRadius.circular(25.0)),
 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,6 +154,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       alignment: Alignment.bottomCenter,
                       child: const CustomCalendar(),
                     ),
+                    const SizedBox(height: 20),
                     if (notes.isEmpty) noNoteWidget(),
                     for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
 
@@ -161,6 +162,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     // NoteItem(labelColor: Colors.green),
                     // NoteItem(labelColor: Colors.red),
                     // NoteItem(),
+                    const SizedBox(height: 20),
                     addNoteButtonWidget(),
                     // ElevatedButton(
                     //   onPressed: () {
@@ -201,15 +203,57 @@ class _CalendarPageState extends State<CalendarPage> {
                                       i < state.adequacies.length;
                                       i++)
                                     Container(
-                                      color: Colors.white,
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 40, vertical: 20),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 1),
-                                      child: Text(
-                                        state.adequacies[i],
-                                        textAlign: TextAlign.right,
+                                      // color: Colors.white,
+                                      // width: 300,
+
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Flexible(
+                                            flex: 2,
+                                            child: Container(
+                                              alignment: Alignment.centerRight,
+                                              // color: Colors.black12,
+                                              child: Text(
+                                                state.adequacies[i].title,
+                                                textAlign: TextAlign.right,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 10,
+                                                softWrap: true,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 1),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.blue
+                                                      .withOpacity(0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Text(
+                                                "${state.adequacies[i].dayTitle}\n${state.adequacies[i].dayNumber}\n${state.adequacies[i].month}",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     )
                                 ],

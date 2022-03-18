@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:today/models/models.dart';
 
 abstract class CalenderEvent extends Equatable {}
 
 class MonthAdequaciesSentCalenderEvent extends CalenderEvent {
-  final List<String> adequacies;
+  final List<Adequacy> adequacies;
 
   MonthAdequaciesSentCalenderEvent(this.adequacies);
   @override

@@ -33,7 +33,6 @@ class _NoteItemState extends State<NoteItem> {
         borderRadius: BorderRadius.circular(cornerSize),
         // border: Border.all(width: 1, color: Colors.black),
         color: backColor,
-        backgroundBlendMode: BlendMode.darken,
       ),
       margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 1.0),
 
@@ -108,8 +107,8 @@ class _NoteItemState extends State<NoteItem> {
         border: Border.all(width: 1, color: Colors.white),
         gradient: RadialGradient(
           colors: [
-            const Color(0xFFBC00AA).withOpacity(0.3),
-            const Color(0xFF00C8CF).withOpacity(0.3),
+            const Color(0xFFBC00AA),
+            const Color(0xFF00C8CF),
           ],
           center: Alignment.topRight,
           radius: 2.8, focalRadius: 2,

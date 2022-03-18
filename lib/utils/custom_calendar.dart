@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:today/blocs/blocs.dart';
+import 'package:today/models/models.dart';
 
 class CustomCalendar extends StatefulWidget {
   const CustomCalendar({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
   //shamsi adequacy
   List<String> shamsiAdequacyTitles = [];
   List<String> shamsiAdequacyDates = [];
+  List<Adequacy> shamsiAdequacies = [];
   List<int> shamsiAdequacyCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   bool isLoading = true;
@@ -563,14 +565,20 @@ class _CustomCalendarState extends State<CustomCalendar> {
       String date = (jsonResult.elementAt(i) as Map<String, dynamic>)
           .keys
           .toList()[0]
-          .toString();
+          .toString(); //sample:"0101"
       String title = (jsonResult.elementAt(i) as Map<String, dynamic>)
           .values
           .toList()[0]
-          .toString(); //sample:"0101"
+          .toString();
 
       shamsiAdequacyCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
 
+      shamsiAdequacies.add(Adequacy(
+        title: title,
+        dayTitle: numberToDayTitle(date.substring(2)),
+        dayNumber: date.substring(2),
+        month: numberToMonthTitle(date.substring(0, 2)),
+      ));
       shamsiAdequacyDates.add(date);
       title = title.trim();
       shamsiAdequacyTitles.add(title);
@@ -579,6 +587,16 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
     print(shamsiAdequacyTitles);
     print(shamsiAdequacyDates);
+  }
+
+  String numberToDayTitle(String number) {
+    return "شنبه";
+  }
+
+  String numberToMonthTitle(String number) {
+    int num = int.parse(number) - 1;
+
+    return months[num];
   }
 
   // Future<List<String>> getAdequaciesList(int currentMonth) async {
@@ -603,8 +621,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
   // }
 
   //shamsi adequacy
-  Future<List<String>> getAdequaciesList(int currentMonth) async {
-    List<String> adequacies = [];
+  Future<List<Adequacy>> getAdequaciesList(int currentMonth) async {
+    List<Adequacy> adequacies = [];
     // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
     int startIndex = 0;
     for (var i = 0; i < currentMonth; i++) {
@@ -618,7 +636,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
     // if (startIndex == endIndex)
     //   print(endIndex);
     // else
-    adequacies = shamsiAdequacyTitles.sublist(startIndex, endIndex);
+    print(shamsiAdequacies.length);
+    adequacies = shamsiAdequacies.sublist(startIndex, endIndex);
     // }
 
     return adequacies;
