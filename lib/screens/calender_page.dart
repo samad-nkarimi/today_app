@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/blocs/blocs.dart';
+import 'package:today/widgets/add_note_button_widget.dart';
 import '../blocs/note/note.dart';
 import '../utils/custom_calendar.dart';
 import 'drawer_widget.dart';
@@ -41,30 +42,7 @@ class _CalendarPageState extends State<CalendarPage> {
           },
         );
       },
-      child: Container(
-        // constraints: BoxConstraints(maxWidth: 100),
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.white.withOpacity(0.35),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 2),
-          ),
-        ], color: Colors.blue, borderRadius: BorderRadius.circular(25.0)),
-
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("افزودن یادداشت", style: Theme.of(context).textTheme.button),
-            const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(Icons.add_circle_outline, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+      child: AddNoteButton(context: context),
     );
   }
 

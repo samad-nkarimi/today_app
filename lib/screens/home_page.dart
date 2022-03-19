@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/utils/date_converter.dart';
+import 'package:today/widgets/add_note_button_widget.dart';
 import 'package:today/widgets/form_widget.dart';
 
 import '../blocs/note/note.dart';
@@ -318,8 +319,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget addNoteWidgetButton() {
-    return ElevatedButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         showModalBottomSheet(
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(
@@ -338,19 +339,7 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "افزودن یادداشت",
-            style: Theme.of(context).textTheme.button,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Icon(Icons.add_circle_outline),
-          ),
-        ],
-      ),
+      child: AddNoteButton(context: context),
     );
   }
 

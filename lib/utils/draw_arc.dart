@@ -97,7 +97,7 @@ class Painter extends CustomPainter {
       ..shader = gradient1.createShader(cloudBaseRect);
 
     Paint _paintBrush3 = Paint()
-          ..color = Colors.white24
+          ..color = Colors.grey
           ..strokeWidth = 15.0
           ..strokeCap = StrokeCap.round
           ..style = PaintingStyle.stroke
