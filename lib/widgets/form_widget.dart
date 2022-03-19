@@ -8,8 +8,17 @@ import '../models/models.dart';
 
 class FormWidget extends StatefulWidget {
   final bool isCalendarPage;
+  final String initialTitle;
+  final String initialSubtitle;
+  final int initialNoteColorIndex;
 
-  const FormWidget({Key? key, this.isCalendarPage = false}) : super(key: key);
+  const FormWidget({
+    Key? key,
+    this.isCalendarPage = false,
+    this.initialTitle = '',
+    this.initialSubtitle = '',
+    this.initialNoteColorIndex = 0,
+  }) : super(key: key);
 
   @override
   _FormWidgetState createState() => _FormWidgetState();
@@ -19,6 +28,12 @@ class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
   Note note = Note("", "");
   int noteColorIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    noteColorIndex = widget.initialNoteColorIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +58,7 @@ class _FormWidgetState extends State<FormWidget> {
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
+                    initialValue: widget.initialTitle,
                     autofocus: true,
                     maxLines: 1,
                     decoration: const InputDecoration(
@@ -70,6 +86,7 @@ class _FormWidgetState extends State<FormWidget> {
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
+                    initialValue: widget.initialSubtitle,
                     maxLines: 4,
                     minLines: 2,
                     decoration: const InputDecoration(

@@ -9,6 +9,7 @@ class Note extends Equatable {
   String subTitle;
   Color labelColor;
   bool isTodayNote;
+  bool isDone;
 
   // int isTodayNote_intFormat = 0;
 
@@ -18,7 +19,8 @@ class Note extends Equatable {
     this.id = "0",
     this.labelColor = Colors.orange,
     this.isTodayNote = false,
-  }) ;
+    this.isDone = false,
+  });
   // {
   //   // id = getRandomString();
   //   // isTodayNote_intFormat = isTodayNote ? 1 : 0;
@@ -37,11 +39,18 @@ class Note extends Equatable {
   }
 
   void setLabelColor(int colorIndex) {
-    switch(colorIndex){
-      case 0: labelColor = Colors.red; break;
-      case 1: labelColor = Colors.blueGrey; break;
-      case 2: labelColor = Colors.green; break;
-      default: labelColor=Colors.orange;
+    switch (colorIndex) {
+      case 0:
+        labelColor = Colors.red;
+        break;
+      case 1:
+        labelColor = Colors.blueGrey;
+        break;
+      case 2:
+        labelColor = Colors.green;
+        break;
+      default:
+        labelColor = Colors.orange;
     }
     // labelColor = color;
   }
@@ -65,17 +74,21 @@ class Note extends Equatable {
 
   String getRandomString() {
     return String.fromCharCodes(
-      Iterable.generate(15, (_) => _chars.codeUnitAt(Random().nextInt(_chars.length))),
+      Iterable.generate(
+          15, (_) => _chars.codeUnitAt(Random().nextInt(_chars.length))),
     );
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [title, subTitle, labelColor, isTodayNote];
+  List<Object?> get props => [title, subTitle, labelColor, isTodayNote, isDone];
+
+  // @override
+  // String toString() {
+  //   return "Note title: $title , subTitle: $subTitle , isToday: $isTodayNote";
+  // }
 
   @override
   String toString() {
-    // TODO: implement toString
-    return "Note title: $title , subTitle: $subTitle , isToday: $isTodayNote";
+    return "{{{ Note title: $title , isDone: $isDone }}}";
   }
 }

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../models/models.dart';
 
-
 abstract class NoteState extends Equatable {
   final Note note;
   final Notes notes;
@@ -9,7 +8,7 @@ abstract class NoteState extends Equatable {
   const NoteState(this.note, this.notes);
 
   @override
-  List<Object> get props => [note, notes];
+  List<Object> get props => [note, notes, note.isDone, note.title];
 }
 
 class NewNoteIsAdded extends NoteState {
@@ -34,9 +33,13 @@ class NoNote extends NoteState {
   List<Object> get props => [note];
 }
 
-class NotesUpdated extends NoteState {
-  const NotesUpdated(Note note, notes) : super(note, notes);
+class NotesUpdatedState extends NoteState {
+  final Note note;
+  final Notes notes;
+  final bool isDone;
+  const NotesUpdatedState(this.note, this.notes, this.isDone)
+      : super(note, notes);
 
   @override
-  List<Object> get props => [note, notes];
+  List<Object> get props => [note, notes, isDone];
 }

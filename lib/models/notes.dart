@@ -8,7 +8,7 @@ class Notes extends Equatable {
     return notesList.length;
   }
 
-  void setAllNotes(List<Note> notes){
+  void setAllNotes(List<Note> notes) {
     notesList = notes;
   }
 
@@ -16,18 +16,26 @@ class Notes extends Equatable {
     notesList.add(newNote);
   }
 
-  List<Note> get getTodayNotes=> notesList.where((element) => !element.isTodayNote).toList();
-  List<Note> get getCalenderNotes=> notesList.where((element) => element.isTodayNote).toList();
+  void updateSingleNote(Note updatedNote) {
+    int index = notesList.indexWhere((note) => note.getId == updatedNote.getId);
+    notesList.removeAt(index);
+    notesList.insert(index, updatedNote);
+  }
+
+  List<Note> get getTodayNotes =>
+      notesList.where((element) => !element.isTodayNote).toList();
+  List<Note> get getCalenderNotes =>
+      notesList.where((element) => element.isTodayNote).toList();
 
   void removeFromNotes(Note newNote) {
     notesList.remove(newNote);
   }
+
   @override
   List<Object?> get props => [notesList, getNotesCount];
 
   @override
   String toString() {
-
     return notesList.toString();
   }
 }

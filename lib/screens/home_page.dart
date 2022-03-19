@@ -82,8 +82,8 @@ class _HomePageState extends State<HomePage> {
                 BlocBuilder<NoteBloc, NoteState>(
                   builder: (context, state) {
                     List<Note> notes = state.notes.getTodayNotes;
-                    // print("notes: $notes");
-                    // print("state: $state");
+                    print("notes: $notes");
+                    print("state: $state");
                     // if(state is NewNoteIsAdded)
                     // noteCount++;
                     return Container(
