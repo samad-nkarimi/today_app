@@ -101,7 +101,7 @@ class AppTheme {
 
   static final TextStyle _subTitleLight = TextStyle(
     color: subTitleTextColor,
-    fontSize: 4 * SizeConfig.textMultiplier,
+    fontSize: 3 * SizeConfig.textMultiplier,
     height: 1.5,
   );
 

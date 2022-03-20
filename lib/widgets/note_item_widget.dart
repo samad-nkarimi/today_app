@@ -124,27 +124,38 @@ class _NoteItemState extends State<NoteItem> {
   Widget _noteContentWidget() {
     return GestureDetector(
       onTap: () {
-        // copied from home page
-        showModalBottomSheet(
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-          ),
-          context: context,
-          builder: (context) {
-            return Container(
-              // height: 300,
-              color: Colors.transparent,
-              child: FormWidget(
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) {
+              return FormWidget(
                 initialTitle: widget.note.title,
                 initialSubtitle: widget.note.subTitle,
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
+        // // copied from home page
+        // showModalBottomSheet(
+        //   isScrollControlled: true,
+        //   shape: const RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(30.0),
+        //       topRight: Radius.circular(30.0),
+        //     ),
+        //   ),
+        //   context: context,
+        //   builder: (context) {
+        //     return Container(
+        //       // height: 300,
+        //       color: Colors.transparent,
+        //       child: FormWidget(
+        //         initialTitle: widget.note.title,
+        //         initialSubtitle: widget.note.subTitle,
+        //       ),
+        //     );
+        //   },
+        // );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),

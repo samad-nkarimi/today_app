@@ -277,24 +277,29 @@ class _HomePageState extends State<HomePage> {
     return Container(
       // margin: const EdgeInsets.only(bottom: 100 / 2 + 20),
       // color: Colors.blue,
-      child: ShaderMask(
-        shaderCallback: (rect) {
-          return const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [
-              0.9,
-              1.1,
-            ],
-            colors: [Colors.black, Colors.transparent],
-          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-        },
-        blendMode: BlendMode.dstIn,
-        child: Image.asset(
-          "assets/images/fall.gif",
-          fit: BoxFit.fill,
-        ),
+      child: Image.asset(
+        "assets/images/fall.gif",
+        fit: BoxFit.fill,
       ),
+
+      //  ShaderMask(
+      //   shaderCallback: (rect) {
+      //     return const LinearGradient(
+      //       begin: Alignment.topCenter,
+      //       end: Alignment.bottomCenter,
+      //       stops: [
+      //         0.9,
+      //         1.1,
+      //       ],
+      //       colors: [Colors.black, Colors.transparent],
+      //     ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+      //   },
+      //   blendMode: BlendMode.dstIn,
+      //   child: Image.asset(
+      //     "assets/images/fall.gif",
+      //     fit: BoxFit.fill,
+      //   ),
+      // ),
       height: topPictureHeight,
       width: double.infinity,
     );
@@ -321,23 +326,7 @@ class _HomePageState extends State<HomePage> {
   Widget addNoteWidgetButton() {
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-          ),
-          context: context,
-          builder: (context) {
-            return Container(
-              // height: 300,
-              color: Colors.transparent,
-              child: const FormWidget(),
-            );
-          },
-        );
+        Navigator.pushNamed(context, FormWidget.routeName);
       },
       child: AddNoteButton(context: context),
     );

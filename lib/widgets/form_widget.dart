@@ -7,6 +7,7 @@ import '../blocs/note/note.dart';
 import '../models/models.dart';
 
 class FormWidget extends StatefulWidget {
+  static const routeName = '/form_widget';
   final bool isCalendarPage;
   final String initialTitle;
   final String initialSubtitle;
@@ -40,78 +41,98 @@ class _FormWidgetState extends State<FormWidget> {
     print("what day: ${widget.isCalendarPage}");
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
-        return Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  "یادداشت",
-                  style: TextStyle(
-                      fontFamily: "Negar", fontWeight: FontWeight.bold),
+        return SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: AppBar(
+                  title: const Text(
+                    "یادداشت",
+                    style: TextStyle(
+                      fontFamily: "Negar",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                          onPressed: _confirmNote,
+                          icon: const Icon(Icons.save)),
+                    )
+                  ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: TextFormField(
-                    initialValue: widget.initialTitle,
-                    autofocus: true,
-                    maxLines: 1,
-                    decoration: const InputDecoration(
-                      labelText: "عنوان",
-                      labelStyle: TextStyle(fontFamily: "Negar"),
+            ),
+            body: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 5.0),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: TextFormField(
+                          initialValue: widget.initialTitle,
+                          // autofocus: true,
+                          maxLines: 1,
+                          decoration: const InputDecoration(
+                            labelText: "عنوان",
+                            labelStyle: TextStyle(fontFamily: "Negar"),
 
-                      // border: const OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      // ),
-                      // label: const Text("عنوان", style: TextStyle(fontFamily: "ANegar")),
+                            // border: const OutlineInputBorder(
+                            //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            // ),
+                            // label: const Text("عنوان", style: TextStyle(fontFamily: "ANegar")),
+                          ),
+                          validator: (title) {
+                            note.setTitle(title!);
+                            if (title == null || title.isEmpty) {
+                              return "please enter some text!";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
-                    validator: (title) {
-                      note.setTitle(title!);
-                      if (title == null || title.isEmpty) {
-                        return "please enter some text!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: TextFormField(
-                    initialValue: widget.initialSubtitle,
-                    maxLines: 4,
-                    minLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: "متن یادداشت",
-                      labelStyle: TextStyle(fontFamily: "Negar"),
-                      // border:  OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      // ),
-                      // label:  Text("متن یادداشت", style: TextStyle(fontFamily: "ANegar")),
-                      // filled: true,
-                      // fillColor: Colors.grey,
-                      // hintText: "salam",
-                      // helperText: "hey",
-                      // focusColor: Colors.blue.withOpacity(0.5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 5.0),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: TextFormField(
+                          initialValue: widget.initialSubtitle,
+                          maxLines: 4,
+                          minLines: 2,
+                          decoration: const InputDecoration(
+                            labelText: "متن یادداشت",
+                            labelStyle: TextStyle(fontFamily: "Negar"),
+                            // border:  OutlineInputBorder(
+                            //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                            // ),
+                            // label:  Text("متن یادداشت", style: TextStyle(fontFamily: "ANegar")),
+                            // filled: true,
+                            // fillColor: Colors.grey,
+                            // hintText: "salam",
+                            // helperText: "hey",
+                            // focusColor: Colors.blue.withOpacity(0.5),
+                          ),
+                          validator: (subTitle) {
+                            note.setSubTitle(subTitle!);
+                            if (subTitle == null || subTitle.isEmpty) {
+                              return "please enter some text!";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
-                    validator: (subTitle) {
-                      note.setSubTitle(subTitle!);
-                      if (subTitle == null || subTitle.isEmpty) {
-                        return "please enter some text!";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
 //               if (widget.isCalendarPage)
 //                 CupertinoDatePicker(
 // minimumDate: DateTime.now(),
@@ -120,81 +141,85 @@ class _FormWidgetState extends State<FormWidget> {
 //                   // initialDateTime: DateTime.now(),
 //                   onDateTimeChanged: (_) {},
 //                 ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () {
-              //         showDialog(
-              //             context: context,
-              //             builder: (con) {
-              //               return DatePickerDialog(
-              //                 initialDate: DateTime(2015),
-              //                 firstDate: DateTime(2010),
-              //                 lastDate: DateTime(2018),
-              //               );
-              //             });
-              //       },
-              //       child: const Text("تاریخ"),
-              //     ),
-              //     const Text("1399.2.2"),
-              //   ],
-              // ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    coloredItem(Colors.red, 0),
-                    coloredItem(Colors.blueGrey, 1),
-                    coloredItem(Colors.green, 2),
-                    // Container(
-                    //   margin: const EdgeInsets.all(3.0),
-                    //   decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3.0)),
-                    //   width: 40,
-                    //   height: 40,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         showDialog(
+                    //             context: context,
+                    //             builder: (con) {
+                    //               return DatePickerDialog(
+                    //                 initialDate: DateTime(2015),
+                    //                 firstDate: DateTime(2010),
+                    //                 lastDate: DateTime(2018),
+                    //               );
+                    //             });
+                    //       },
+                    //       child: const Text("تاریخ"),
+                    //     ),
+                    //     const Text("1399.2.2"),
+                    //   ],
                     // ),
-                    // Container(
-                    //   margin: const EdgeInsets.all(3.0),
-                    //   decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(3.0)),
-                    //   width: 40,
-                    //   height: 40,
-                    // ),
-                    // Container(
-                    //   margin: const EdgeInsets.all(3.0),
-                    //   decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(3.0)),
-                    //   width: 40,
-                    //   height: 40,
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          coloredItem(Colors.red, 0),
+                          coloredItem(Colors.blueGrey, 1),
+                          coloredItem(Colors.green, 2),
+                          // Container(
+                          //   margin: const EdgeInsets.all(3.0),
+                          //   decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3.0)),
+                          //   width: 40,
+                          //   height: 40,
+                          // ),
+                          // Container(
+                          //   margin: const EdgeInsets.all(3.0),
+                          //   decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(3.0)),
+                          //   width: 40,
+                          //   height: 40,
+                          // ),
+                          // Container(
+                          //   margin: const EdgeInsets.all(3.0),
+                          //   decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(3.0)),
+                          //   width: 40,
+                          //   height: 40,
+                          // ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                        onPressed: _confirmNote,
+                        child: const Text("ثبت"),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Container(
-                width: double.infinity,
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pop(context);
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   const SnackBar(content: Text("done!")),
-                      // );
-                      note.isTodayNote = widget.isCalendarPage;
-                      note.setId(note.getRandomString());
-                      note.setLabelColor(noteColorIndex);
-                      BlocProvider.of<NoteBloc>(context)
-                          .add(NewNoteWasSent(note));
-                    }
-                  },
-                  child: const Text("ثبت"),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },
     );
+  }
+
+  void _confirmNote() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pop(context);
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text("done!")),
+      // );
+      note.isTodayNote = widget.isCalendarPage;
+      note.setId(note.getRandomString());
+      note.setLabelColor(noteColorIndex);
+      BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
+    }
   }
 
   // repeated

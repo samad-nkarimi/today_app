@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:today/widgets/form_widget.dart';
 import './blocs/blocs.dart';
 import 'screens/calender_page.dart';
 import './database/database_provider.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
                   "/": (context) => const HomePage(),
                   CalendarPage.routeName: (context) => const CalendarPage(),
                   MoodPage.routeName: (context) => const MoodPage(),
+                  FormWidget.routeName: (context) => const FormWidget(),
                 },
               );
             });

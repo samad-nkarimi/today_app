@@ -41,5 +41,5 @@ class NotesUpdatedState extends NoteState {
       : super(note, notes);
 
   @override
-  List<Object> get props => [note, notes, isDone];
+  List<Object> get props => [note, notes, notes.notesList.length, isDone];
 }
