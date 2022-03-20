@@ -37,7 +37,8 @@ class _CalendarPageState extends State<CalendarPage> {
             return Container(
               // height: 400,
               color: Colors.transparent,
-              child: const FormWidget(isCalendarPage: true),
+              child:
+                  FormWidget(isCalendarPage: true, initialData: Note("", "")),
             );
           },
         );

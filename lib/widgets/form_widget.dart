@@ -9,16 +9,12 @@ import '../models/models.dart';
 class FormWidget extends StatefulWidget {
   static const routeName = '/form_widget';
   final bool isCalendarPage;
-  final String initialTitle;
-  final String initialSubtitle;
-  final int initialNoteColorIndex;
+  final Note initialData;
 
   const FormWidget({
     Key? key,
     this.isCalendarPage = false,
-    this.initialTitle = '',
-    this.initialSubtitle = '',
-    this.initialNoteColorIndex = 0,
+    required this.initialData,
   }) : super(key: key);
 
   @override
@@ -27,18 +23,20 @@ class FormWidget extends StatefulWidget {
 
 class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
-  Note note = Note("", "");
+  late Note note;
   int noteColorIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    noteColorIndex = widget.initialNoteColorIndex;
+    note = widget.initialData;
+    // noteColorIndex = widget.initialData.labelColor.;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("what day: ${widget.isCalendarPage}");
+    // print("what day: ${widget.isCalendarPage}");
+    print(widget.initialData);
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
         return SafeArea(
@@ -79,7 +77,7 @@ class _FormWidgetState extends State<FormWidget> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
-                          initialValue: widget.initialTitle,
+                          initialValue: widget.initialData.title,
                           // autofocus: true,
                           maxLines: 1,
                           decoration: const InputDecoration(
@@ -107,7 +105,7 @@ class _FormWidgetState extends State<FormWidget> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
-                          initialValue: widget.initialSubtitle,
+                          initialValue: widget.initialData.subTitle,
                           maxLines: 4,
                           minLines: 2,
                           decoration: const InputDecoration(
@@ -215,10 +213,18 @@ class _FormWidgetState extends State<FormWidget> {
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text("done!")),
       // );
-      note.isTodayNote = widget.isCalendarPage;
-      note.setId(note.getRandomString());
-      note.setLabelColor(noteColorIndex);
-      BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
+
+      if (widget.initialData.title.isEmpty) {
+        //we are creating a new note
+        note.isTodayNote = widget.isCalendarPage;
+        note.setId(note.getRandomString());
+        note.setLabelColor(noteColorIndex);
+        BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
+      } else {
+        // we are editting a note
+        print(note);
+        BlocProvider.of<NoteBloc>(context).add(NoteWasEdittedEvent(note));
+      }
     }
   }
 

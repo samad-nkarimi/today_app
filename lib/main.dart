@@ -70,7 +70,8 @@ class MyApp extends StatelessWidget {
                   "/": (context) => const HomePage(),
                   CalendarPage.routeName: (context) => const CalendarPage(),
                   MoodPage.routeName: (context) => const MoodPage(),
-                  FormWidget.routeName: (context) => const FormWidget(),
+                  FormWidget.routeName: (context) =>
+                      FormWidget(initialData: Note("", "")),
                 },
               );
             });

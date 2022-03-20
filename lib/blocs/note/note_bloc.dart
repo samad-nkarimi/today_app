@@ -25,11 +25,20 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       },
     );
 
+    on<NoteWasEdittedEvent>(
+      (event, emit) async {
+        _notes = state.notes;
+        _notes.updateSingleNote(event.note);
+        await _databaseProvider.insertNote(event.note); //will replace it
+        emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
+      },
+    );
+
     on<NoteWasRemovedEvent>(
       (event, emit) async {
         _notes = state.notes;
         _notes.removeFromNotes(event.note);
-        print("notes id: ${event.note.getId}");
+        print("${event.note.getId} was removed");
         await _databaseProvider.deleteNote(event.note);
         emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
       },

@@ -89,6 +89,6 @@ class Note extends Equatable {
 
   @override
   String toString() {
-    return "{{{ Note title: $title , isDone: $isDone }}}";
+    return "{{{ Note id: $id , isDone: $isDone }}}";
   }
 }

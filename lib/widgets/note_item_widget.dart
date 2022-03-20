@@ -129,8 +129,7 @@ class _NoteItemState extends State<NoteItem> {
           MaterialPageRoute(
             builder: (c) {
               return FormWidget(
-                initialTitle: widget.note.title,
-                initialSubtitle: widget.note.subTitle,
+                initialData: widget.note,
               );
             },
           ),
@@ -166,8 +165,8 @@ class _NoteItemState extends State<NoteItem> {
           border: Border.all(width: 1, color: Colors.white),
           gradient: RadialGradient(
             colors: [
-              widget.note.isDone ? Colors.green : Color(0xFFBC00AA),
-              Color(0xFF00C8CF),
+              widget.note.isDone ? Colors.green : const Color(0xFFBC00AA),
+              const Color(0xFF00C8CF),
             ],
             center: Alignment.topRight,
             radius: 2.8, focalRadius: 2,
