@@ -73,7 +73,7 @@ class Painter extends CustomPainter {
     Gradient gradient1 = RadialGradient(
       colors: [
         Colors.red.shade500,
-        Colors.yellow.withOpacity(0.3),
+        Colors.yellow,
       ],
       stops: const [
         0.7,
@@ -83,22 +83,22 @@ class Painter extends CustomPainter {
 
     Paint _paintBrush2 = Paint()
       // ..color = Colors.red
-      ..strokeWidth = 15.0
+      ..strokeWidth = 18.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect);
 
     Paint _paintBrush1 = Paint()
       // ..color = Colors.red
-      ..strokeWidth = 15.0
+      ..strokeWidth = 18.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect)
       ..shader = gradient1.createShader(cloudBaseRect);
 
     Paint _paintBrush3 = Paint()
-          ..color = Colors.grey
-          ..strokeWidth = 15.0
+          ..color = Colors.cyan
+          ..strokeWidth = 18.0
           ..strokeCap = StrokeCap.round
           ..style = PaintingStyle.stroke
         // ..shader = gradient.createShader(cloudBaseRect)

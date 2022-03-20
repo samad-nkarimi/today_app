@@ -162,7 +162,7 @@ class _NoteItemState extends State<NoteItem> {
         padding: const EdgeInsets.only(right: 16.0, left: 14.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(cornerSize),
-          border: Border.all(width: 1, color: Colors.white),
+          border: Border.all(width: 1, color: Colors.white38),
           gradient: RadialGradient(
             colors: [
               widget.note.isDone ? Colors.green : const Color(0xFFBC00AA),

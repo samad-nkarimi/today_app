@@ -75,11 +75,30 @@ class _HomePageState extends State<HomePage> {
       endDrawer: const DrawerWidget(),
       body: Builder(builder: (BuildContext context) {
         return Container(
-          color: Colors.blue.shade100,
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                BlocBuilder<NoteBloc, NoteState>(
+          // color: Colors.blue.shade100,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/earth.jpg"),
+              fit: BoxFit.cover,
+            ),
+            gradient: RadialGradient(
+              // begin: Alignment.topLeft,
+              // end: Alignment.bottomRight,
+              center: Alignment.topLeft,
+              radius: 1.4,
+              stops: [0.5, 1.0],
+              colors: [
+                Color(0xFFB2AFFF),
+                Color(0xFF883AD9),
+                // Theme.of(context).scaffoldBackgroundColor,
+                // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+              ],
+            ),
+          ),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: BlocBuilder<NoteBloc, NoteState>(
                   builder: (context, state) {
                     List<Note> notes = state.notes.getTodayNotes;
                     print("notes: $notes");
@@ -89,142 +108,63 @@ class _HomePageState extends State<HomePage> {
                     return Container(
                       // color: Theme.of(context).scaffoldBackgroundColor,
                       padding: EdgeInsets.only(bottom: showBoardSize / 2),
-                      decoration: BoxDecoration(
-                        // color: Colors.red,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          stops: const [0.5, 1.0],
-                          colors: [
-                            // Colors.green,
-                            // Colors.red,
-                            Theme.of(context).scaffoldBackgroundColor,
-                            Theme.of(context)
-                                .scaffoldBackgroundColor
-                                .withOpacity(0.3),
-                          ],
-                        ),
-                      ),
+                      // decoration: BoxDecoration(
+                      //   // color: Colors.red,
+                      //   gradient: LinearGradient(
+                      //     begin: Alignment.topLeft,
+                      //     end: Alignment.bottomRight,
+                      //     stops: const [0.5, 1.0],
+                      //     colors: [
+                      //       // Colors.green,
+                      //       // Colors.red,
+                      //       Theme.of(context).scaffoldBackgroundColor,
+                      //       Theme.of(context)
+                      //           .scaffoldBackgroundColor
+                      //           .withOpacity(0.3),
+                      //     ],
+                      //   ),
+                      // ),
+
                       child: Column(
                         children: [
                           topPicture(),
-                          SizedBox(height: showBoardSize / 2 + 30),
+                          // SizedBox(height: showBoardSize / 2 + 30),
                           if (notes.isEmpty) noNoteWidget(),
                           for (int i = 0; i < notes.length; i++)
                             NoteItem(notes[i]),
+                          const SizedBox(height: 20),
                           addNoteWidgetButton(),
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 30),
-                            height: 150,
-                            width: double.infinity,
-                            child: const Text(""),
-                            color: Colors.grey,
-                          )
+                          // Container(
+                          //   margin: const EdgeInsets.symmetric(
+                          //       horizontal: 30, vertical: 30),
+                          //   height: 150,
+                          //   width: double.infinity,
+                          //   child: const Text(""),
+                          //   color: Colors.grey,
+                          // )
                         ],
                       ),
                     );
                   },
                 ),
-                menuButton(),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: topPictureHeight - showBoardSize / 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(20.0),
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.lightGreenAccent,
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: Text(
-                          "${(getHourPercent() * 100).toStringAsFixed(0)}%",
-                          style: const TextStyle(fontFamily: "ANegar"),
-                        ),
-                      ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(100.0),
-                            clipBehavior: Clip.antiAlias,
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: showBoardSize,
-                                width: showBoardSize,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20.0),
-                                decoration: BoxDecoration(
-                                  // color: Colors.blue.withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  // border: Border.all(width: 5.0,color: Colors.blue),
-
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      Colors.purple.withOpacity(0.3),
-                                      Colors.blue.withOpacity(0.3)
-                                    ],
-                                    radius: .8,
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      getWeekdayInShamsi(),
-                                      style: const TextStyle(
-                                        fontFamily: "Negar",
-                                        color: Colors.white,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      getTodayDateStringInShamsi(),
-                                      style: const TextStyle(
-                                        fontFamily: "Negar",
-                                        color: Colors.white,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          ForPainting(
-                            radius: showBoardSize / 2,
-                            fillPercent: getHourPercent(),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () =>
-                            Navigator.pushNamed(context, MoodPage.routeName),
-                        child: Container(
-                          margin: const EdgeInsets.all(20.0),
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlueAccent,
-                            borderRadius: BorderRadius.circular(50.0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+              ),
+              menuButton(),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 100,
+                  // top: topPictureHeight - showBoardSize / 2,
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    _showPercentWidget(),
+                    _todayInfoWidget(),
+                    _statisticWidget(),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       }),
@@ -246,6 +186,101 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _todayInfoWidget() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          clipBehavior: Clip.antiAlias,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              alignment: Alignment.center,
+              height: showBoardSize,
+              width: showBoardSize,
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              decoration: BoxDecoration(
+                // color: Colors.blue.withOpacity(.5),
+                borderRadius: BorderRadius.circular(100.0),
+                // border: Border.all(width: 5.0,color: Colors.blue),
+
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.purple.withOpacity(0.3),
+                    Colors.blue.withOpacity(0.3)
+                  ],
+                  radius: .8,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    getWeekdayInShamsi(),
+                    style: const TextStyle(
+                      fontFamily: "Negar",
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    getTodayDateStringInShamsi(),
+                    style: const TextStyle(
+                      fontFamily: "Negar",
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        ForPainting(
+          radius: showBoardSize / 2,
+          fillPercent: getHourPercent(),
+        ),
+      ],
+    );
+  }
+
+  Widget _showPercentWidget() {
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.all(20.0),
+      height: 60,
+      width: 60,
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(50.0),
+        border: Border.all(width: 4, color: Colors.white),
+      ),
+      child: Text(
+        "${(getHourPercent() * 100).toStringAsFixed(0)}%",
+        style: const TextStyle(fontFamily: "ANegar", color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _statisticWidget() {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, MoodPage.routeName),
+      child: Container(
+        margin: const EdgeInsets.all(20.0),
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+          color: Colors.lightBlueAccent,
+          borderRadius: BorderRadius.circular(50.0),
+          border: Border.all(width: 4, color: Colors.white),
+        ),
+        child: const Icon(Icons.bar_chart_rounded, color: Colors.white),
       ),
     );
   }
@@ -277,10 +312,10 @@ class _HomePageState extends State<HomePage> {
     return Container(
       // margin: const EdgeInsets.only(bottom: 100 / 2 + 20),
       // color: Colors.blue,
-      child: Image.asset(
-        "assets/images/fall.gif",
-        fit: BoxFit.fill,
-      ),
+      // child: Image.asset(
+      //   "assets/images/winter.jpg",
+      //   fit: BoxFit.fill,
+      // ),
 
       //  ShaderMask(
       //   shaderCallback: (rect) {

@@ -214,7 +214,7 @@ class _FormWidgetState extends State<FormWidget> {
       //   const SnackBar(content: Text("done!")),
       // );
 
-      if (widget.initialData.title.isEmpty) {
+      if (widget.initialData.id == "0") {
         //we are creating a new note
         note.isTodayNote = widget.isCalendarPage;
         note.setId(note.getRandomString());
