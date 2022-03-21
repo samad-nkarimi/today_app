@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/utils/date_converter.dart';
 import 'package:today/widgets/add_note_button_widget.dart';
+import 'package:today/widgets/floating_button_widget.dart';
 import 'package:today/widgets/form_widget.dart';
 
 import '../blocs/note/note.dart';
@@ -169,24 +170,7 @@ class _HomePageState extends State<HomePage> {
         );
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: InkWell(
-        onTap: () => Navigator.pushNamed(context, CalendarPage.routeName),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          padding: const EdgeInsets.all(14.0),
-          child: const Text(
-            "تقویم",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Negar",
-            ),
-          ),
-        ),
-      ),
+      floatingActionButton: const CustomFloatingButton(page: pageid.today),
     );
   }
 

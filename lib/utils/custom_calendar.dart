@@ -182,7 +182,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                           icon: const Icon(Icons.navigate_next)),
                       BlocBuilder<CalenderBloc, CalenderState>(
                           builder: (context, state) {
-                        print(state);
+                        // print(state);
                         int monthId = state is MonthUpdatedCalenderState
                             ? state.monthId
                             : currentMonth;
@@ -225,7 +225,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
                   //why itemIndex change irregularly ????? -> cause of keepPage=true ???
                   // index is the target month
                   // currentMonth is the month we are scrolling from
-                  int index = (600 - itemIndex).abs() % 12;
+                  // int index = (600 - itemIndex).abs() % 12;
+                  int index = (600 - itemIndex) > 0
+                      ? 12 - ((600 - itemIndex).abs() % 12)
+                      : (600 - itemIndex).abs() % 12;
                   print("item index: $itemIndex");
                   print("index: $index");
                   getAdequaciesList(index).then((value) {
@@ -250,7 +253,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     // setState(() {
     getStartDay();
     getEndDay();
-    print("$currentStartDay**");
+    // print("$currentStartDay**");
 
     if (currentMonth > index) {
       currentStartDay = startDayPreviousMonth;
@@ -273,10 +276,12 @@ class _CustomCalendarState extends State<CustomCalendar> {
         (thisYear - 1 - 1399).abs().remainder(4) == 0 ? true : false;
     esfandLength = isFullYear ? 30 : 29;
     esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
-    currentMonth = index;
-    print("$currentStartDay**");
-    print("currentMonth $currentMonth , i=$index , isFullYear: $isFullYear");
 
+    // print("$currentStartDay**");
+    print(thisYear);
+    print(
+        "currentMonth $currentMonth , index=$index , isFullYear: $isFullYear");
+    currentMonth = index;
     // currentStartDay++;
     // });
     return Container(
@@ -429,7 +434,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     List<int> todayDate =
         []; //day number nth in month ,month number nth in year
     int dayCount =
-        (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
+        ((DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1) % 365;
 
     int monthInYear = 1;
     int dayInMonth = 1;
@@ -449,7 +454,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
     todayDate.add(dayInMonth);
     todayDate.add(monthInYear);
     // currentMonth = month;
-    // print("dayCount: $dayCount , month: $month , day: $day , hour: ${DateTime.now().hour}");
+    print(
+        "dayCount: $dayCount , month: $monthInYear , day: $dayInMonth , hour: ${DateTime.now().hour}");
     return todayDate;
   }
 
@@ -550,11 +556,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
       holidayDates.add(date);
       title = title.trim();
       holidayTitles.add(title);
-      print(holidayCountPerMonth);
+      // print(holidayCountPerMonth);
     }
 
-    print(holidayTitles);
-    print(holidayDates);
+    // print(holidayTitles);
+    // print(holidayDates);
   }
 
   Future<void> loadShamsiAdequacyJson() async {
@@ -582,11 +588,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
       shamsiAdequacyDates.add(date);
       title = title.trim();
       shamsiAdequacyTitles.add(title);
-      print(shamsiAdequacyCountPerMonth);
+      // print(shamsiAdequacyCountPerMonth);
     }
 
-    print(shamsiAdequacyTitles);
-    print(shamsiAdequacyDates);
+    // print(shamsiAdequacyTitles);
+    // print(shamsiAdequacyDates);
   }
 
   String numberToDayTitle(String number) {

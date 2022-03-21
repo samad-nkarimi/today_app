@@ -76,7 +76,9 @@ class Note extends Equatable {
   String getRandomString() {
     return String.fromCharCodes(
       Iterable.generate(
-          15, (_) => _chars.codeUnitAt(Random().nextInt(_chars.length))),
+        15,
+        (_) => _chars.codeUnitAt(Random().nextInt(_chars.length)),
+      ),
     );
   }
 
@@ -90,6 +92,6 @@ class Note extends Equatable {
 
   @override
   String toString() {
-    return "{{{ Note id: $id , isDone: $isDone }}}";
+    return "{ Note id:$id , isDone:$isDone }";
   }
 }

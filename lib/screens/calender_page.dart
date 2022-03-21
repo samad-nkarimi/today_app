@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/widgets/add_note_button_widget.dart';
+import 'package:today/widgets/floating_button_widget.dart';
 import '../blocs/note/note.dart';
 import '../utils/custom_calendar.dart';
 import 'drawer_widget.dart';
@@ -166,7 +167,8 @@ class _CalendarPageState extends State<CalendarPage> {
                     // ),
                     BlocBuilder<CalenderBloc, CalenderState>(
                         builder: (context, state) {
-                      print("from page : $state");
+                      // print("from page : $state");
+
                       return state is MonthAdequaciesCalenderState
                           ? Container(
                               margin: const EdgeInsets.symmetric(
@@ -248,24 +250,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            padding: const EdgeInsets.all(14.0),
-            child: const Text(
-              "امروز",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Negar",
-              ),
-            ),
-          ),
-        ),
+        floatingActionButton: const CustomFloatingButton(page: pageid.calendar),
       ),
     );
   }
