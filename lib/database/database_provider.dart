@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/models.dart';
 
-
 class DatabaseProvider {
   Database database;
 
@@ -25,7 +24,6 @@ class DatabaseProvider {
     );
 
     // print("count: ${note.getId}");
-
   }
 
   // await insertNote(event.note);
@@ -43,6 +41,7 @@ class DatabaseProvider {
         maps[i]['subtitle'],
         id: maps[i]['id'],
         isTodayNote: maps[i]["istoday"] == 1 ? true : false,
+        isDone: maps[i]["isdone"] == 1 ? true : false,
       );
     });
     // print("notes: $notesList");

@@ -221,6 +221,7 @@ class _NoteItemState extends State<NoteItem> {
                             padding: const EdgeInsets.symmetric(vertical: 2.0),
                             child: Text(
                               widget.note.title,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -230,6 +231,8 @@ class _NoteItemState extends State<NoteItem> {
                           ),
                           Text(
                             widget.note.subTitle,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: Theme.of(context).textTheme.subtitle2,
                             textAlign: TextAlign.right,
                           ),

@@ -67,6 +67,7 @@ class Note extends Equatable {
       'title': title,
       'subtitle': subTitle,
       'istoday': isTodayNote ? 1 : 0,
+      'isdone': isDone ? 1 : 0,
     };
   }
 

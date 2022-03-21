@@ -23,7 +23,7 @@ void main() async {
     databasePath,
     onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER)');
+          'CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER , isdone INTEGER)');
     },
     version: 1,
   );

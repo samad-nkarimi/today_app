@@ -47,12 +47,10 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<NoteWasDoneEvent>(
       (event, emit) async {
         _notes = state.notes;
-        _notes.updateSingleNote(event.note);
-        print("is done: ${!event.note.isDone}");
         event.note.isDone = !event.note.isDone;
-        print("note id: ${event.note.getId}");
-        print(_notes);
-        // await _databaseProvider.deleteNote(event.note);
+        _notes.updateSingleNote(event.note);
+        // print("is done: ${!event.note.isDone}");
+        await _databaseProvider.insertNote(event.note); //will replace it
         emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
       },
     );
