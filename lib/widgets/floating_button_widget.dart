@@ -46,10 +46,11 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
         padding: EdgeInsets.all(animatedPadding),
         margin: const EdgeInsets.all(5.0),
         child: Icon(
-            widget.page == pageid.calendar
-                ? Icons.today_outlined
-                : Icons.calendar_today_outlined,
-            color: Colors.white),
+          widget.page == pageid.calendar
+              ? Icons.today_outlined
+              : Icons.calendar_today_outlined,
+          color: Colors.white,
+        ),
       ),
     );
   }

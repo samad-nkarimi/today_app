@@ -437,7 +437,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
         ((DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1) % 365;
 
     int monthInYear = 1;
-    int dayInMonth = 1;
+    int dayInMonth = dayCount;
     int sumMonth = 31;
     int monthAdd = 31;
     while (dayCount > sumMonth) {

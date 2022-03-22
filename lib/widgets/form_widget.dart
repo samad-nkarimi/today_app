@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 // import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/note/note.dart';
@@ -131,34 +132,34 @@ class _FormWidgetState extends State<FormWidget> {
                         ),
                       ),
                     ),
-//               if (widget.isCalendarPage)
-//                 CupertinoDatePicker(
-// minimumDate: DateTime.now(),
-//                   minuteInterval: 1,
-//                   mode: CupertinoDatePickerMode.date,
-//                   // initialDateTime: DateTime.now(),
-//                   onDateTimeChanged: (_) {},
-//                 ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         showDialog(
-                    //             context: context,
-                    //             builder: (con) {
-                    //               return DatePickerDialog(
-                    //                 initialDate: DateTime(2015),
-                    //                 firstDate: DateTime(2010),
-                    //                 lastDate: DateTime(2018),
-                    //               );
-                    //             });
-                    //       },
-                    //       child: const Text("تاریخ"),
-                    //     ),
-                    //     const Text("1399.2.2"),
-                    //   ],
-                    // ),
+                    if (widget.isCalendarPage)
+                      CupertinoDatePicker(
+                        minimumDate: DateTime.now(),
+                        minuteInterval: 1,
+                        mode: CupertinoDatePickerMode.date,
+                        // initialDateTime: DateTime.now(),
+                        onDateTimeChanged: (_) {},
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (con) {
+                                  return DatePickerDialog(
+                                    initialDate: DateTime(2015),
+                                    firstDate: DateTime(2010),
+                                    lastDate: DateTime(2018),
+                                  );
+                                });
+                          },
+                          child: const Text("تاریخ"),
+                        ),
+                        const Text("1399.2.2"),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
