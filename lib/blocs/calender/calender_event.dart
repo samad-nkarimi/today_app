@@ -18,3 +18,9 @@ class CalendarScrolledCalenderEvent extends CalenderEvent {
   @override
   List<Object?> get props => [monthId];
 }
+
+class InitialCalenderEvent extends CalenderEvent {
+  InitialCalenderEvent();
+  @override
+  List<Object?> get props => [];
+}

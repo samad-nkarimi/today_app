@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:today/blocs/blocs.dart';
 import 'package:today/screens/calender_page.dart';
 
 enum pageid { today, calendar }
@@ -26,9 +28,12 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
           );
         });
 
-        widget.page == pageid.calendar
-            ? Navigator.pop(context)
-            : Navigator.pushNamed(context, CalendarPage.routeName);
+        if (widget.page == pageid.calendar) {
+          Navigator.pop(context);
+        } else {
+          BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
+          Navigator.pushNamed(context, CalendarPage.routeName);
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
