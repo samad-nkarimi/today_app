@@ -24,3 +24,10 @@ class InitialCalenderEvent extends CalenderEvent {
   @override
   List<Object?> get props => [];
 }
+
+class DaySelectedCalenderEvent extends CalenderEvent {
+  final String day;
+  DaySelectedCalenderEvent(this.day);
+  @override
+  List<Object?> get props => [day];
+}

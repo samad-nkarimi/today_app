@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/models/models.dart';
+import 'package:today/widgets/calendar_day_widget.dart';
 
 class CustomCalendar extends StatefulWidget {
   const CustomCalendar({Key? key}) : super(key: key);
@@ -50,52 +51,6 @@ class _CustomCalendarState extends State<CustomCalendar> {
     "بهمن",
     "اسفند"
   ];
-
-  Widget rowText(String text,
-      {bool isTitle = false, bool isToday = false, bool isHoliday = false}) {
-    return
-        // ClipRRect(
-        //   clipBehavior: Clip.antiAlias,
-        //   child: BackdropFilter(
-        //     filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-        //     child:
-        Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: isToday
-            ? Colors.green
-            : isTitle
-                ? Colors.red
-                : Colors.blue.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(isTitle
-            ? 10
-            : isToday
-                ? 20
-                : 2.0),
-        border: Border.all(
-          width: isToday ? 1.0 : 1.0,
-          color: (isHoliday && text.isNotEmpty)
-              ? Colors.orange
-              : isToday
-                  ? Colors.white
-                  : Colors.transparent,
-          style: BorderStyle.solid,
-        ),
-      ),
-      padding: const EdgeInsets.all(10.0),
-      margin: const EdgeInsets.all(0.5),
-      child: Text(
-        text,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontFamily: "Negar",
-          color: isHoliday ? Colors.red : Colors.white,
-        ),
-      ),
-      //   ),
-      // ),
-    );
-  }
 
   Widget buildCalendar() {
     return Directionality(
@@ -203,9 +158,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     // index is the target month
                     // currentMonth is the month we are scrolling from
                     // int index = (600 - itemIndex).abs() % 12;
-                    // int index = (600 - itemIndex) > 0
-                    //     ? 12 - ((600 - itemIndex).abs() % 12)
-                    //     : (600 - itemIndex).abs() % 12;
+                    int index = (600 - itemIndex) > 0
+                        ? 12 - ((600 - itemIndex).abs() % 12)
+                        : (600 - itemIndex).abs() % 12;
+
                     // print("item index: $itemIndex");
                     // print("index: $index");
 
@@ -229,19 +185,23 @@ class _CustomCalendarState extends State<CustomCalendar> {
   Widget contentTable(CalenderState state) {
     print(state);
     print(state.dateDetails);
+    String selectedDay =
+        state is ContentRefreshedCalenderState && state.selectedDay.isNotEmpty
+            ? state.selectedDay
+            : "0";
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Table(
         // border: TableBorder.all(color: Colors.black.withOpacity(0.2)),
         children: [
-          TableRow(children: [
-            rowText('ش', isTitle: true),
-            rowText('ی', isTitle: true),
-            rowText('د', isTitle: true),
-            rowText('س', isTitle: true),
-            rowText('چ', isTitle: true),
-            rowText('پ', isTitle: true),
-            rowText('ج', isTitle: true),
+          const TableRow(children: [
+            CalendarDayWidget(text: 'ش', isTitle: true),
+            CalendarDayWidget(text: 'ی', isTitle: true),
+            CalendarDayWidget(text: 'د', isTitle: true),
+            CalendarDayWidget(text: 'س', isTitle: true),
+            CalendarDayWidget(text: 'چ', isTitle: true),
+            CalendarDayWidget(text: 'پ', isTitle: true),
+            CalendarDayWidget(text: 'ج', isTitle: true),
           ]),
           // ..._tableContentRows(),
           ..._tableRows(
@@ -253,6 +213,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
               state.dateDetails.esfandLength,
               state.dateDetails.isFullYear,
               state.dateDetails.holidayDates,
+              selectedDay,
             ),
           )
         ],
@@ -285,6 +246,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     int esfandLength,
     bool isFullYear,
     List<String> holidayDates,
+    String selectedDay,
   ) {
     //month is the month index we are in it now
     //monthInYear is the month that contains today date
@@ -296,7 +258,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     int rowCount = 5;
     int endDay = month == 11 ? esfandLength : (month > 5 ? 30 : 31);
     for (int i = 0; i < startDay; i++) {
-      list.add(rowText(""));
+      list.add(const CalendarDayWidget(text: ""));
     }
 
     if ((startDay <= 4) ||
@@ -345,10 +307,16 @@ class _CustomCalendarState extends State<CustomCalendar> {
         print("day:$month ,dayInMonth:$monthInYear");
         // do not forget to apply year too!!
         (day == dayInMonth && month == monthInYear)
-            ? list.add(rowText((day <= endDay) ? '$day' : "",
-                isToday: true, isHoliday: isHoliday))
-            : list.add(
-                rowText((day <= endDay) ? '$day' : "", isHoliday: isHoliday));
+            ? list.add(CalendarDayWidget(
+                text: (day <= endDay) ? '$day' : "",
+                isToday: true,
+                isSelected: selectedDay == ((day <= endDay) ? '$day' : ""),
+                isHoliday: isHoliday))
+            : list.add(CalendarDayWidget(
+                text: (day <= endDay) ? '$day' : "",
+                isSelected: selectedDay == ((day <= endDay) ? '$day' : ""),
+                isHoliday: isHoliday,
+              ));
       }
     }
 

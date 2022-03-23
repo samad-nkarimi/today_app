@@ -4,6 +4,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:today/utils/custom_calendar.dart';
 import '../blocs/note/note.dart';
 import '../models/models.dart';
 
@@ -132,33 +134,58 @@ class _FormWidgetState extends State<FormWidget> {
                         ),
                       ),
                     ),
-                    if (widget.isCalendarPage)
-                      CupertinoDatePicker(
-                        minimumDate: DateTime.now(),
-                        minuteInterval: 1,
-                        mode: CupertinoDatePickerMode.date,
-                        // initialDateTime: DateTime.now(),
-                        onDateTimeChanged: (_) {},
-                      ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
+                    // if (widget.isCalendarPage)
+                    //   CupertinoDatePicker(
+                    //     minimumDate: DateTime.now(),
+                    //     minuteInterval: 1,
+                    //     mode: CupertinoDatePickerMode.date,
+                    //     // initialDateTime: DateTime.now(),
+                    //     onDateTimeChanged: (_) {},
+                    //   ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              showGeneralDialog(
+                                barrierLabel: "label",
+                                barrierDismissible: true,
+                                barrierColor: Colors.black54,
+                                transitionDuration:
+                                    const Duration(milliseconds: 300),
                                 context: context,
-                                builder: (con) {
-                                  return DatePickerDialog(
-                                    initialDate: DateTime(2015),
-                                    firstDate: DateTime(2010),
-                                    lastDate: DateTime(2018),
-                                  );
-                                });
-                          },
-                          child: const Text("تاریخ"),
-                        ),
-                        const Text("1399.2.2"),
-                      ],
+                                pageBuilder: (context, anim1, anim2) =>
+                                    customDialog(context),
+                                //     Container(
+                                //   height: 300,
+                                //   decoration: const BoxDecoration(
+                                //     color: Colors.amber,
+                                //     // image: DecorationImage(
+                                //     //   image: AssetImage(
+                                //     //       "assets/images/rose.jpg"),
+                                //     //   fit: BoxFit.cover,
+                                //     // ),
+                                //   ),
+                                //   // alignment: Alignment.bottomCenter,
+                                //   // child: const CustomCalendar(),
+                                // ),
+                                transitionBuilder:
+                                    (context, anim1, anim2, child) =>
+                                        ScaleTransition(
+                                  scale: Tween(begin: 0.0, end: 1.0)
+                                      .animate(anim1),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: const Text("data"),
+                          ),
+                          const Text("تاریخ"),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -205,6 +232,74 @@ class _FormWidgetState extends State<FormWidget> {
           ),
         );
       },
+    );
+  }
+
+  Widget customDialog(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Container(
+        height: 400,
+        decoration: const BoxDecoration(
+          color: Colors.amber,
+          // image: DecorationImage(
+          //   image: AssetImage(
+          //       "assets/images/rose.jpg"),
+          //   fit: BoxFit.cover,
+          // ),
+        ),
+        // alignment: Alignment.bottomCenter,
+        child: const CustomCalendar(),
+      ),
+      // Container(
+      //   // height: 350,
+      //   width: 300,
+      //   constraints: const BoxConstraints(minHeight: 200),
+      //   // alignment: Alignment.center,
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       // Container(
+      //       //   // color: Colors.red,
+      //       //   margin: const EdgeInsets.only(left: 30), //change this value
+      //       //   height: 50,
+      //       //   alignment: Alignment.center,
+      //       //   child: SvgPicture.asset("assets/images/logo.svg"),
+      //       // ),
+      //       Container(
+      //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      //         alignment: Alignment.center,
+      //         child: const Text(
+      //           """this can help you to find what you are searching for.""",
+      //           textAlign: TextAlign.center,
+      //           style: TextStyle(color: Colors.purple),
+      //         ),
+      //       ),
+      //       GestureDetector(
+      //         onTap: () => Navigator.pop(context),
+      //         child: Container(
+      //           height: 50,
+      //           alignment: Alignment.center,
+      //           decoration: const BoxDecoration(
+      //             borderRadius: BorderRadius.only(
+      //               bottomLeft: Radius.circular(8.0),
+      //               bottomRight: Radius.circular(8.0),
+      //             ),
+      //             color: Colors.green,
+      //           ),
+      //           child: const Text(
+      //             "ok",
+      //             style: TextStyle(fontSize: 20, color: Colors.white),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 

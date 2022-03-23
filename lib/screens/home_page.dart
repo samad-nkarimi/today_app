@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
               ),
               menuButton(),
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 100,
                   // top: topPictureHeight - showBoardSize / 2,
                 ),

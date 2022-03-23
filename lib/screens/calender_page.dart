@@ -25,27 +25,40 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget addNoteButtonWidget() {
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                FormWidget(initialData: Note("", ""), isCalendarPage: true),
           ),
-          context: context,
-          builder: (context) {
-            return Container(
-              // height: 400,
-              color: Colors.transparent,
-              child:
-                  FormWidget(isCalendarPage: true, initialData: Note("", "")),
-            );
-          },
         );
       },
       child: AddNoteButton(context: context),
     );
+
+    // GestureDetector(
+    //   onTap: () {
+    //     showModalBottomSheet(
+    //       isScrollControlled: true,
+    //       shape: const RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.only(
+    //           topLeft: Radius.circular(30.0),
+    //           topRight: Radius.circular(30.0),
+    //         ),
+    //       ),
+    //       context: context,
+    //       builder: (context) {
+    //         return Container(
+    //           // height: 400,
+    //           color: Colors.transparent,
+    //           child:
+    //               FormWidget(isCalendarPage: true, initialData: Note("", "")),
+    //         );
+    //       },
+    //     );
+    //   },
+    //   child: AddNoteButton(context: context),
+    // );
   }
 
   // repeated

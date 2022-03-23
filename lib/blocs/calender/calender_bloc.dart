@@ -61,6 +61,11 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       // print(dateDetails);
       emit(MonthUpdatedCalenderState(updateContent(event.monthId)));
     });
+
+    //when we select a day box to be colorized
+    on<DaySelectedCalenderEvent>((event, emit) {
+      emit(ContentRefreshedCalenderState(dateDetails, event.day));
+    });
   }
 
   void initialization() {
@@ -125,7 +130,8 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     print(
         "currentMonth $currentMonth , index=$index , isFullYear: $isFullYear");
     currentMonth = index;
-    return DateDetails(
+
+    dateDetails = DateDetails(
       thisYear,
       currentMonth,
       _getTodayInShamsi()[0],
@@ -135,6 +141,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       isFullYear,
       holidayDates,
     );
+    return dateDetails;
 
     // currentStartDay++;
     // });
