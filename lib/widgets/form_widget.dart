@@ -1,10 +1,12 @@
 // ignore_for_file: file_names
 
 // import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:today/blocs/blocs.dart';
 import 'package:today/utils/custom_calendar.dart';
 import '../blocs/note/note.dart';
 import '../models/models.dart';
@@ -28,6 +30,7 @@ class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
   late Note note;
   int noteColorIndex = 0;
+  String selectedDate = "select date";
 
   @override
   void initState() {
@@ -35,6 +38,21 @@ class _FormWidgetState extends State<FormWidget> {
     note = widget.initialData;
     // noteColorIndex = widget.initialData.labelColor.;
   }
+
+  List<String> months = [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+    "مهر",
+    "آبان",
+    "آذر",
+    "دی",
+    "بهمن",
+    "اسفند"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +101,7 @@ class _FormWidgetState extends State<FormWidget> {
                           initialValue: widget.initialData.title,
                           // autofocus: true,
                           maxLines: 1,
+                          textInputAction: TextInputAction.next,
                           decoration: const InputDecoration(
                             labelText: "عنوان",
                             labelStyle: TextStyle(fontFamily: "Negar"),
@@ -110,7 +129,8 @@ class _FormWidgetState extends State<FormWidget> {
                         child: TextFormField(
                           initialValue: widget.initialData.subTitle,
                           maxLines: 4,
-                          minLines: 2,
+                          minLines: 1,
+                          textInputAction: TextInputAction.done,
                           decoration: const InputDecoration(
                             labelText: "متن یادداشت",
                             labelStyle: TextStyle(fontFamily: "Negar"),
@@ -150,7 +170,7 @@ class _FormWidgetState extends State<FormWidget> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              showGeneralDialog(
+                              showGeneralDialog<String>(
                                 barrierLabel: "label",
                                 barrierDismissible: true,
                                 barrierColor: Colors.black54,
@@ -159,29 +179,22 @@ class _FormWidgetState extends State<FormWidget> {
                                 context: context,
                                 pageBuilder: (context, anim1, anim2) =>
                                     customDialog(context),
-                                //     Container(
-                                //   height: 300,
-                                //   decoration: const BoxDecoration(
-                                //     color: Colors.amber,
-                                //     // image: DecorationImage(
-                                //     //   image: AssetImage(
-                                //     //       "assets/images/rose.jpg"),
-                                //     //   fit: BoxFit.cover,
-                                //     // ),
-                                //   ),
-                                //   // alignment: Alignment.bottomCenter,
-                                //   // child: const CustomCalendar(),
+
+                                // transitionBuilder:
+                                //     (context, anim1, anim2, child) =>
+                                //         ScaleTransition(
+                                //   scale: Tween(begin: 0.0, end: 1.0)
+                                //       .animate(anim1),
+                                //   child: child,
                                 // ),
-                                transitionBuilder:
-                                    (context, anim1, anim2, child) =>
-                                        ScaleTransition(
-                                  scale: Tween(begin: 0.0, end: 1.0)
-                                      .animate(anim1),
-                                  child: child,
-                                ),
-                              );
+                              ).then((value) => print(value));
                             },
-                            child: const Text("data"),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.black12),
+                            child: Text(
+                              selectedDate,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           const Text("تاریخ"),
                         ],
@@ -241,9 +254,9 @@ class _FormWidgetState extends State<FormWidget> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Container(
-        height: 400,
+        height: 450,
         decoration: const BoxDecoration(
-          color: Colors.amber,
+          color: Colors.blue,
           // image: DecorationImage(
           //   image: AssetImage(
           //       "assets/images/rose.jpg"),
@@ -251,7 +264,27 @@ class _FormWidgetState extends State<FormWidget> {
           // ),
         ),
         // alignment: Alignment.bottomCenter,
-        child: const CustomCalendar(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const CustomCalendar(),
+            BlocBuilder<CalenderBloc, CalenderState>(builder: (context, state) {
+              String date = "not selected";
+              if (state is ContentRefreshedCalenderState) {
+                date =
+                    "${getDayName(state.dateDetails.startDay, state.selectedDay)}    ${state.selectedDay}    ${months[state.dateDetails.month]}";
+
+                Future.delayed(Duration.zero).then((value) => setState(() {
+                      selectedDate = date;
+                    }));
+              }
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(date, style: const TextStyle(color: Colors.white)),
+              );
+            }),
+          ],
+        ),
       ),
       // Container(
       //   // height: 350,
@@ -301,6 +334,35 @@ class _FormWidgetState extends State<FormWidget> {
       //   ),
       // ),
     );
+  }
+
+  String getDayName(int monthStartDay, String selectedDay) {
+    int dayInWeek = (monthStartDay + int.parse(selectedDay)) % 7;
+    String todayString = "";
+    switch (dayInWeek) {
+      case 1:
+        todayString = "شنبه";
+        break;
+      case 2:
+        todayString = "یکشنبه";
+        break;
+      case 3:
+        todayString = "دوشنبه";
+        break;
+      case 4:
+        todayString = "سه شنبه";
+        break;
+      case 5:
+        todayString = "چهارشنبه";
+        break;
+      case 6:
+        todayString = "پنجشنبه";
+        break;
+      default:
+        todayString = "جمعه";
+    }
+
+    return todayString;
   }
 
   void _confirmNote() {
