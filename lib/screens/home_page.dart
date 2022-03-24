@@ -75,97 +75,110 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       endDrawer: const DrawerWidget(),
       body: Builder(builder: (BuildContext context) {
-        return Container(
-          // color: Colors.blue.shade100,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/earth.jpg"),
-              fit: BoxFit.cover,
+        return RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(Duration.zero)
+                .then((value) => setState(() {}));
+          },
+          child: Container(
+            // color: Colors.blue.shade100,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/earth.jpg"),
+                fit: BoxFit.cover,
+              ),
+              gradient: RadialGradient(
+                // begin: Alignment.topLeft,
+                // end: Alignment.bottomRight,
+                center: Alignment.topLeft,
+                radius: 1.4,
+                stops: [0.5, 1.0],
+                colors: [
+                  Color(0xFFB2AFFF),
+                  Color(0xFF883AD9),
+                  // Theme.of(context).scaffoldBackgroundColor,
+                  // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+                ],
+              ),
             ),
-            gradient: RadialGradient(
-              // begin: Alignment.topLeft,
-              // end: Alignment.bottomRight,
-              center: Alignment.topLeft,
-              radius: 1.4,
-              stops: [0.5, 1.0],
-              colors: [
-                Color(0xFFB2AFFF),
-                Color(0xFF883AD9),
-                // Theme.of(context).scaffoldBackgroundColor,
-                // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: BlocBuilder<NoteBloc, NoteState>(
+                    builder: (context, state) {
+                      List<Note> notes = state.notes.getTodayNotes;
+                      print("notes: $notes");
+                      print("state: $state");
+                      // if(state is NewNoteIsAdded)
+                      // noteCount++;
+                      return Container(
+                        // color: Theme.of(context).scaffoldBackgroundColor,
+                        padding: EdgeInsets.only(bottom: showBoardSize / 2),
+                        // decoration: BoxDecoration(
+                        //   // color: Colors.red,
+                        //   gradient: LinearGradient(
+                        //     begin: Alignment.topLeft,
+                        //     end: Alignment.bottomRight,
+                        //     stops: const [0.5, 1.0],
+                        //     colors: [
+                        //       // Colors.green,
+                        //       // Colors.red,
+                        //       Theme.of(context).scaffoldBackgroundColor,
+                        //       Theme.of(context)
+                        //           .scaffoldBackgroundColor
+                        //           .withOpacity(0.3),
+                        //     ],
+                        //   ),
+                        // ),
+
+                        child: Column(
+                          children: [
+                            topPicture(),
+                            // SizedBox(height: showBoardSize / 2 + 30),
+                            if (notes.isEmpty) noNoteWidget(),
+
+                            ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              children: [
+                                for (int i = 0; i < notes.length; i++)
+                                  NoteItem(notes[i]),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            addNoteWidgetButton(),
+                            // Container(
+                            //   margin: const EdgeInsets.symmetric(
+                            //       horizontal: 30, vertical: 30),
+                            //   height: 150,
+                            //   width: double.infinity,
+                            //   child: const Text(""),
+                            //   color: Colors.grey,
+                            // )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                menuButton(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 100,
+                    // top: topPictureHeight - showBoardSize / 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      _showPercentWidget(),
+                      _todayInfoWidget(),
+                      _statisticWidget(),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: BlocBuilder<NoteBloc, NoteState>(
-                  builder: (context, state) {
-                    List<Note> notes = state.notes.getTodayNotes;
-                    print("notes: $notes");
-                    print("state: $state");
-                    // if(state is NewNoteIsAdded)
-                    // noteCount++;
-                    return Container(
-                      // color: Theme.of(context).scaffoldBackgroundColor,
-                      padding: EdgeInsets.only(bottom: showBoardSize / 2),
-                      // decoration: BoxDecoration(
-                      //   // color: Colors.red,
-                      //   gradient: LinearGradient(
-                      //     begin: Alignment.topLeft,
-                      //     end: Alignment.bottomRight,
-                      //     stops: const [0.5, 1.0],
-                      //     colors: [
-                      //       // Colors.green,
-                      //       // Colors.red,
-                      //       Theme.of(context).scaffoldBackgroundColor,
-                      //       Theme.of(context)
-                      //           .scaffoldBackgroundColor
-                      //           .withOpacity(0.3),
-                      //     ],
-                      //   ),
-                      // ),
-
-                      child: Column(
-                        children: [
-                          topPicture(),
-                          // SizedBox(height: showBoardSize / 2 + 30),
-                          if (notes.isEmpty) noNoteWidget(),
-                          for (int i = 0; i < notes.length; i++)
-                            NoteItem(notes[i]),
-                          const SizedBox(height: 20),
-                          addNoteWidgetButton(),
-                          // Container(
-                          //   margin: const EdgeInsets.symmetric(
-                          //       horizontal: 30, vertical: 30),
-                          //   height: 150,
-                          //   width: double.infinity,
-                          //   child: const Text(""),
-                          //   color: Colors.grey,
-                          // )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              menuButton(),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 100,
-                  // top: topPictureHeight - showBoardSize / 2,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _showPercentWidget(),
-                    _todayInfoWidget(),
-                    _statisticWidget(),
-                  ],
-                ),
-              ),
-            ],
           ),
         );
       }),

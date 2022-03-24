@@ -10,6 +10,11 @@ class Note extends Equatable {
   Color labelColor;
   bool isTodayNote;
   bool isDone;
+  String hour; //12:32
+  String day; //1,2,3,...
+  String dayName; //sunday,...
+  String month; //1,2,3
+  String year;
 
   // int isTodayNote_intFormat = 0;
 
@@ -20,6 +25,11 @@ class Note extends Equatable {
     this.labelColor = Colors.orange,
     this.isTodayNote = false,
     this.isDone = false,
+    this.hour = "",
+    this.day = "",
+    this.dayName = "",
+    this.month = "",
+    this.year = "",
   });
   // {
   //   // id = getRandomString();

@@ -42,6 +42,11 @@ class DatabaseProvider {
         id: maps[i]['id'],
         isTodayNote: maps[i]["istoday"] == 1 ? true : false,
         isDone: maps[i]["isdone"] == 1 ? true : false,
+        hour: maps[i]['hour'],
+        day: maps[i]['day'],
+        dayName: maps[i]['dayname'],
+        month: maps[i]['month'],
+        year: maps[i]['year'],
       );
     });
     // print("notes: $notesList");

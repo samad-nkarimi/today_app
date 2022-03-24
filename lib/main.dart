@@ -22,8 +22,18 @@ void main() async {
   final database = await openDatabase(
     databasePath,
     onCreate: (db, version) async {
-      await db.execute(
-          'CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER , isdone INTEGER)');
+      await db.execute("""CREATE TABLE notes
+          (id TEXT PRIMARY KEY,
+           title TEXT,
+           subtitle TEXT ,
+           hour TEXT ,
+           day TEXT ,
+           dayname TEXT ,
+           month TEXT ,
+           year TEXT ,
+           istoday INTEGER ,
+           isdone INTEGER
+           )""");
     },
     version: 1,
   );

@@ -71,10 +71,6 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     //when we select a day box to be colorized
     on<DaySelectedCalenderEvent>((event, emit) async {
       emit(ContentRefreshedCalenderState(dateDetails, event.day));
-      // await Future.delayed(Duration.zero);
-
-      // emit(MonthAdequaciesCalenderState(
-      //     await getAdequaciesList(dateDetails.month), dateDetails));
     });
   }
 

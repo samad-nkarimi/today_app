@@ -277,6 +277,12 @@ class _FormWidgetState extends State<FormWidget> {
 
                 Future.delayed(Duration.zero).then((value) => setState(() {
                       selectedDate = date;
+                      note.hour = "";
+                      note.day = state.selectedDay;
+                      note.dayName = getDayName(
+                          state.dateDetails.startDay, state.selectedDay);
+                      note.month = months[state.dateDetails.month];
+                      note.year = state.dateDetails.year.toString();
                     }));
               }
               return Padding(
@@ -378,6 +384,7 @@ class _FormWidgetState extends State<FormWidget> {
         note.isTodayNote = widget.isCalendarPage;
         note.setId(note.getRandomString());
         note.setLabelColor(noteColorIndex);
+
         BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
       } else {
         // we are editting a note

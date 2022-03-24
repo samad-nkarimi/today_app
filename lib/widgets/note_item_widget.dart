@@ -191,12 +191,19 @@ class _NoteItemState extends State<NoteItem> {
                   // if (!widget.note.isDone)
                   Flexible(
                     flex: 1,
-                    child: widget.note.isDone
-                        ? SvgPicture.asset(
-                            "assets/images/tick.svg",
-                            color: Colors.purple,
-                          )
-                        : SvgPicture.asset("assets/images/arrow.svg"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        widget.note.isDone
+                            ? SvgPicture.asset(
+                                "assets/images/tick.svg",
+                                color: Colors.purple,
+                              )
+                            : SvgPicture.asset("assets/images/arrow.svg"),
+                        Text(widget.note.dayName,
+                            style: const TextStyle(color: Colors.white)),
+                      ],
+                    ),
                   ),
                   // if (widget.note.isDone)
                   // SvgPicture.asset(

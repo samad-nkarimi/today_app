@@ -37,10 +37,13 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<NoteWasRemovedEvent>(
       (event, emit) async {
         _notes = state.notes;
+        print(_notes.notesList.length);
         _notes.removeFromNotes(event.note);
         print("${event.note.getId} was removed");
         await _databaseProvider.deleteNote(event.note);
-        emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
+        print(_notes.notesList.length);
+        emit(NotesUpdatedState(event.note, _notes, event.note.isDone,
+            remove: true));
       },
     );
 
