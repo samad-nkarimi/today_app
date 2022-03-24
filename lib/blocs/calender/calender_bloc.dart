@@ -47,24 +47,34 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   CalenderBloc()
       : super(InitialCalenderState(
             const DateDetails(1401, 1, 2, 3, 1, 29, false, [""]))) {
-    on<InitialCalenderEvent>((event, emit) {
+    on<InitialCalenderEvent>((event, emit) async {
       initialization();
       emit(InitialCalenderState(dateDetails));
+      await Future.delayed(Duration.zero); //why we need this line?
+      emit(MonthAdequaciesCalenderState(
+          await getAdequaciesList(dateDetails.month), dateDetails));
     });
     on<MonthAdequaciesSentCalenderEvent>((event, emit) {
       emit(MonthAdequaciesCalenderState(event.adequacies, dateDetails));
     });
 
-    on<CalendarScrolledCalenderEvent>((event, emit) {
+    on<CalendarScrolledCalenderEvent>((event, emit) async {
       print("month id: ${event.monthId}");
       // updateContent(event.monthId);
       // print(dateDetails);
       emit(MonthUpdatedCalenderState(updateContent(event.monthId)));
+      await Future.delayed(Duration.zero);
+      emit(MonthAdequaciesCalenderState(
+          await getAdequaciesList(event.monthId), dateDetails));
     });
 
     //when we select a day box to be colorized
-    on<DaySelectedCalenderEvent>((event, emit) {
+    on<DaySelectedCalenderEvent>((event, emit) async {
       emit(ContentRefreshedCalenderState(dateDetails, event.day));
+      // await Future.delayed(Duration.zero);
+
+      // emit(MonthAdequaciesCalenderState(
+      //     await getAdequaciesList(dateDetails.month), dateDetails));
     });
   }
 

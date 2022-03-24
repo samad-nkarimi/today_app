@@ -115,8 +115,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
                                 color: Colors.white)),
                         Expanded(
                             child: Center(
-                                child: Text(months[state.dateDetails.month]))),
-                        Text("${state.dateDetails.year}"),
+                                child: Text(
+                          months[state.dateDetails.month],
+                          style: const TextStyle(color: Colors.white),
+                        ))),
+                        Text(
+                          "${state.dateDetails.year}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),

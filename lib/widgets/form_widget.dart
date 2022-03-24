@@ -162,44 +162,45 @@ class _FormWidgetState extends State<FormWidget> {
                     //     // initialDateTime: DateTime.now(),
                     //     onDateTimeChanged: (_) {},
                     //   ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              showGeneralDialog<String>(
-                                barrierLabel: "label",
-                                barrierDismissible: true,
-                                barrierColor: Colors.black54,
-                                transitionDuration:
-                                    const Duration(milliseconds: 300),
-                                context: context,
-                                pageBuilder: (context, anim1, anim2) =>
-                                    customDialog(context),
+                    if (widget.isCalendarPage)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                showGeneralDialog<String>(
+                                  barrierLabel: "label",
+                                  barrierDismissible: true,
+                                  barrierColor: Colors.black54,
+                                  transitionDuration:
+                                      const Duration(milliseconds: 300),
+                                  context: context,
+                                  pageBuilder: (context, anim1, anim2) =>
+                                      customDialog(context),
 
-                                // transitionBuilder:
-                                //     (context, anim1, anim2, child) =>
-                                //         ScaleTransition(
-                                //   scale: Tween(begin: 0.0, end: 1.0)
-                                //       .animate(anim1),
-                                //   child: child,
-                                // ),
-                              ).then((value) => print(value));
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.black12),
-                            child: Text(
-                              selectedDate,
-                              textAlign: TextAlign.center,
+                                  // transitionBuilder:
+                                  //     (context, anim1, anim2, child) =>
+                                  //         ScaleTransition(
+                                  //   scale: Tween(begin: 0.0, end: 1.0)
+                                  //       .animate(anim1),
+                                  //   child: child,
+                                  // ),
+                                ).then((value) => print(value));
+                              },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.black12),
+                              child: Text(
+                                selectedDate,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                          const Text("تاریخ"),
-                        ],
+                            const Text("تاریخ"),
+                          ],
+                        ),
                       ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(

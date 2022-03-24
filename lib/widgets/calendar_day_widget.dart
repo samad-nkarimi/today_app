@@ -43,13 +43,15 @@ class _CalendarDayWidgetState extends State<CalendarDayWidget> {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: widget.isSelected
-              ? Colors.orange
-              : widget.isToday
-                  ? Colors.green
-                  : widget.isTitle
-                      ? Colors.red
-                      : Colors.blue.withOpacity(0.3),
+          color: widget.text.isEmpty
+              ? Colors.transparent
+              : widget.isSelected
+                  ? Colors.orange
+                  : widget.isToday
+                      ? Colors.green
+                      : widget.isTitle
+                          ? Colors.red.withOpacity(0.8)
+                          : Colors.blue.withOpacity(0.4),
           borderRadius: BorderRadius.circular(widget.isTitle
               ? 10
               : widget.isToday
@@ -72,7 +74,7 @@ class _CalendarDayWidgetState extends State<CalendarDayWidget> {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontFamily: "Negar",
-            color: widget.isHoliday ? Colors.red : Colors.white,
+            color: widget.isHoliday ? Colors.amber : Colors.white,
             fontSize: 12,
           ),
         ),
