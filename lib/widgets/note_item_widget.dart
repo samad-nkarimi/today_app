@@ -35,7 +35,7 @@ class _NoteItemState extends State<NoteItem> {
         // border: Border.all(width: 1, color: Colors.black),
         color: backColor,
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 1.0),
+      margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 1.0),
 
       // padding: const EdgeInsets.only(right: 8.0, left: 14.0),
       child: Dismissible(

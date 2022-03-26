@@ -206,27 +206,7 @@ class _FormWidgetState extends State<FormWidget> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          coloredItem(Colors.red, 0),
-                          coloredItem(Colors.blueGrey, 1),
-                          coloredItem(Colors.green, 2),
-                          // Container(
-                          //   margin: const EdgeInsets.all(3.0),
-                          //   decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(3.0)),
-                          //   width: 40,
-                          //   height: 40,
-                          // ),
-                          // Container(
-                          //   margin: const EdgeInsets.all(3.0),
-                          //   decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(3.0)),
-                          //   width: 40,
-                          //   height: 40,
-                          // ),
-                          // Container(
-                          //   margin: const EdgeInsets.all(3.0),
-                          //   decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(3.0)),
-                          //   width: 40,
-                          //   height: 40,
-                          // ),
+                          for (int i = 0; i < 6; i++) coloredItem(i),
                         ],
                       ),
                     ),
@@ -395,7 +375,15 @@ class _FormWidgetState extends State<FormWidget> {
   }
 
   // repeated
-  Widget coloredItem(Color color, int i) {
+  Widget coloredItem(int i) {
+    List<Color> colors = [
+      Colors.red,
+      Colors.amber,
+      Colors.blue,
+      Colors.orange,
+      Colors.yellow,
+      Colors.green,
+    ];
     return InkWell(
       onTap: () {
         setState(() {
@@ -404,13 +392,16 @@ class _FormWidgetState extends State<FormWidget> {
         // BlocProvider.of<ThemeSettingBloc>(context).add(ThemeChanged(currentTheme));
       },
       child: Card(
-        elevation: 5,
-        color: noteColorIndex == i ? Colors.white : color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: noteColorIndex == i ? 1 : 5,
+        color: noteColorIndex == i ? Colors.white : colors[i],
         child: Container(
           margin: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            color: color,
+            borderRadius: BorderRadius.circular(12),
+            color: colors[i],
           ),
           height: 40,
           width: 40,
@@ -421,8 +412,6 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     super.dispose();
   }
 }

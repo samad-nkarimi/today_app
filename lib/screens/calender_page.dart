@@ -117,7 +117,7 @@ class _CalendarPageState extends State<CalendarPage> {
               // end: Alignment.bottomRight,
               center: Alignment.topLeft,
               radius: 1.4,
-              stops: const [0.5, 1.0],
+              stops: [0.5, 1.0],
               colors: [
                 Color(0xFFB2AFFF),
                 Color(0xFF003AD9),

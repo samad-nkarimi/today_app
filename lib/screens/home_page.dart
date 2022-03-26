@@ -62,7 +62,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // WidgetsBinding.instance!.addPostFrameCallback((_) async {
     //   await loadJson();
@@ -82,6 +81,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Container(
             // color: Colors.blue.shade100,
+            height: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/earth.jpg"),
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             topPicture(),
                             // SizedBox(height: showBoardSize / 2 + 30),
-                            if (notes.isEmpty) noNoteWidget(),
+                            // if (notes.isEmpty) noNoteWidget(),
 
                             ListView(
                               shrinkWrap: true,
