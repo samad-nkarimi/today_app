@@ -80,8 +80,9 @@ class _FormWidgetState extends State<FormWidget> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
-                          onPressed: _confirmNote,
-                          icon: const Icon(Icons.save)),
+                        onPressed: _confirmNote,
+                        icon: const Icon(Icons.done_rounded),
+                      ),
                     )
                   ],
                 ),
@@ -144,13 +145,13 @@ class _FormWidgetState extends State<FormWidget> {
                             // helperText: "hey",
                             // focusColor: Colors.blue.withOpacity(0.5),
                           ),
-                          validator: (subTitle) {
-                            note.setSubTitle(subTitle!);
-                            if (subTitle == null || subTitle.isEmpty) {
-                              return "please enter some text!";
-                            }
-                            return null;
-                          },
+                          // validator: (subTitle) {
+                          //   note.setSubTitle(subTitle!);
+                          //   if (subTitle == null || subTitle.isEmpty) {
+                          //     return "please enter some text!";
+                          //   }
+                          //   return null;
+                          // },
                         ),
                       ),
                     ),
@@ -405,6 +406,9 @@ class _FormWidgetState extends State<FormWidget> {
           ),
           height: 40,
           width: 40,
+          child: noteColorIndex == i
+              ? const Icon(Icons.done_rounded, color: Colors.white)
+              : const Text(""),
         ),
       ),
     );

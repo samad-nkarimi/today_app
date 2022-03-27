@@ -148,10 +148,10 @@ class _CalendarPageState extends State<CalendarPage> {
                       child: const CustomCalendar(),
                     ),
                     const SizedBox(height: 20),
-                    if (notes.isEmpty) noNoteWidget(),
-                    for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
-                    const SizedBox(height: 20),
+                    // if (notes.isEmpty) noNoteWidget(),
                     addNoteButtonWidget(),
+                    const SizedBox(height: 20),
+                    for (int i = 0; i < notes.length; i++) NoteItem(notes[i]),
                     BlocBuilder<CalenderBloc, CalenderState>(
                         buildWhen: (previous, current) {
                       if (current is MonthAdequaciesCalenderState) {

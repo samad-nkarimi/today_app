@@ -17,7 +17,7 @@ class AddNoteButton extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey.withOpacity(0.2),
+        color: Colors.orange.withOpacity(0.4),
       ),
       child: DottedBorder(
         borderType: BorderType.RRect,
@@ -33,7 +33,7 @@ class AddNoteButton extends StatelessWidget {
             children: [
               Text("افزودن یادداشت", style: Theme.of(context).textTheme.button),
               const Padding(
-                padding: EdgeInsets.only(left: 5.0),
+                padding: EdgeInsets.only(left: 10.0),
                 child: Icon(Icons.add_circle_outline, color: Colors.white),
               ),
             ],

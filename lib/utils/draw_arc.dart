@@ -5,9 +5,16 @@ import 'dart:math';
 
 class ForPainting extends StatefulWidget {
   final double radius;
+  final double offset;
   final double fillPercent;
-  const ForPainting({Key? key, this.radius = 50, this.fillPercent = 1})
-      : super(key: key);
+  final double stroke;
+  const ForPainting({
+    Key? key,
+    this.radius = 50,
+    this.fillPercent = 1,
+    this.stroke = 5,
+    this.offset = 50,
+  }) : super(key: key);
 
   @override
   _ForPaintingState createState() => _ForPaintingState();
@@ -17,6 +24,7 @@ class _ForPaintingState extends State<ForPainting> {
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
+    print("object");
 
     Size size = const Size(100.0, 100.0);
     return Container(
@@ -24,7 +32,8 @@ class _ForPaintingState extends State<ForPainting> {
       // height: 50.0,
       child: CustomPaint(
         size: size,
-        painter: Painter(widget.radius, widget.fillPercent),
+        painter: Painter(
+            widget.radius, widget.fillPercent, widget.stroke, widget.offset),
       ),
     );
   }
@@ -34,9 +43,11 @@ class Painter extends CustomPainter {
   // Paint cloudPaint;
   // Painter(this.cloudPaint);
   final double radius;
+  final double offset;
+  final double stroke;
   final double fillPercent;
 
-  Painter(this.radius, this.fillPercent);
+  Painter(this.radius, this.fillPercent, this.stroke, this.offset);
   @override
   void paint(Canvas canvas, Size size) {
     // double rectTop = 110.0;
@@ -46,7 +57,7 @@ class Painter extends CustomPainter {
     // double figureCenter = size.width / 2;
 
     Rect cloudBaseRect =
-        Rect.fromCircle(center: const Offset(50.0, 50.0), radius: radius);
+        Rect.fromCircle(center: Offset(offset, offset), radius: radius);
     // RRect cloudBase = RRect.fromRectAndRadius(
     //   cloudBaseRect,
     //   Radius.circular(10.0),
@@ -83,14 +94,14 @@ class Painter extends CustomPainter {
 
     Paint _paintBrush2 = Paint()
       // ..color = Colors.red
-      ..strokeWidth = 18.0
+      ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect);
 
     Paint _paintBrush1 = Paint()
       // ..color = Colors.red
-      ..strokeWidth = 18.0
+      ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..shader = gradient.createShader(cloudBaseRect)
@@ -98,7 +109,7 @@ class Painter extends CustomPainter {
 
     Paint _paintBrush3 = Paint()
           ..color = Colors.cyan
-          ..strokeWidth = 18.0
+          ..strokeWidth = stroke
           ..strokeCap = StrokeCap.round
           ..style = PaintingStyle.stroke
         // ..shader = gradient.createShader(cloudBaseRect)
