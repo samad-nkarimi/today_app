@@ -165,11 +165,13 @@ class _NoteItemState extends State<NoteItem> {
           border: Border.all(width: 1, color: Colors.white38),
           gradient: RadialGradient(
             colors: [
-              widget.note.isDone ? Colors.green : const Color(0xFFBC00AA),
-              const Color(0xFF00C8CF),
+              widget.note.isDone
+                  ? Colors.green.shade700
+                  : const Color(0xFFBC00AA),
+              widget.note.isDone ? Colors.white : const Color(0xFF00C8CF),
             ],
             center: Alignment.topRight,
-            radius: 2.8, focalRadius: 2,
+            radius: 3.5, focalRadius: 3,
             // begin: Alignment.topRight,
             // end: Alignment.bottomLeft,
           ),

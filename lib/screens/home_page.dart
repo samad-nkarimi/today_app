@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       body: Builder(builder: (BuildContext context) {
         return Container(
           // color: Colors.blue.shade100,
-          height: double.infinity,
+          // height: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/earth.jpg"),
@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                           ListView(
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
+                            reverse: true,
                             children: [
                               for (int i = 0; i < notes.length; i++)
                                 NoteItem(notes[i]),

@@ -93,6 +93,32 @@ class _FormWidgetState extends State<FormWidget> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                    Container(
+                        height: 90,
+                        child: FutureBuilder<Notes>(
+                          future: BlocProvider.of<NoteBloc>(context)
+                              .databaseProvider
+                              .notes
+                              .call(),
+                          builder: (context, ss) {
+                            List<Note> notes = ss.data!.notesList;
+                            return ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 0; i < notes.length; i++)
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    width: 80,
+                                    height: 80,
+                                    decoration:
+                                        const BoxDecoration(color: Colors.blue),
+                                    child: Text(notes[i].title),
+                                  )
+                              ],
+                            );
+                          },
+                        )),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 5.0),
