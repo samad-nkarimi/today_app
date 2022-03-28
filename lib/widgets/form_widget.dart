@@ -90,12 +90,19 @@ class _FormWidgetState extends State<FormWidget> {
                   ),
                   actions: [
                     Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: IconButton(
+                        onPressed: _clearNoteDitails,
+                        icon: const Icon(Icons.clear_rounded),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                         onPressed: _confirmNote,
                         icon: const Icon(Icons.done_rounded),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -448,6 +455,15 @@ class _FormWidgetState extends State<FormWidget> {
         BlocProvider.of<NoteBloc>(context).add(NoteWasEdittedEvent(note));
       }
     }
+  }
+
+  void _clearNoteDitails() {
+    setState(() {
+      titleController.text = "";
+      subTitleController.text = "";
+      noteColorIndex = 0;
+      selectedDate = "select date";
+    });
   }
 
   // repeated
