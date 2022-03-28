@@ -28,7 +28,7 @@ class _NoteItemState extends State<NoteItem> {
     // print(labelColor.toString());
 
     return Container(
-      height: 80,
+      height: 90,
 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(cornerSize),
@@ -42,6 +42,10 @@ class _NoteItemState extends State<NoteItem> {
         key: Key(widget.note.getId.toString()),
         confirmDismiss: (direction) async {
           print("confirm");
+          //just today notes could be done or undo
+          if (widget.note.isTodayNote) {
+            return false;
+          }
 
           if (direction == DismissDirection.endToStart) {
             // remove the note
@@ -104,8 +108,9 @@ class _NoteItemState extends State<NoteItem> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(snapshot.data! ? "undo" : "done",
-                          style: const TextStyle(color: Colors.white)),
+                      if (!widget.note.isTodayNote)
+                        Text(snapshot.data! ? "undo" : "done",
+                            style: const TextStyle(color: Colors.white)),
                       const Text(""),
                     ],
                   ),

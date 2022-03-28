@@ -30,7 +30,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // int noteCount = 0;
-  final double showBoardSize = 130;
+  final double showBoardSize = 150;
   final double topPictureHeight = 300;
 
   Future<void> loadJson() async {
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       body: Builder(builder: (BuildContext context) {
         return Container(
           // color: Colors.blue.shade100,
-          // height: double.infinity,
+          height: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/earth.jpg"),
@@ -97,10 +97,10 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: BlocBuilder<NoteBloc, NoteState>(
+          child: SingleChildScrollView(
+            child: Stack(
+              children: [
+                BlocBuilder<NoteBloc, NoteState>(
                   builder: (context, state) {
                     List<Note> notes = state.notes.getTodayNotes;
                     print("notes: $notes");
@@ -132,16 +132,20 @@ class _HomePageState extends State<HomePage> {
                           topPicture(),
                           // SizedBox(height: showBoardSize / 2 + 30),
                           // if (notes.isEmpty) noNoteWidget(),
+                          // const SizedBox(height: 60),
                           addNoteWidgetButton(),
-                          // const SizedBox(height: 20),
-                          ListView(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            reverse: true,
-                            children: [
-                              for (int i = 0; i < notes.length; i++)
-                                NoteItem(notes[i]),
-                            ],
+                          Container(
+                            // height: 400,
+                            child: ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: const NeverScrollableScrollPhysics(),
+                              reverse: true,
+                              children: [
+                                for (int i = 0; i < notes.length; i++)
+                                  NoteItem(notes[i]),
+                              ],
+                            ),
                           ),
 
                           // Container(
@@ -157,24 +161,24 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-              ),
-              menuButton(),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 100,
-                  // top: topPictureHeight - showBoardSize / 2,
+                menuButton(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 100,
+                    // top: topPictureHeight - showBoardSize / 2,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      _showPercentWidget(),
+                      _todayInfoWidget(),
+                      const HourWidget(),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _showPercentWidget(),
-                    _todayInfoWidget(),
-                    const HourWidget(),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),
@@ -249,8 +253,8 @@ class _HomePageState extends State<HomePage> {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.all(20.0),
-      height: 60,
-      width: 60,
+      height: 80,
+      width: 80,
       decoration: BoxDecoration(
         color: Colors.orange,
         borderRadius: BorderRadius.circular(50.0),

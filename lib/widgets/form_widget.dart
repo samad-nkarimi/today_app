@@ -132,7 +132,7 @@ class _FormWidgetState extends State<FormWidget> {
                             return ListView(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              physics: const NeverScrollableScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 5),
                               children: [
@@ -317,7 +317,7 @@ class _FormWidgetState extends State<FormWidget> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Container(
-        height: 450,
+        // height: 460,
         decoration: const BoxDecoration(
           color: Colors.blue,
           // image: DecorationImage(
@@ -328,7 +328,8 @@ class _FormWidgetState extends State<FormWidget> {
         ),
         // alignment: Alignment.bottomCenter,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const CustomCalendar(),
             BlocBuilder<CalenderBloc, CalenderState>(builder: (context, state) {
@@ -352,6 +353,19 @@ class _FormWidgetState extends State<FormWidget> {
                 child: Text(date, style: const TextStyle(color: Colors.white)),
               );
             }),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "ok",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ),

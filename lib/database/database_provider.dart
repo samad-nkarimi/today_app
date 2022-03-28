@@ -131,6 +131,7 @@ class DatabaseProvider {
     return notes;
   }
 
+  // and will sort notes
   static Future<Notes> historyNotes() async {
     final db = database;
     Notes notes = Notes();
@@ -148,7 +149,7 @@ class DatabaseProvider {
 
       return note;
     });
-
+    notesList.sort((a, b) => b.repeat.compareTo(a.repeat));
     notes.setAllNotes(notesList);
     return notes;
   }

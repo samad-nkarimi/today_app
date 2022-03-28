@@ -68,13 +68,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
                   filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
                   child: Container(
                     // alignment: Alignment.bottomCenter,
-                    // color: Colors.red,
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 5.0),
+                        horizontal: 0.0, vertical: 5.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
                       color: Colors.blue.withOpacity(0.3),
+                      // color: Colors.red,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

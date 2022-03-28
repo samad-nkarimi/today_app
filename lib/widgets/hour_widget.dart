@@ -11,6 +11,7 @@ class HourWidget extends StatefulWidget {
 }
 
 class _HourWidgetState extends State<HourWidget> {
+  final double height = 80;
   @override
   void initState() {
     super.initState();
@@ -23,8 +24,8 @@ class _HourWidgetState extends State<HourWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(20.0),
-      height: 60,
-      width: 60,
+      height: height,
+      width: height,
       decoration: BoxDecoration(
         color: Colors.lightBlueAccent,
         borderRadius: BorderRadius.circular(50.0),
@@ -40,8 +41,8 @@ class _HourWidgetState extends State<HourWidget> {
           ),
           ForPainting(
             key: Key(DateTime.now().second.toString()),
-            offset: 30 - 4, //half of width minus  stroke width
-            radius: 28,
+            offset: height / 2 - 4, //half of width minus  stroke width
+            radius: height / 2 - 4 / 2,
             stroke: 4,
             fillPercent: (59 - DateTime.now().second) / 59.0,
           ),
