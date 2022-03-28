@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/blocs/blocs.dart';
+import 'package:today/database/database_provider.dart';
 import 'package:today/utils/custom_calendar.dart';
 import '../blocs/note/note.dart';
 import '../models/models.dart';
@@ -31,12 +32,23 @@ class _FormWidgetState extends State<FormWidget> {
   late Note note;
   int noteColorIndex = 0;
   String selectedDate = "select date";
+  final subTitleController = TextEditingController();
+  final titleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     note = widget.initialData;
-    // noteColorIndex = widget.initialData.labelColor.;
+    titleController.text = note.title;
+    subTitleController.text = note.subTitle;
+    noteColorIndex = widget.initialData.labelColor;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    subTitleController.dispose();
   }
 
   List<String> months = [
@@ -94,38 +106,73 @@ class _FormWidgetState extends State<FormWidget> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                        height: 90,
-                        child: FutureBuilder<Notes>(
-                          future: BlocProvider.of<NoteBloc>(context)
-                              .databaseProvider
-                              .notes
-                              .call(),
-                          builder: (context, ss) {
-                            List<Note> notes = ss.data!.notesList;
+                      height: 90,
+                      color: Colors.grey.withOpacity(0.1),
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: FutureBuilder<Notes>(
+                        future: DatabaseProvider.historyNotes(),
+                        builder: (context, ss) {
+                          print(ss.connectionState);
+
+                          if (ss.connectionState == ConnectionState.done) {
+                            int length = 0;
+                            List<Note> notes = [];
+                            if (ss.hasData) {
+                              notes = ss.data!.notesList;
+                              length = notes.length;
+                            }
                             return ListView(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 5),
                               children: [
-                                for (int i = 0; i < notes.length; i++)
-                                  Container(
-                                    margin: const EdgeInsets.all(5),
-                                    width: 80,
-                                    height: 80,
-                                    decoration:
-                                        const BoxDecoration(color: Colors.blue),
-                                    child: Text(notes[i].title),
+                                for (int i = 0; i < length; i++)
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        titleController.text = notes[i].title;
+                                        subTitleController.text =
+                                            notes[i].subTitle;
+                                        noteColorIndex = notes[i].labelColor;
+                                        print(noteColorIndex);
+                                        print(notes[i].title);
+                                        print(notes[i].subTitle);
+                                      });
+                                    },
+                                    child: Card(
+                                      elevation: 1,
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        width: 80,
+                                        height: 80,
+                                        alignment: Alignment.center,
+                                        child: Text(notes[i].title),
+                                      ),
+                                    ),
                                   )
                               ],
                             );
-                          },
-                        )),
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 5.0),
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
-                          initialValue: widget.initialData.title,
+                          // initialValue: note.title,
+                          controller: titleController,
                           // autofocus: true,
                           maxLines: 1,
                           textInputAction: TextInputAction.next,
@@ -154,7 +201,8 @@ class _FormWidgetState extends State<FormWidget> {
                       child: Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextFormField(
-                          initialValue: widget.initialData.subTitle,
+                          // initialValue: note.subTitle,
+                          controller: subTitleController,
                           maxLines: 4,
                           minLines: 1,
                           textInputAction: TextInputAction.done,
@@ -171,13 +219,13 @@ class _FormWidgetState extends State<FormWidget> {
                             // helperText: "hey",
                             // focusColor: Colors.blue.withOpacity(0.5),
                           ),
-                          // validator: (subTitle) {
-                          //   note.setSubTitle(subTitle!);
-                          //   if (subTitle == null || subTitle.isEmpty) {
-                          //     return "please enter some text!";
-                          //   }
-                          //   return null;
-                          // },
+                          validator: (subTitle) {
+                            note.setSubTitle(subTitle!);
+                            // if (subTitle == null || subTitle.isEmpty) {
+                            //   return "please enter some text!";
+                            // }
+                            return null;
+                          },
                         ),
                       ),
                     ),
@@ -382,6 +430,7 @@ class _FormWidgetState extends State<FormWidget> {
   void _confirmNote() {
     if (_formKey.currentState!.validate()) {
       Navigator.pop(context);
+
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text("done!")),
       // );
@@ -390,7 +439,7 @@ class _FormWidgetState extends State<FormWidget> {
         //we are creating a new note
         note.isTodayNote = widget.isCalendarPage;
         note.setId(note.getRandomString());
-        note.setLabelColor(noteColorIndex);
+        note.labelColor = noteColorIndex;
 
         BlocProvider.of<NoteBloc>(context).add(NewNoteWasSent(note));
       } else {
@@ -438,10 +487,5 @@ class _FormWidgetState extends State<FormWidget> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

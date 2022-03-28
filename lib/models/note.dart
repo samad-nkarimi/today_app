@@ -7,7 +7,7 @@ class Note extends Equatable {
   String id;
   String title;
   String subTitle;
-  Color labelColor;
+  int labelColor;
   bool isTodayNote;
   bool isDone;
   String hour; //12:32
@@ -16,13 +16,15 @@ class Note extends Equatable {
   String month; //1,2,3
   String year;
 
+  int repeat;
+
   // int isTodayNote_intFormat = 0;
 
   Note(
     this.title,
     this.subTitle, {
     this.id = "0",
-    this.labelColor = Colors.orange,
+    this.labelColor = 0,
     this.isTodayNote = false,
     this.isDone = false,
     this.hour = "",
@@ -30,6 +32,7 @@ class Note extends Equatable {
     this.dayName = "",
     this.month = "",
     this.year = "",
+    this.repeat = 0,
   });
   // {
   //   // id = getRandomString();
@@ -57,8 +60,9 @@ class Note extends Equatable {
     Colors.green,
   ];
 
-  void setLabelColor(int colorIndex) {
-    labelColor = colors[colorIndex];
+  Color getColorFromIndex(int colorIndex) {
+    return colors[colorIndex];
+
     // switch (colorIndex) {
     //   case 0:
     //     labelColor = colors[colorIndex];
@@ -86,8 +90,19 @@ class Note extends Equatable {
       'id': id,
       'title': title,
       'subtitle': subTitle,
+      'color': labelColor,
       'istoday': isTodayNote ? 1 : 0,
       'isdone': isDone ? 1 : 0,
+    };
+  }
+
+  Map<String, dynamic> toMapForHistory() {
+    return {
+      'id': id,
+      'repeat': repeat,
+      'title': title,
+      'subtitle': subTitle,
+      'color': labelColor,
     };
   }
 
@@ -112,6 +127,6 @@ class Note extends Equatable {
 
   @override
   String toString() {
-    return "{ Note id:$id , isDone:$isDone }";
+    return "{ Note id:$id , sub:$subTitle }";
   }
 }

@@ -16,38 +16,12 @@ import 'screens/home_page.dart';
 void main() async {
   // Bloc.observer = SimpleBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
-  final databasePath = join(await getDatabasesPath(), 'notes_database.db');
-  // await deleteDatabase(databasePath);
-  print(databasePath);
-  final database = await openDatabase(
-    databasePath,
-    onCreate: (db, version) async {
-      await db.execute("""CREATE TABLE notes
-          (id TEXT PRIMARY KEY,
-           title TEXT,
-           subtitle TEXT ,
-           hour TEXT ,
-           day TEXT ,
-           dayname TEXT ,
-           month TEXT ,
-           year TEXT ,
-           istoday INTEGER ,
-           isdone INTEGER
-           )""");
-    },
-    version: 1,
-  );
-  DatabaseProvider databaseProvider = DatabaseProvider(database);
-  Notes notes;
-  try {
-    notes = await databaseProvider.notes();
-  } catch (e) {
-    notes = Notes();
-  }
+  final dp = DatabaseProvider();
+  Notes notes = await dp.init();
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
+        BlocProvider(create: (context) => NoteBloc(dp, notes)),
         BlocProvider(create: (context) => CalenderBloc()),
         BlocProvider(create: (context) => ThemeSettingBloc()),
       ],

@@ -256,7 +256,7 @@ class _NoteItemState extends State<NoteItem> {
               alignment: Alignment.topCenter,
               child: SvgPicture.asset(
                 "assets/images/label_red.svg",
-                color: widget.note.labelColor,
+                color: widget.note.getColorFromIndex((widget.note.labelColor)),
               ),
             ),
           ],

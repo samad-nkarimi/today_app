@@ -24,7 +24,7 @@ class _ForPaintingState extends State<ForPainting> {
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
-    print("object");
+    // print("object");
 
     Size size = const Size(100.0, 100.0);
     return Container(

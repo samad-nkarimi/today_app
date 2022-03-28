@@ -38,7 +38,7 @@ dependencies:
   store_redirect: ^2.0.0
 
   flutter_svg: ^0.23.0+1
-  jalali_calendar: ^1.0.4
+#  jalali_calendar: ^1.0.4
   table_calendar: ^3.0.3
   dotted_border: ^2.0.0+1
   sqflite: ^2.0.0+4
