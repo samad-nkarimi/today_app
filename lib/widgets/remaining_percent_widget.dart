@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:today/size/short_methods.dart';
 import 'package:today/utils/helper_methods.dart';
 
 class RemaningPercentWisget extends StatefulWidget {
@@ -9,13 +10,14 @@ class RemaningPercentWisget extends StatefulWidget {
 }
 
 class _RemaningPercentWisgetState extends State<RemaningPercentWisget> {
+  final double diameter = rw(70, 90);
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.all(20.0),
-      height: 80,
-      width: 80,
+      height: diameter,
+      width: diameter,
       decoration: BoxDecoration(
         color: Colors.orange,
         borderRadius: BorderRadius.circular(50.0),
@@ -29,7 +31,7 @@ class _RemaningPercentWisgetState extends State<RemaningPercentWisget> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 0.1 * 60,
+                height: getHourPercent() * diameter,
                 color: Colors.blueAccent,
               ),
             ),

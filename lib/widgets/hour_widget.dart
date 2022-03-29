@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:today/size/short_methods.dart';
 import 'package:today/utils/draw_arc.dart';
 
 class HourWidget extends StatefulWidget {
@@ -11,7 +12,7 @@ class HourWidget extends StatefulWidget {
 }
 
 class _HourWidgetState extends State<HourWidget> {
-  final double height = 80;
+  final double height = rw(70, 90);
   @override
   void initState() {
     super.initState();
