@@ -12,6 +12,8 @@ import 'package:today/widgets/add_note_button_widget.dart';
 import 'package:today/widgets/floating_button_widget.dart';
 import 'package:today/widgets/form_widget.dart';
 import 'package:today/widgets/hour_widget.dart';
+import 'package:today/widgets/remaining_percent_widget.dart';
+import 'package:today/widgets/today_info_widget.dart';
 
 import '../blocs/note/note.dart';
 import 'calender_page.dart';
@@ -171,8 +173,8 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      _showPercentWidget(),
-                      _todayInfoWidget(),
+                      const RemaningPercentWisget(),
+                      TodayInfoWidget(showBoardSize: showBoardSize),
                       const HourWidget(),
                     ],
                   ),
@@ -184,101 +186,6 @@ class _HomePageState extends State<HomePage> {
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: const CustomFloatingButton(page: pageid.today),
-    );
-  }
-
-  Widget _todayInfoWidget() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100.0),
-          clipBehavior: Clip.antiAlias,
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              alignment: Alignment.center,
-              height: showBoardSize,
-              width: showBoardSize,
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              decoration: BoxDecoration(
-                // color: Colors.blue.withOpacity(.5),
-                borderRadius: BorderRadius.circular(100.0),
-                // border: Border.all(width: 5.0,color: Colors.blue),
-
-                gradient: RadialGradient(
-                  colors: [
-                    Colors.purple.withOpacity(0.3),
-                    Colors.blue.withOpacity(0.3)
-                  ],
-                  radius: .8,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    getWeekdayInShamsi(),
-                    style: const TextStyle(
-                      fontFamily: "Negar",
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    getTodayDateStringInShamsi(),
-                    style: const TextStyle(
-                      fontFamily: "Negar",
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        ForPainting(
-          radius: showBoardSize / 2,
-          offset: 50,
-          stroke: 18.0,
-          fillPercent: getHourPercent(),
-        ),
-      ],
-    );
-  }
-
-  Widget _showPercentWidget() {
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.all(20.0),
-      height: 80,
-      width: 80,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(50.0),
-        border: Border.all(width: 4, color: Colors.white),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50.0),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 0.1 * 60,
-                color: Colors.blueAccent,
-              ),
-            ),
-            Text(
-              "${(getHourPercent() * 100).toStringAsFixed(0)}%",
-              style: const TextStyle(fontFamily: "ANegar", color: Colors.white),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -362,14 +269,5 @@ class _HomePageState extends State<HomePage> {
       },
       child: AddNoteButton(context: context),
     );
-  }
-
-  double getHourPercent() {
-    int hour = DateTime.now().hour;
-    int min = DateTime.now().minute;
-    int totalMinute = 24 * 60;
-    int spendedMinute = hour * 60 + min;
-    double hourPercent = 1.0 - spendedMinute / totalMinute;
-    return hourPercent;
   }
 }
