@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/screens/calender_page.dart';
 
-enum pageid { today, calendar }
+enum pageid { today, calendar, menu }
 
 class CustomFloatingButton extends StatefulWidget {
   final pageid page;
@@ -30,9 +30,12 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
 
         if (widget.page == pageid.calendar) {
           Navigator.pop(context);
-        } else {
+        } else if (widget.page == pageid.today) {
           BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
           Navigator.pushNamed(context, CalendarPage.routeName);
+        } else {
+          //to open drawer
+          Scaffold.of(context).openEndDrawer();
         }
       },
       child: AnimatedContainer(
@@ -53,7 +56,9 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
         child: Icon(
           widget.page == pageid.calendar
               ? Icons.today_outlined
-              : Icons.calendar_today_outlined,
+              : widget.page == pageid.today
+                  ? Icons.calendar_today_outlined
+                  : Icons.menu,
           color: Colors.white,
         ),
       ),

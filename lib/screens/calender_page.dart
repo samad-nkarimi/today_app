@@ -170,8 +170,15 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: const CustomFloatingButton(page: pageid.calendar),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            CustomFloatingButton(page: pageid.calendar),
+            CustomFloatingButton(page: pageid.menu),
+            // menuButton(),
+          ],
+        ),
       ),
     );
   }

@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print((DateTime.now().difference(DateTime(2021, 3, 21)).inHours) % 24.0);
     return SafeArea(
       child: Scaffold(
         endDrawer: const DrawerWidget(),
@@ -191,12 +192,13 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const CustomFloatingButton(page: pageid.today),
-            menuButton(),
+          children: const [
+            CustomFloatingButton(page: pageid.today),
+            CustomFloatingButton(page: pageid.menu),
+            // menuButton(),
           ],
         ),
       ),
