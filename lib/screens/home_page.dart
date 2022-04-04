@@ -76,7 +76,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print((DateTime.now().difference(DateTime(2021, 3, 21)).inHours) % 24.0);
+    // print((DateTime.now().difference(DateTime(2021, 3, 21)).inHours) % 24.0);
+    print((DateTime.now().difference(DateTime(2021, 3, 21)).inDays) - 354);
+    print(gregorianToJalali(2022, 3, 23));
     return SafeArea(
       child: Scaffold(
         endDrawer: const DrawerWidget(),

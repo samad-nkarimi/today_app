@@ -91,6 +91,9 @@ flutter:
     - assets/images/tick8_logo.png
     - assets/json/shamsi_holiday.json
     - assets/json/shamsi_adequacy.json
+    - assets/json/miladi_adequacy.json
+    - assets/json/ghamari_holiday.json
+    - assets/json/ghamari_adequacy.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

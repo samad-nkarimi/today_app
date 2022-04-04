@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/models/adequacy.dart';
 import 'package:today/models/date_details.dart';
+import 'package:today/utils/date_converter.dart';
 
 class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   int thisYear = 1400;
@@ -52,7 +53,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       emit(InitialCalenderState(dateDetails));
       await Future.delayed(Duration.zero); //why we need this line?
       emit(MonthAdequaciesCalenderState(
-          await getAdequaciesList(dateDetails.month), dateDetails));
+          await loadShamsiAdequacyJson(dateDetails.month), dateDetails));
     });
     on<MonthAdequaciesSentCalenderEvent>((event, emit) {
       emit(MonthAdequaciesCalenderState(event.adequacies, dateDetails));
@@ -65,7 +66,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       emit(MonthUpdatedCalenderState(updateContent(event.monthId)));
       await Future.delayed(Duration.zero);
       emit(MonthAdequaciesCalenderState(
-          await getAdequaciesList(event.monthId), dateDetails));
+          await loadShamsiAdequacyJson(event.monthId), dateDetails));
     });
 
     //when we select a day box to be colorized
@@ -88,7 +89,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     loadJson().then((value) {});
 
     //shamsi adequacy
-    loadShamsiAdequacyJson().then((value) {});
+    loadShamsiAdequacyJson(currentMonth).then((value) {});
 
     //initialize datedetails
     dateDetails = DateDetails(
@@ -264,9 +265,60 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     return firstDay;
   }
 
-  Future<void> loadShamsiAdequacyJson() async {
+  Future<List<Adequacy>> loadShamsiAdequacyJson(int currentMonth) async {
+    List<Adequacy> adequacies = [];
     var data = await rootBundle.loadString('assets/json/shamsi_adequacy.json');
     List<dynamic> jsonResult = jsonDecode(data);
+
+    //try to adding miladi adequacies to shamsi ones
+    data = await rootBundle.loadString('assets/json/miladi_adequacy.json');
+    List<dynamic> miladiJsonResult = jsonDecode(data);
+    for (int i = 0; i < miladiJsonResult.length; i++) {
+      String date = (miladiJsonResult.elementAt(i) as Map<String, dynamic>)
+          .keys
+          .toList()[0]
+          .toString(); //sample:"0101"
+      String title = (miladiJsonResult.elementAt(i) as Map<String, dynamic>)
+          .values
+          .toList()[0]
+          .toString();
+      String shamsiDate = convertMiladiToShamsi(date);
+      Map<String, dynamic> element = {shamsiDate: title};
+
+      jsonResult.add(element);
+    }
+    //
+    currentMonth++; //the first is 0
+    String stringMonth = currentMonth < 10 ? "0$currentMonth" : "$currentMonth";
+
+    //select adequacies of target month
+    jsonResult = jsonResult
+        .where((element) =>
+            (element as Map<String, dynamic>)
+                .keys
+                .toList()[0]
+                .toString()
+                .substring(0, 2) ==
+            stringMonth)
+        .toList();
+
+    jsonResult.sort((a, b) => a.keys.first.compareTo(b.keys.first));
+
+    ////trying to have unique keys
+    // List<String> keys = [];
+    // List<String> values = [];
+    // jsonResult.forEach((element) {
+    //   if (keys.contains(element.keys.first)) {
+    //     print(element.keys.first);
+    //     values[keys.indexOf(element.keys.first)] =
+    //         values[keys.indexOf(element.keys.first)].toString() +
+    //             element.values.first;
+    //     jsonResult.removeWhere((e) => e.keys.first == element.keys.first);
+    //   } else {
+    //     values.add(element.values.first);
+    //     keys.add(element.keys.first);
+    //   }
+    // });
 
     for (var i = 0; i < jsonResult.length; i++) {
       String date = (jsonResult.elementAt(i) as Map<String, dynamic>)
@@ -278,22 +330,36 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
           .toList()[0]
           .toString();
 
-      shamsiAdequacyCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
+      // shamsiAdequacyCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
 
-      shamsiAdequacies.add(Adequacy(
+      adequacies.add(Adequacy(
         title: title,
         dayTitle: numberToDayTitle(date.substring(2)),
         dayNumber: date.substring(2),
         month: numberToMonthTitle(date.substring(0, 2)),
       ));
-      shamsiAdequacyDates.add(date);
-      title = title.trim();
-      shamsiAdequacyTitles.add(title);
+
+      // shamsiAdequacyDates.add(date);
+      // title = title.trim();
+      // shamsiAdequacyTitles.add(title);
       // print(shamsiAdequacyCountPerMonth);
     }
 
     // print(shamsiAdequacyTitles);
     // print(shamsiAdequacyDates);
+    return adequacies;
+  }
+
+  String convertMiladiToShamsi(String miladi) {
+    List<int> shamsi = gregorianToJalali(
+      2021,
+      int.parse(miladi.substring(0, 2)),
+      int.parse(miladi.substring(2)),
+    ); // sample [1400,02,10]
+    String stringMonth = shamsi[1] < 10 ? "0${shamsi[1]}" : "${shamsi[1]}";
+    String stringDay = shamsi[2] < 10 ? "0${shamsi[2]}" : "${shamsi[2]}";
+    print(stringMonth + stringDay);
+    return stringMonth + stringDay;
   }
 
   String numberToDayTitle(String number) {
@@ -306,28 +372,28 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     return months[num];
   }
 
-  //shamsi adequacy
-  Future<List<Adequacy>> getAdequaciesList(int currentMonth) async {
-    List<Adequacy> adequacies = [];
-    // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
-    int startIndex = 0;
-    for (var i = 0; i < currentMonth; i++) {
-      startIndex = startIndex + shamsiAdequacyCountPerMonth[i];
-    }
+  //shamsi adequacy (??) all adequacy in shamsi date
+  // Future<List<Adequacy>> getAdequaciesList(int currentMonth) async {
+  //   List<Adequacy> adequacies = [];
+  //   // for (var i = 0; i < holidayCountPerMonth[currentMonth]; i++) {
+  //   int startIndex = 0;
+  //   for (var i = 0; i < currentMonth; i++) {
+  //     startIndex = startIndex + shamsiAdequacyCountPerMonth[i];
+  //   }
 
-    int endIndex = shamsiAdequacyCountPerMonth[currentMonth] + startIndex;
-    print(currentMonth);
-    print(startIndex);
-    print(endIndex);
-    // if (startIndex == endIndex)
-    //   print(endIndex);
-    // else
-    print(shamsiAdequacies.length);
-    adequacies = shamsiAdequacies.sublist(startIndex, endIndex);
-    // }
+  //   int endIndex = shamsiAdequacyCountPerMonth[currentMonth] + startIndex;
+  //   print(currentMonth);
+  //   print(startIndex);
+  //   print(endIndex);
+  //   // if (startIndex == endIndex)
+  //   //   print(endIndex);
+  //   // else
+  //   print(shamsiAdequacies.length);
+  //   adequacies = shamsiAdequacies.sublist(startIndex, endIndex);
+  //   // }
 
-    return adequacies;
-  }
+  //   return adequacies;
+  // }
 
   Future<void> loadJson() async {
     var data = await rootBundle.loadString('assets/json/shamsi_holiday.json');
