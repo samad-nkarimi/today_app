@@ -5,30 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/models/adequacy.dart';
 import 'package:today/models/date_details.dart';
+import 'package:today/models/today.dart';
 import 'package:today/utils/date_converter.dart';
 
 class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
-  int thisYear = 1400;
-  int currentMonth = 0;
-  int currentStartDay = 0;
-  int startDayPreviousMonth = 0;
-  int startDayNextMonth = 0;
-  bool isFullYear = false; // kabise
   bool isPreviousYearFullYear = false; // kabise
-  int esfandLength = 29;
+
   int esfandLengthInPreviousYear = 29;
   List<String> holidayTitles = [];
-
-  List<int> holidayCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-  //shamsi adequacy
-  List<String> shamsiAdequacyTitles = [];
-  List<String> shamsiAdequacyDates = [];
   List<Adequacy> shamsiAdequacies = [];
-  List<int> shamsiAdequacyCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
   DateDetails dateDetails =
-      const DateDetails(1401, 1, 2, 4, 1, 29, false, [""]);
+      DateDetails(1401, 1, 2, 4, 1, 29, false, [""], 1, 1);
 
   List<String> months = [
     "فروردین",
@@ -47,7 +34,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
 
   CalenderBloc()
       : super(InitialCalenderState(
-            const DateDetails(1401, 1, 2, 3, 1, 29, false, [""]))) {
+            DateDetails(1401, 1, 2, 3, 1, 29, false, [""], 1, 1))) {
     on<InitialCalenderEvent>((event, emit) async {
       await initialization();
       emit(InitialCalenderState(dateDetails));
@@ -76,77 +63,91 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   }
 
   Future<void> initialization() async {
-    int initialPage = _getTodayInShamsi()[1] - 1;
-    print("initialPage $initialPage");
+    print("initialization calendar bloc");
+    print("esfandlepr: $esfandLengthInPreviousYear");
+    // int initialPage = _getTodayInShamsi().monthInYear - 1;
+    // print("initialPage $initialPage");
 
-    currentMonth = initialPage;
-    currentStartDay = getFirstDayInMonth();
+    // currentMonth = initialPage;
+    // currentStartDay = getFirstDayInMonth();
     // thisYear = getThisYear();
 
-    getStartDay();
-    getEndDay();
-    getFirstDayInMonth();
+    // getStartDay();
+    // getEndDay();
+    // getFirstDayInMonth();
     // loadJson().then((value) {});
 
     //shamsi adequacy
-    loadShamsiAdequacyJson(currentMonth).then((value) {});
 
+    dateDetails.month = _getTodayInShamsi().monthInYear - 1;
+    dateDetails.currentStartDay = getFirstDayInMonth();
+    dateDetails.esfandLength =
+        (getThisYear() - 1399).abs().remainder(4) == 0 ? 30 : 29;
+    isPreviousYearFullYear =
+        (getThisYear() - 1 - 1399).abs().remainder(4) == 0 ? true : false;
+
+    esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
     //initialize datedetails
     dateDetails = DateDetails(
       getThisYear(),
-      _getTodayInShamsi()[1] - 1,
-      _getTodayInShamsi()[0],
-      currentStartDay,
-      esfandLength,
-      _getTodayInShamsi()[1] - 1,
-      isFullYear,
+      _getTodayInShamsi().monthInYear - 1, //just for start
+      _getTodayInShamsi().dayInMonth,
+      getFirstDayInMonth(), //just for start , for initialization
+      (getThisYear() - 1399).abs().remainder(4) == 0 ? 30 : 29,
+      _getTodayInShamsi().monthInYear - 1,
+      (getThisYear() - 1399).abs().remainder(4) == 0 ? true : false,
       await getHolidayDates(),
+      getStartDayPreviousMonth(),
+      getStartNextMonth(),
     );
+    // loadShamsiAdequacyJson(dateDetails.month).then((value) {});
   }
 
   Future<DateDetails> updateContent(int index) async {
     // setState(() {
-    getStartDay();
-    getEndDay();
+    // getStartDay();
+    // getEndDay();
     // print("$currentStartDay**");
 
-    if (currentMonth > index) {
-      currentStartDay = startDayPreviousMonth;
-    } else if (currentMonth < index) {
-      currentStartDay = startDayNextMonth;
+    if (dateDetails.month > index) {
+      dateDetails.currentStartDay = dateDetails.startDayPreviousMonth;
+    } else if (dateDetails.month < index) {
+      dateDetails.currentStartDay = dateDetails.startDayNextMonth;
     }
     // for start new year
-    if (currentMonth == 11 && index == 0) {
-      thisYear++;
-      currentStartDay = startDayNextMonth;
+    if (dateDetails.month == 11 && index == 0) {
+      dateDetails.year++;
+      dateDetails.currentStartDay = dateDetails.startDayNextMonth;
     }
-    // for comeback to previous year
-    if (currentMonth == 0 && index == 11) {
-      thisYear--;
-      currentStartDay = startDayPreviousMonth;
+    // for go back to previous year
+    if (dateDetails.month == 0 && index == 11) {
+      dateDetails.year--;
+      dateDetails.currentStartDay = dateDetails.startDayPreviousMonth;
     }
     // after updating thisYear
-    isFullYear = (thisYear - 1399).abs().remainder(4) == 0 ? true : false;
+    dateDetails.isFullYear =
+        (dateDetails.year - 1399).abs().remainder(4) == 0 ? true : false;
     isPreviousYearFullYear =
-        (thisYear - 1 - 1399).abs().remainder(4) == 0 ? true : false;
-    esfandLength = isFullYear ? 30 : 29;
+        (dateDetails.year - 1 - 1399).abs().remainder(4) == 0 ? true : false;
+    dateDetails.esfandLength = dateDetails.isFullYear ? 30 : 29;
     esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
 
     // print("$currentStartDay**");
-    print(thisYear);
-    print(
-        "currentMonth $currentMonth , index=$index , isFullYear: $isFullYear");
-    currentMonth = index;
+    print(dateDetails.year);
+    print(" index=$index , isFullYear: ${dateDetails.isFullYear}");
+    dateDetails.month = index;
 
     dateDetails = DateDetails(
-      thisYear,
-      currentMonth,
-      _getTodayInShamsi()[0],
-      currentStartDay,
-      esfandLength,
-      _getTodayInShamsi()[1] - 1,
-      isFullYear,
+      dateDetails.year,
+      dateDetails.month,
+      _getTodayInShamsi().dayInMonth,
+      dateDetails.currentStartDay,
+      dateDetails.esfandLength,
+      _getTodayInShamsi().monthInYear - 1,
+      dateDetails.isFullYear,
       await getHolidayDates(),
+      getStartDayPreviousMonth(),
+      getStartNextMonth(),
     );
     return dateDetails;
 
@@ -155,6 +156,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   }
 
   int getThisYear() {
+    int thisYear = 1400;
     int daysCount =
         (DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1;
     thisYear = (daysCount / 364).floor() + 1400;
@@ -162,11 +164,13 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     return thisYear;
   }
 
-  int getEndDay() {
-    int todayNumber = currentStartDay;
-    int monthNumber = currentMonth;
-    int monthLength =
-        monthNumber == 11 ? esfandLength : (monthNumber > 5 ? 30 : 31);
+  int getStartNextMonth() {
+    int startDayNextMonth;
+    int todayNumber = dateDetails.currentStartDay;
+    int monthNumber = dateDetails.month;
+    int monthLength = monthNumber == 11
+        ? dateDetails.esfandLength
+        : (monthNumber > 5 ? 30 : 31);
     int currentEndDay =
         todayNumber + (monthLength - (monthLength / 7).floor() * 7 - 1);
     startDayNextMonth = currentEndDay + 1;
@@ -180,41 +184,39 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     // print("startDayNextMonth $startDayNextMonth");
     // print("startDay $currentStartDay");
     print("-------------------------------");
-    return 1;
+    return startDayNextMonth;
   }
 
-  int getStartDay() {
-    int todayNumber = currentStartDay;
-    int previousMonthNumber = currentMonth - 1;
+  int getStartDayPreviousMonth() {
+    int startDayPreviousMonth;
+    int previousMonthNumber = dateDetails.month - 1;
     if (previousMonthNumber < 0) previousMonthNumber = 11;
-    int monthLength = previousMonthNumber == 11
+    int previousMonthLength = previousMonthNumber == 11
         ? esfandLengthInPreviousYear
         : (previousMonthNumber > 5 ? 30 : 31);
     // int currentMonthLength = currentMonth == 11 ? 29 : (currentMonth > 5 ? 30 : 31);
     // int currentEndDay = todayNumber + (currentMonthLength - (currentMonthLength / 7).round() * 7 - 1);
     // currentEndDay = currentEndDay > 6 ? currentEndDay - 7 : currentEndDay;
-    int previousMontEndDay = currentStartDay - 1;
+    int previousMontEndDay = dateDetails.currentStartDay - 1;
     previousMontEndDay =
         previousMontEndDay < 0 ? previousMontEndDay + 7 : previousMontEndDay;
     previousMontEndDay =
         previousMontEndDay > 6 ? previousMontEndDay - 7 : previousMontEndDay;
     // print("previousMontEndDay $previousMontEndDay");
-    startDayPreviousMonth =
-        previousMontEndDay - (monthLength - (monthLength / 7).floor() * 7 - 1);
+    startDayPreviousMonth = previousMontEndDay -
+        (previousMonthLength - (previousMonthLength / 7).floor() * 7 - 1);
     startDayPreviousMonth = startDayPreviousMonth < 0
         ? startDayPreviousMonth + 7
         : startDayPreviousMonth;
     startDayPreviousMonth = startDayPreviousMonth > 6
         ? startDayPreviousMonth - 7
         : startDayPreviousMonth;
-    print("monthLength $monthLength");
+    print("previousMonthLength $previousMonthLength");
     print("startDayPreviousMonth $startDayPreviousMonth");
-    return 1;
+    return startDayPreviousMonth;
   }
 
-  List<int> _getTodayInShamsi() {
-    List<int> todayDate =
-        []; //day number nth in month ,month number nth in year
+  Today _getTodayInShamsi() {
     int dayCount =
         ((DateTime.now().difference(DateTime(2021, 3, 21)).inDays) + 1) % 365;
 
@@ -229,21 +231,20 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       if (monthInYear >= 6) {
         monthAdd = 30;
       } else if (monthInYear == 12) {
-        monthAdd = esfandLength;
+        monthAdd = dateDetails.esfandLength;
       }
     }
 
-    todayDate.add(dayInMonth);
-    todayDate.add(monthInYear);
+    final today = Today(dayInMonth, monthInYear);
     // currentMonth = month;
-    print(
-        "dayCount: $dayCount , month: $monthInYear , day: $dayInMonth , hour: ${DateTime.now().hour}");
-    return todayDate;
+    // print(
+    //     "dayCount: $dayCount , month: $monthInYear , day: $dayInMonth , hour: ${DateTime.now().hour}");
+    return today;
   }
 
   int getFirstDayInMonth() {
-    List<int> todayDate = _getTodayInShamsi();
-    int dayInMonth = todayDate[0];
+    final today = _getTodayInShamsi();
+
     // print("dayInMonth $dayInMonth");
 
     // int dayInSeven = dayInMonth - (dayInMonth / 7).floor();
@@ -256,7 +257,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
             7;
     // int diff = todayNumber - dayInSeven;
     // print("diff: $diff");
-    int firstDay = dayInSeven - dayInMonth.remainder(7).toInt();
+    int firstDay = dayInSeven - today.dayInMonth.remainder(7).toInt();
     // print("firstDay $firstDay");
     // print("todayNumber $todayNumber");
     // print("dayInSeven $dayInSeven");
@@ -338,15 +339,8 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
         dayNumber: date.substring(2),
         month: numberToMonthTitle(date.substring(0, 2)),
       ));
-
-      // shamsiAdequacyDates.add(date);
-      // title = title.trim();
-      // shamsiAdequacyTitles.add(title);
-      // print(shamsiAdequacyCountPerMonth);
     }
 
-    // print(shamsiAdequacyTitles);
-    // print(shamsiAdequacyDates);
     return adequacies;
   }
 
@@ -358,7 +352,6 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     ); // sample [1400,02,10]
     String stringMonth = shamsi[1] < 10 ? "0${shamsi[1]}" : "${shamsi[1]}";
     String stringDay = shamsi[2] < 10 ? "0${shamsi[2]}" : "${shamsi[2]}";
-    print(stringMonth + stringDay);
     return stringMonth + stringDay;
   }
 
@@ -368,7 +361,6 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
 
   String numberToMonthTitle(String number) {
     int num = int.parse(number) - 1;
-
     return months[num];
   }
 
@@ -401,12 +393,8 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     List<dynamic> jsonResult = jsonDecode(data);
 
     for (var i = 0; i < jsonResult.length; i++) {
-      String title =
-          jsonResult.elementAt(i)["title"] ?? "oooooooooooooooooooooooooo";
       String date =
           jsonResult.elementAt(i)["date"] ?? "1111111111111111"; //sample:"0101"
-
-      holidayCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
 
       holidayDates.add(date);
     }

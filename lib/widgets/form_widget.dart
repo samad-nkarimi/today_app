@@ -336,14 +336,14 @@ class _FormWidgetState extends State<FormWidget> {
               String date = "not selected";
               if (state is ContentRefreshedCalenderState) {
                 date =
-                    "${getDayName(state.dateDetails.startDay, state.selectedDay)}    ${state.selectedDay}    ${months[state.dateDetails.month]}";
+                    "${getDayName(state.dateDetails.currentStartDay, state.selectedDay)}    ${state.selectedDay}    ${months[state.dateDetails.month]}";
 
                 Future.delayed(Duration.zero).then((value) => setState(() {
                       selectedDate = date;
                       note.hour = "";
                       note.day = state.selectedDay;
                       note.dayName = getDayName(
-                          state.dateDetails.startDay, state.selectedDay);
+                          state.dateDetails.currentStartDay, state.selectedDay);
                       note.month = months[state.dateDetails.month];
                       note.year = state.dateDetails.year.toString();
                     }));

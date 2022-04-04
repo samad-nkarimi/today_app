@@ -1,24 +1,28 @@
 import 'package:equatable/equatable.dart';
 
 class DateDetails extends Equatable {
-  final int year;
-  final int month;
+  int year;
+  int month;
   final int day;
-  final int startDay;
-  final int esfandLength;
-  final int monthInYear;
-  final bool isFullYear;
+  int currentStartDay;
+  int esfandLength;
+  int monthInYear;
+  bool isFullYear;
   final List<String> holidayDates;
+  final int startDayPreviousMonth;
+  final int startDayNextMonth;
 
-  const DateDetails(
+  DateDetails(
     this.year,
     this.month,
     this.day,
-    this.startDay,
+    this.currentStartDay,
     this.esfandLength,
     this.monthInYear,
     this.isFullYear,
     this.holidayDates,
+    this.startDayPreviousMonth,
+    this.startDayNextMonth,
   );
 
   @override
@@ -26,15 +30,17 @@ class DateDetails extends Equatable {
         year,
         month,
         day,
-        startDay,
+        currentStartDay,
         esfandLength,
         monthInYear,
         isFullYear,
-        holidayDates
+        holidayDates,
+        startDayPreviousMonth,
+        startDayNextMonth,
       ];
 
   @override
   String toString() {
-    return "$year/$month/$day - $startDay";
+    return "$year/$month/$day - $currentStartDay";
   }
 }

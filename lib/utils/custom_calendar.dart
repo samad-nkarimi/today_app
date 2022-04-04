@@ -190,7 +190,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
   }
 
   Widget contentTable(CalenderState state) {
-    print(state);
+    // print(state);
     print(state.dateDetails);
     String selectedDay =
         state is ContentRefreshedCalenderState && state.selectedDay.isNotEmpty
@@ -213,7 +213,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
           // ..._tableContentRows(),
           ..._tableRows(
             _tableContentRows(
-              state.dateDetails.startDay,
+              state.dateDetails.currentStartDay,
               state.dateDetails.month,
               state.dateDetails.day,
               state.dateDetails.monthInYear,
@@ -311,7 +311,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
           correction++;
           continue;
         }
-        print("day:$month ,dayInMonth:$monthInYear");
+        // print("day:$month ,dayInMonth:$monthInYear");
         // do not forget to apply year too!!
         (day == dayInMonth && month == monthInYear)
             ? list.add(CalendarDayWidget(
