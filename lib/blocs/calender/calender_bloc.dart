@@ -18,7 +18,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   int esfandLength = 29;
   int esfandLengthInPreviousYear = 29;
   List<String> holidayTitles = [];
-  List<String> holidayDates = [];
+
   List<int> holidayCountPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   //shamsi adequacy
@@ -49,7 +49,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       : super(InitialCalenderState(
             const DateDetails(1401, 1, 2, 3, 1, 29, false, [""]))) {
     on<InitialCalenderEvent>((event, emit) async {
-      initialization();
+      await initialization();
       emit(InitialCalenderState(dateDetails));
       await Future.delayed(Duration.zero); //why we need this line?
       emit(MonthAdequaciesCalenderState(
@@ -63,7 +63,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       print("month id: ${event.monthId}");
       // updateContent(event.monthId);
       // print(dateDetails);
-      emit(MonthUpdatedCalenderState(updateContent(event.monthId)));
+      emit(MonthUpdatedCalenderState(await updateContent(event.monthId)));
       await Future.delayed(Duration.zero);
       emit(MonthAdequaciesCalenderState(
           await loadShamsiAdequacyJson(event.monthId), dateDetails));
@@ -75,7 +75,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     });
   }
 
-  void initialization() {
+  Future<void> initialization() async {
     int initialPage = _getTodayInShamsi()[1] - 1;
     print("initialPage $initialPage");
 
@@ -86,7 +86,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     getStartDay();
     getEndDay();
     getFirstDayInMonth();
-    loadJson().then((value) {});
+    // loadJson().then((value) {});
 
     //shamsi adequacy
     loadShamsiAdequacyJson(currentMonth).then((value) {});
@@ -100,11 +100,11 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       esfandLength,
       _getTodayInShamsi()[1] - 1,
       isFullYear,
-      holidayDates,
+      await getHolidayDates(),
     );
   }
 
-  DateDetails updateContent(int index) {
+  Future<DateDetails> updateContent(int index) async {
     // setState(() {
     getStartDay();
     getEndDay();
@@ -146,7 +146,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       esfandLength,
       _getTodayInShamsi()[1] - 1,
       isFullYear,
-      holidayDates,
+      await getHolidayDates(),
     );
     return dateDetails;
 
@@ -395,7 +395,8 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
   //   return adequacies;
   // }
 
-  Future<void> loadJson() async {
+  Future<List<String>> getHolidayDates() async {
+    List<String> holidayDates = [];
     var data = await rootBundle.loadString('assets/json/shamsi_holiday.json');
     List<dynamic> jsonResult = jsonDecode(data);
 
@@ -408,12 +409,8 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
       holidayCountPerMonth[int.parse(date.substring(0, 2)) - 1]++;
 
       holidayDates.add(date);
-      title = title.trim();
-      holidayTitles.add(title);
-      // print(holidayCountPerMonth);
     }
 
-    // print(holidayTitles);
-    // print(holidayDates);
+    return holidayDates;
   }
 }
