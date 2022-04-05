@@ -10,11 +10,11 @@ class Note extends Equatable {
   int labelColor;
   bool isTodayNote;
   bool isDone;
-  String hour; //12:32
-  String day; //1,2,3,...
+  int hour; //12
+  int day; //1,2,3,...
   String dayName; //sunday,...
-  String month; //1,2,3
-  String year;
+  int month; //0,1,2,3
+  int year;
 
   int repeat;
 
@@ -27,11 +27,11 @@ class Note extends Equatable {
     this.labelColor = 0,
     this.isTodayNote = false,
     this.isDone = false,
-    this.hour = "",
-    this.day = "",
+    this.hour = 0,
+    this.day = 0,
     this.dayName = "",
-    this.month = "",
-    this.year = "",
+    this.month = 0,
+    this.year = 0,
     this.repeat = 0,
   });
   // {
@@ -83,6 +83,15 @@ class Note extends Equatable {
     return id;
   }
 
+  //to convert a calendar note to today note by changing some properties
+  void convertToTodayNote() {
+    dayName = "";
+    hour = 0;
+    day = 0;
+    month = 0;
+    isTodayNote = false;
+  }
+
   // Convert a Note into a Map. The keys must correspond to the names of the
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -93,6 +102,11 @@ class Note extends Equatable {
       'color': labelColor,
       'istoday': isTodayNote ? 1 : 0,
       'isdone': isDone ? 1 : 0,
+      'hour': hour,
+      'day': day,
+      'month': month,
+      'year': year,
+      'dayname': dayName,
     };
   }
 

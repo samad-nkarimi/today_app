@@ -27,11 +27,11 @@ class DatabaseProvider {
            title TEXT,
            subtitle TEXT ,
            color INTEGER,
-           hour TEXT ,
-           day TEXT ,
+           hour INTEGER ,
+           day INTEGER ,
            dayname TEXT ,
-           month TEXT ,
-           year TEXT ,
+           month INTEGER ,
+           year INTEGER ,
            istoday INTEGER ,
            isdone INTEGER
            )""");
@@ -45,15 +45,44 @@ class DatabaseProvider {
     } catch (e) {
       notes = Notes();
     }
+
+    /*
+    here we must try pick today notes due to the dates
+    */
+    print("notes: $notes");
+    for (int i = 0; i < notes.notesList.length; i++) {
+      Note note = notes.notesList[i];
+      if (!note.isTodayNote) continue;
+      int result =
+          DateTime(1401, 0, 16).compareTo(DateTime(note.year, note.month, 16));
+      print("result: $result");
+      if (result == 0) {
+        //this note is belong to today
+        note.convertToTodayNote();
+        await database.insert(
+          'notes',
+          note.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      } else if (result == 1) {
+        print(note.props);
+        await deleteNote(note);
+      }
+    }
+    //after changes
+    try {
+      notes = await fetchNotes();
+    } catch (e) {
+      notes = Notes();
+    }
+
     return notes;
   }
 
   // const DatabaseProvider(this.database);
 
   Future<void> insertNote(Note note) async {
-    final db = database;
-
-    await db.insert(
+    await database.insert(
       'notes',
       note.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -64,7 +93,7 @@ class DatabaseProvider {
         .indexWhere((e) => e.title == note.title);
     if (index == -1) {
       //we will have a new note in history
-      await db.insert(
+      await database.insert(
         'history',
         note.toMapForHistory(),
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -76,7 +105,7 @@ class DatabaseProvider {
           note.subTitle.isNotEmpty ? note.subTitle : hnote.subTitle;
       hnote.labelColor = note.labelColor;
       hnote.repeat++;
-      await db.insert(
+      await database.insert(
         'history',
         hnote.toMapForHistory(),
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -104,30 +133,33 @@ class DatabaseProvider {
 
     final List<Map<String, dynamic>> maps = await db.query('notes');
     print("query: $maps");
+    try {
+      List<Note> notesList = List.generate(maps.length, (i) {
+        final note = Note(
+          maps[i]['title'],
+          maps[i]['subtitle'],
+          id: maps[i]['id'],
+          labelColor: maps[i]['color'],
+          isTodayNote: maps[i]["istoday"] == 1 ? true : false,
+          isDone: maps[i]["isdone"] == 1 ? true : false,
+          hour: maps[i]['hour'],
+          day: maps[i]['day'],
+          dayName: maps[i]['dayname'],
+          month: maps[i]['month'],
+          year: maps[i]['year'],
+        );
 
-    List<Note> notesList = List.generate(maps.length, (i) {
-      final note = Note(
-        maps[i]['title'],
-        maps[i]['subtitle'],
-        id: maps[i]['id'],
-        labelColor: maps[i]['color'],
-        isTodayNote: maps[i]["istoday"] == 1 ? true : false,
-        isDone: maps[i]["isdone"] == 1 ? true : false,
-        hour: maps[i]['hour'],
-        day: maps[i]['day'],
-        dayName: maps[i]['dayname'],
-        month: maps[i]['month'],
-        year: maps[i]['year'],
-      );
-
-      return note;
-    });
-    // print("notes: $notesList");
+        return note;
+      });
+      print("notes: $notesList");
+      notes.setAllNotes(notesList);
+    } catch (e) {
+      print(e);
+    }
     // print("istoday: ${maps[0]["istoday"]}");
     // print("istoday: ${maps[1]["istoday"]}");
     // print("istoday: ${maps[2]["istoday"]}");
     // print("istoday: ${maps[3]["istoday"]}");
-    notes.setAllNotes(notesList);
     return notes;
   }
 
