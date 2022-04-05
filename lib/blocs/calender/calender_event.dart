@@ -26,8 +26,11 @@ class InitialCalenderEvent extends CalenderEvent {
 }
 
 class DaySelectedCalenderEvent extends CalenderEvent {
-  final String day;
-  DaySelectedCalenderEvent(this.day);
+  final bool isDatePicker;
+  final int day;
+  final int month;
+  final int year;
+  DaySelectedCalenderEvent(this.isDatePicker, this.day, this.month, this.year);
   @override
-  List<Object?> get props => [day];
+  List<Object?> get props => [isDatePicker, day, month, year];
 }

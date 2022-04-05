@@ -253,6 +253,8 @@ class _FormWidgetState extends State<FormWidget> {
                           children: [
                             TextButton(
                               onPressed: () {
+                                BlocProvider.of<CalenderBloc>(context)
+                                    .add(InitialCalenderEvent());
                                 showGeneralDialog<String>(
                                   barrierLabel: "label",
                                   barrierDismissible: true,
@@ -331,19 +333,23 @@ class _FormWidgetState extends State<FormWidget> {
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CustomCalendar(),
+            const CustomCalendar(isAsDatePicker: true, key: Key("datePicker")),
             BlocBuilder<CalenderBloc, CalenderState>(builder: (context, state) {
               String date = "not selected";
               if (state is ContentRefreshedCalenderState) {
-                date =
-                    "${getDayName(state.dateDetails.currentStartDay, state.selectedDay)}    ${state.selectedDay}    ${months[state.dateDetails.month]}";
-
+                if (state.selectedDay > 0) {
+                  date =
+                      "${getDayName(state.dateDetails.currentStartDay, state.selectedDay.toString())}    ${state.selectedDay}    ${months[state.dateDetails.month]}";
+                } else {
+                  date = "don't choose from past";
+                }
                 Future.delayed(Duration.zero).then((value) => setState(() {
                       selectedDate = date;
                       note.hour = "";
-                      note.day = state.selectedDay;
+                      note.day = state.selectedDay.toString();
                       note.dayName = getDayName(
-                          state.dateDetails.currentStartDay, state.selectedDay);
+                          state.dateDetails.currentStartDay,
+                          state.selectedDay.toString());
                       note.month = months[state.dateDetails.month];
                       note.year = state.dateDetails.year.toString();
                     }));

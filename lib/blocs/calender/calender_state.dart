@@ -37,12 +37,15 @@ class MonthUpdatedCalenderState extends CalenderState {
 //after selecting a day
 class ContentRefreshedCalenderState extends CalenderState {
   final DateDetails dateDetails;
-  final String selectedDay;
+  final int selectedDay;
+  final int selectedMonth;
+  final int selectedYear;
 
-  ContentRefreshedCalenderState(this.dateDetails, this.selectedDay)
+  ContentRefreshedCalenderState(
+      this.dateDetails, this.selectedDay, this.selectedMonth, this.selectedYear)
       : super(dateDetails);
   @override
-  List<Object?> get props => [selectedDay];
+  List<Object?> get props => [selectedDay, selectedMonth, selectedYear];
 }
 
 // class DateDetailsCalenderState extends CalenderState {

@@ -58,7 +58,20 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
 
     //when we select a day box to be colorized
     on<DaySelectedCalenderEvent>((event, emit) async {
-      emit(ContentRefreshedCalenderState(dateDetails, event.day));
+      //to not pick date from the past
+      print("${event.day} vs ${dateDetails.day}");
+      print("${event.month} vs ${dateDetails.monthInYear}");
+      print("${event.year} vs ${getThisYear()}");
+
+      bool isAfterToday = DateTime(event.year, event.month, event.day).isAfter(
+          DateTime(getThisYear(), dateDetails.monthInYear, dateDetails.day));
+      if (isAfterToday || !event.isDatePicker) {
+        emit(ContentRefreshedCalenderState(
+            dateDetails, event.day, event.month, event.year));
+      } else {
+        emit(ContentRefreshedCalenderState(dateDetails, 0, 0, 0));
+        print("you chose from past!!!");
+      }
     });
   }
 
@@ -89,7 +102,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
     esfandLengthInPreviousYear = isPreviousYearFullYear ? 30 : 29;
     //initialize datedetails
     dateDetails = DateDetails(
-      getThisYear(),
+      getThisYear(), //for start
       _getTodayInShamsi().monthInYear - 1, //just for start
       _getTodayInShamsi().dayInMonth,
       getFirstDayInMonth(), //just for start , for initialization

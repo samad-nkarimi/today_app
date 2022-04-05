@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class DateDetails extends Equatable {
-  int year;
-  int month;
-  final int day;
+  int year; //will change by scrolling
+  int month; //this change by scrolling calendar
+  final int day; //today in real life
   int currentStartDay;
   int esfandLength;
-  int monthInYear;
+  int monthInYear; //this is fix, and its the real current month in real life
   bool isFullYear;
   final List<String> holidayDates;
   final int startDayPreviousMonth;
@@ -41,6 +41,6 @@ class DateDetails extends Equatable {
 
   @override
   String toString() {
-    return "$year/$month/$day - $currentStartDay";
+    return "$year/$month/$day - $currentStartDay/$esfandLength/$monthInYear - $isFullYear/$holidayDates/$startDayPreviousMonth/$startDayNextMonth";
   }
 }

@@ -4,6 +4,9 @@ import 'package:today/blocs/blocs.dart';
 
 class CalendarDayWidget extends StatefulWidget {
   final String text;
+  final int month;
+  final int year;
+  final bool isDatePicker;
   final bool isTitle;
   final bool isToday;
   final bool isHoliday;
@@ -15,6 +18,9 @@ class CalendarDayWidget extends StatefulWidget {
     this.isHoliday = false,
     this.isSelected = false,
     required this.text,
+    this.month = 0,
+    this.year = 0,
+    this.isDatePicker = false,
   }) : super(key: key);
 
   @override
@@ -35,10 +41,17 @@ class _CalendarDayWidgetState extends State<CalendarDayWidget> {
       onTap: () {
         // setState(() {
         //   isSelected = true;
-        //   print(widget.text);
+
         // });
-        BlocProvider.of<CalenderBloc>(context)
-            .add(DaySelectedCalenderEvent(widget.text));
+
+        //don't want to select day titles (monday,...)
+        if (!widget.isTitle) {
+          BlocProvider.of<CalenderBloc>(context).add(DaySelectedCalenderEvent(
+              widget.isDatePicker,
+              int.parse(widget.text),
+              widget.month,
+              widget.year));
+        }
       },
       child: Container(
         alignment: Alignment.center,

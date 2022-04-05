@@ -10,7 +10,9 @@ import 'package:today/models/models.dart';
 import 'package:today/widgets/calendar_day_widget.dart';
 
 class CustomCalendar extends StatefulWidget {
-  const CustomCalendar({Key? key}) : super(key: key);
+  final bool isAsDatePicker;
+  const CustomCalendar({Key? key, this.isAsDatePicker = false})
+      : super(key: key);
 
   @override
   _CustomCalendarState createState() => _CustomCalendarState();
@@ -55,8 +57,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
   Widget buildCalendar() {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child:
-          BlocBuilder<CalenderBloc, CalenderState>(builder: (context, state) {
+      child: BlocBuilder<CalenderBloc, CalenderState>(
+          buildWhen: (previous, current) {
+        if (current is MonthUpdatedCalenderState || current != previous) {
+          return true;
+        }
+        return false;
+      }, builder: (context, state) {
+        // print(state);
         return Container(
           // color: Colors.orange,
           child: Column(
@@ -168,6 +176,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     int index = (600 - itemIndex) > 0
                         ? 12 - ((600 - itemIndex).abs() % 12)
                         : (600 - itemIndex).abs() % 12;
+                    // BlocProvider.of<CalenderBloc>(context)
+                    //     .add(CalendarScrolledCalenderEvent(index));
 
                     // print("item index: $itemIndex");
                     // print("index: $index");
@@ -192,10 +202,9 @@ class _CustomCalendarState extends State<CustomCalendar> {
   Widget contentTable(CalenderState state) {
     // print(state);
     print(state.dateDetails);
-    String selectedDay =
-        state is ContentRefreshedCalenderState && state.selectedDay.isNotEmpty
-            ? state.selectedDay
-            : "0";
+    int selectedDay =
+        state is ContentRefreshedCalenderState ? state.selectedDay : 0;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Table(
@@ -214,6 +223,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
           ..._tableRows(
             _tableContentRows(
               state.dateDetails.currentStartDay,
+              state.dateDetails.year,
               state.dateDetails.month,
               state.dateDetails.day,
               state.dateDetails.monthInYear,
@@ -247,13 +257,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   List<Widget> _tableContentRows(
     int startDay,
+    int year,
     int month,
     int dayInMonth,
     int monthInYear,
     int esfandLength,
     bool isFullYear,
     List<String> holidayDates,
-    String selectedDay,
+    int selectedDay,
   ) {
     //month is the month index we are in it now
     //monthInYear is the month that contains today date
@@ -316,12 +327,20 @@ class _CustomCalendarState extends State<CustomCalendar> {
         (day == dayInMonth && month == monthInYear)
             ? list.add(CalendarDayWidget(
                 text: (day <= endDay) ? '$day' : "",
+                month: month,
+                year: year,
+                isDatePicker: widget.isAsDatePicker,
                 isToday: true,
-                isSelected: selectedDay == ((day <= endDay) ? '$day' : ""),
+                isSelected:
+                    selectedDay.toString() == ((day <= endDay) ? '$day' : ""),
                 isHoliday: isHoliday))
             : list.add(CalendarDayWidget(
                 text: (day <= endDay) ? '$day' : "",
-                isSelected: selectedDay == ((day <= endDay) ? '$day' : ""),
+                month: month,
+                year: year,
+                isDatePicker: widget.isAsDatePicker,
+                isSelected:
+                    selectedDay.toString() == ((day <= endDay) ? '$day' : ""),
                 isHoliday: isHoliday,
               ));
       }
