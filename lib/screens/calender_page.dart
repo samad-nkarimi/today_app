@@ -8,7 +8,7 @@ import 'package:today/widgets/floating_button_widget.dart';
 import '../blocs/note/note.dart';
 import '../utils/custom_calendar.dart';
 import 'drawer_widget.dart';
-import '../widgets/form_widget.dart';
+import 'form_page.dart';
 import '../models/models.dart';
 import '../widgets/note_item_widget.dart';
 
@@ -29,79 +29,26 @@ class _CalendarPageState extends State<CalendarPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                FormWidget(initialData: Note("", ""), isCalendarPage: true),
+                FormPage(initialData: Note("", ""), isCalendarPage: true),
           ),
         );
       },
       child: AddNoteButton(context: context),
     );
-
-    // GestureDetector(
-    //   onTap: () {
-    //     showModalBottomSheet(
-    //       isScrollControlled: true,
-    //       shape: const RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.only(
-    //           topLeft: Radius.circular(30.0),
-    //           topRight: Radius.circular(30.0),
-    //         ),
-    //       ),
-    //       context: context,
-    //       builder: (context) {
-    //         return Container(
-    //           // height: 400,
-    //           color: Colors.transparent,
-    //           child:
-    //               FormWidget(isCalendarPage: true, initialData: Note("", "")),
-    //         );
-    //       },
-    //     );
-    //   },
-    //   child: AddNoteButton(context: context),
-    // );
   }
 
-  // repeated
-  Widget noNoteWidget() {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.grey.withOpacity(0.2),
-      ),
-      child: DottedBorder(
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(5),
-        dashPattern: const [10, 5],
-        color: Colors.grey,
-        strokeWidth: 1.5,
-        child: Container(
-          alignment: Alignment.center,
-          child: const Text("no note"),
-        ),
-      ),
-    );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
+    print("didChangeDependencies");
   }
 
-  // repeated
-  Widget menuButton() {
-    return Positioned(
-      right: 0,
-      top: 20,
-      child: Container(
-        height: 70,
-        width: 70,
-        child: IconButton(
-          onPressed: () {
-            print("pressed");
-            Scaffold.of(context).openEndDrawer();
-          },
-          icon: SvgPicture.asset("assets/images/menu_icon.svg"),
-        ),
-      ),
-    );
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
+    print("didUpdateWidget");
   }
 
   @override

@@ -58,93 +58,33 @@ class _CustomCalendarState extends State<CustomCalendar> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BlocBuilder<CalenderBloc, CalenderState>(
-          buildWhen: (previous, current) {
-        if (current is MonthUpdatedCalenderState || current != previous) {
-          return true;
+          //     buildWhen: (previous, current) {
+          //   if (current is MonthUpdatedCalenderState || current != previous) {
+          //     return true;
+          //   }
+          //   return false;
+          // },
+
+          builder: (context, state) {
+        if (state is InitialCalenderState) {
+          _pageController = PageController(
+            // initialPage: initialPage + 600,
+            initialPage: 600,
+            keepPage: false,
+            viewportFraction: 1,
+          );
         }
-        return false;
-      }, builder: (context, state) {
-        // print(state);
+        // print("${state.toString()}");
         return Container(
-          // color: Colors.orange,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ClipRRect(
-                clipBehavior: Clip.antiAlias,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-                  child: Container(
-                    // alignment: Alignment.bottomCenter,
-
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 0.0, vertical: 5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: Colors.blue.withOpacity(0.3),
-                      // color: Colors.red,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              //to previous month
-                              int targetMonth;
-                              targetMonth = state.dateDetails.month - 1 < 0
-                                  ? 11
-                                  : state.dateDetails.month - 1;
-                              // BlocProvider.of<CalenderBloc>(context).add(
-                              //     CalendarScrolledCalenderEvent(targetMonth));
-                              _pageController?.animateToPage(
-                                targetMonth,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeIn,
-                              );
-                            },
-                            icon: const Icon(Icons.chevron_left,
-                                color: Colors.white)),
-                        IconButton(
-                            onPressed: () {
-                              //to next month
-                              int targetMonth;
-                              targetMonth = state.dateDetails.month + 1 > 11
-                                  ? 0
-                                  : state.dateDetails.month + 1;
-                              // BlocProvider.of<CalenderBloc>(context).add(
-                              //     CalendarScrolledCalenderEvent(targetMonth));
-                              _pageController?.animateToPage(
-                                targetMonth,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            icon: const Icon(Icons.navigate_next,
-                                color: Colors.white)),
-                        Expanded(
-                            child: Center(
-                                child: Text(
-                          months[state.dateDetails.month],
-                          style: const TextStyle(color: Colors.white),
-                        ))),
-                        Text(
-                          "${state.dateDetails.year}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              calendarStatusBar(state),
               Container(
                 height: 275,
-                // color: Colors.black45,
                 alignment: Alignment.bottomCenter,
                 child: PageView.builder(
-                  // itemCount: 12,
                   dragStartBehavior: DragStartBehavior.start,
-
                   onPageChanged: (i) {
                     print("onChanged pageview");
                     print(i);
@@ -191,7 +131,6 @@ class _CustomCalendarState extends State<CustomCalendar> {
                   },
                 ),
               ),
-              // Text(_getTodayInShamsi())
             ],
           ),
         );
@@ -201,7 +140,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
   Widget contentTable(CalenderState state) {
     // print(state);
-    print(state.dateDetails);
+    // print(state.dateDetails);
     int selectedDay =
         state is ContentRefreshedCalenderState ? state.selectedDay : 0;
 
@@ -414,4 +353,67 @@ class _CustomCalendarState extends State<CustomCalendar> {
   //   return adequacies;
   // }
 
+  Widget calendarStatusBar(CalenderState state) {
+    return ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: Colors.blue.withOpacity(0.3),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    //to previous month
+                    int targetMonth;
+                    targetMonth = state.dateDetails.month - 1 < 0
+                        ? 11
+                        : state.dateDetails.month - 1;
+                    // BlocProvider.of<CalenderBloc>(context).add(
+                    //     CalendarScrolledCalenderEvent(targetMonth));
+                    _pageController?.animateToPage(
+                      targetMonth,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  icon: const Icon(Icons.chevron_left, color: Colors.white)),
+              IconButton(
+                  onPressed: () {
+                    //to next month
+                    int targetMonth;
+                    targetMonth = state.dateDetails.month + 1 > 11
+                        ? 0
+                        : state.dateDetails.month + 1;
+                    // BlocProvider.of<CalenderBloc>(context).add(
+                    //     CalendarScrolledCalenderEvent(targetMonth));
+                    _pageController?.animateToPage(
+                      targetMonth,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  icon: const Icon(Icons.navigate_next, color: Colors.white)),
+              Expanded(
+                  child: Center(
+                      child: Text(
+                months[state.dateDetails.month],
+                style: const TextStyle(color: Colors.white),
+              ))),
+              Text(
+                "${state.dateDetails.year}",
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

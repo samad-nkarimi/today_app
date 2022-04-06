@@ -34,7 +34,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
 
   CalenderBloc()
       : super(InitialCalenderState(
-            DateDetails(1401, 1, 2, 3, 1, 29, false, [""], 1, 1))) {
+            DateDetails(1401, 5, 2, 3, 1, 29, false, [""], 1, 1))) {
     on<InitialCalenderEvent>((event, emit) async {
       await initialization();
       emit(InitialCalenderState(dateDetails));
@@ -77,7 +77,7 @@ class CalenderBloc extends Bloc<CalenderEvent, CalenderState> {
 
   Future<void> initialization() async {
     print("initialization calendar bloc");
-    print("esfandlepr: $esfandLengthInPreviousYear");
+    // print("esfandlepr: $esfandLengthInPreviousYear");
     // int initialPage = _getTodayInShamsi().monthInYear - 1;
     // print("initialPage $initialPage");
 

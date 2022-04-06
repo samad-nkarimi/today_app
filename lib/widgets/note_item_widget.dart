@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:today/widgets/form_widget.dart';
+import 'package:today/screens/form_page.dart';
 import '../blocs/blocs.dart';
 import '../models/models.dart';
 
@@ -133,7 +133,7 @@ class _NoteItemState extends State<NoteItem> {
           context,
           MaterialPageRoute(
             builder: (c) {
-              return FormWidget(
+              return FormPage(
                 initialData: widget.note,
               );
             },

@@ -8,26 +8,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/blocs/blocs.dart';
 import 'package:today/database/database_provider.dart';
+import 'package:today/screens/calender_page.dart';
 import 'package:today/utils/custom_calendar.dart';
 import '../blocs/note/note.dart';
 import '../models/models.dart';
 
-class FormWidget extends StatefulWidget {
+class FormPage extends StatefulWidget {
   static const routeName = '/form_widget';
   final bool isCalendarPage;
   final Note initialData;
 
-  const FormWidget({
+  const FormPage({
     Key? key,
     this.isCalendarPage = false,
     required this.initialData,
   }) : super(key: key);
 
   @override
-  _FormWidgetState createState() => _FormWidgetState();
+  _FormPageState createState() => _FormPageState();
 }
 
-class _FormWidgetState extends State<FormWidget> {
+class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
   late Note note;
   int noteColorIndex = 0;
@@ -47,8 +48,10 @@ class _FormWidgetState extends State<FormWidget> {
   @override
   void dispose() {
     super.dispose();
+
     titleController.dispose();
     subTitleController.dispose();
+    print("formpage dispose");
   }
 
   List<String> months = [

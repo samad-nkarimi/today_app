@@ -65,7 +65,7 @@ class DatabaseProvider {
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       } else if (result == 1) {
-        print(note.props);
+        // print(note.props);
         await deleteNote(note);
       }
     }
@@ -151,7 +151,7 @@ class DatabaseProvider {
 
         return note;
       });
-      print("notes: $notesList");
+      // print("notes: $notesList");
       notes.setAllNotes(notesList);
     } catch (e) {
       print(e);

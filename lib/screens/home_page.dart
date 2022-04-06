@@ -12,7 +12,7 @@ import 'package:today/size/short_methods.dart';
 import 'package:today/utils/date_converter.dart';
 import 'package:today/widgets/add_note_button_widget.dart';
 import 'package:today/widgets/floating_button_widget.dart';
-import 'package:today/widgets/form_widget.dart';
+import 'package:today/screens/form_page.dart';
 import 'package:today/widgets/hour_widget.dart';
 import 'package:today/widgets/remaining_percent_widget.dart';
 import 'package:today/widgets/today_info_widget.dart';
@@ -284,7 +284,7 @@ class _HomePageState extends State<HomePage> {
   Widget addNoteWidgetButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, FormWidget.routeName);
+        Navigator.pushNamed(context, FormPage.routeName);
       },
       child: AddNoteButton(context: context),
     );
