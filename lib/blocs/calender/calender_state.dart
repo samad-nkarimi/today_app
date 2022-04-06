@@ -13,7 +13,7 @@ class InitialCalenderState extends CalenderState {
 
   InitialCalenderState(this.dateDetails) : super(dateDetails);
   @override
-  List<Object?> get props => [dateDetails];
+  List<Object?> get props => [dateDetails, DateTime.now().second];
 }
 
 class MonthAdequaciesCalenderState extends CalenderState {

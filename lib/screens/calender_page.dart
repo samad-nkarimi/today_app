@@ -25,7 +25,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget addNoteButtonWidget() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) =>

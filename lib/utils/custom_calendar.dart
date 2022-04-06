@@ -37,6 +37,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
       keepPage: false,
       viewportFraction: 1,
     );
+    print("custom calendar");
   }
 
   List<String> months = [
@@ -67,6 +68,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
 
           builder: (context, state) {
         if (state is InitialCalenderState) {
+          print("initial state");
           _pageController = PageController(
             // initialPage: initialPage + 600,
             initialPage: 600,
@@ -119,7 +121,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     // BlocProvider.of<CalenderBloc>(context)
                     //     .add(CalendarScrolledCalenderEvent(index));
 
-                    // print("item index: $itemIndex");
+                    print("item index: $itemIndex");
                     // print("index: $index");
 
                     // getAdequaciesList(index).then((value) {
@@ -243,7 +245,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
       rowCount = 6;
     }
     if (startDay == 6 && month == 11 && isFullYear) rowCount = 6;
-    print("rowCount $rowCount , endDay $endDay , isFullYear $isFullYear");
+    // print("rowCount $rowCount , endDay $endDay , isFullYear $isFullYear");
     int correction = 0;
     bool isHoliday = false;
     for (int row = 1; row <= rowCount; row++) {

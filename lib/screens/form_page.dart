@@ -4,10 +4,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:today/blocs/blocs.dart';
-import 'package:today/database/database_provider.dart';
+import 'package:today/services/database_provider.dart';
 import 'package:today/screens/calender_page.dart';
 import 'package:today/utils/custom_calendar.dart';
 import '../blocs/note/note.dart';
@@ -69,6 +70,13 @@ class _FormPageState extends State<FormPage> {
     "اسفند"
   ];
 
+  Future<bool> _onWillPop() {
+    print("onWillPop");
+    BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
+    Navigator.pushReplacementNamed(context, CalendarPage.routeName);
+    return Future.delayed(Duration.zero, () => true);
+  }
+
   @override
   Widget build(BuildContext context) {
     // print("what day: ${widget.isCalendarPage}");
@@ -76,237 +84,241 @@ class _FormPageState extends State<FormPage> {
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
         return SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: AppBar(
-                  title: const Text(
-                    "یادداشت",
-                    style: TextStyle(
-                      fontFamily: "Negar",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+          child: WillPopScope(
+            onWillPop: _onWillPop,
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: AppBar(
+                    title: const Text(
+                      "یادداشت",
+                      style: TextStyle(
+                        fontFamily: "Negar",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: IconButton(
+                          onPressed: _clearNoteDitails,
+                          icon: const Icon(Icons.clear_rounded),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                          onPressed: _confirmNote,
+                          icon: const Icon(Icons.done_rounded),
+                        ),
+                      ),
+                    ],
                   ),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: IconButton(
-                        onPressed: _clearNoteDitails,
-                        icon: const Icon(Icons.clear_rounded),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton(
-                        onPressed: _confirmNote,
-                        icon: const Icon(Icons.done_rounded),
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: 90,
-                      color: Colors.grey.withOpacity(0.1),
-                      width: double.infinity,
-                      alignment: Alignment.centerLeft,
-                      child: FutureBuilder<Notes>(
-                        future: DatabaseProvider.historyNotes(),
-                        builder: (context, ss) {
-                          print(ss.connectionState);
+              body: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 90,
+                        color: Colors.grey.withOpacity(0.1),
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        child: FutureBuilder<Notes>(
+                          future: DatabaseProvider.historyNotes(),
+                          builder: (context, ss) {
+                            print(ss.connectionState);
 
-                          if (ss.connectionState == ConnectionState.done) {
-                            int length = 0;
-                            List<Note> notes = [];
-                            if (ss.hasData) {
-                              notes = ss.data!.notesList;
-                              length = notes.length;
-                            }
-                            return ListView(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, bottom: 5),
-                              children: [
-                                for (int i = 0; i < length; i++)
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        titleController.text = notes[i].title;
-                                        subTitleController.text =
-                                            notes[i].subTitle;
-                                        noteColorIndex = notes[i].labelColor;
-                                        print(noteColorIndex);
-                                        print(notes[i].title);
-                                        print(notes[i].subTitle);
-                                      });
-                                    },
-                                    child: Card(
-                                      elevation: 1,
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                            if (ss.connectionState == ConnectionState.done) {
+                              int length = 0;
+                              List<Note> notes = [];
+                              if (ss.hasData) {
+                                notes = ss.data!.notesList;
+                                length = notes.length;
+                              }
+                              return ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, bottom: 5),
+                                children: [
+                                  for (int i = 0; i < length; i++)
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          titleController.text = notes[i].title;
+                                          subTitleController.text =
+                                              notes[i].subTitle;
+                                          noteColorIndex = notes[i].labelColor;
+                                          print(noteColorIndex);
+                                          print(notes[i].title);
+                                          print(notes[i].subTitle);
+                                        });
+                                      },
+                                      child: Card(
+                                        elevation: 1,
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(5),
+                                          width: 80,
+                                          height: 80,
+                                          alignment: Alignment.center,
+                                          child: Text(notes[i].title),
+                                        ),
                                       ),
-                                      child: Container(
-                                        margin: const EdgeInsets.all(5),
-                                        width: 80,
-                                        height: 80,
-                                        alignment: Alignment.center,
-                                        child: Text(notes[i].title),
-                                      ),
-                                    ),
-                                  )
-                              ],
-                            );
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 5.0),
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
-                          // initialValue: note.title,
-                          controller: titleController,
-                          // autofocus: true,
-                          maxLines: 1,
-                          textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
-                            labelText: "عنوان",
-                            labelStyle: TextStyle(fontFamily: "Negar"),
-
-                            // border: const OutlineInputBorder(
-                            //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                            // ),
-                            // label: const Text("عنوان", style: TextStyle(fontFamily: "ANegar")),
-                          ),
-                          validator: (title) {
-                            note.setTitle(title!);
-                            if (title == null || title.isEmpty) {
-                              return "please enter some text!";
+                                    )
+                                ],
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
                             }
-                            return null;
                           },
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 5.0),
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextFormField(
-                          // initialValue: note.subTitle,
-                          controller: subTitleController,
-                          maxLines: 4,
-                          minLines: 1,
-                          textInputAction: TextInputAction.done,
-                          decoration: const InputDecoration(
-                            labelText: "متن یادداشت",
-                            labelStyle: TextStyle(fontFamily: "Negar"),
-                            // border:  OutlineInputBorder(
-                            //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                            // ),
-                            // label:  Text("متن یادداشت", style: TextStyle(fontFamily: "ANegar")),
-                            // filled: true,
-                            // fillColor: Colors.grey,
-                            // hintText: "salam",
-                            // helperText: "hey",
-                            // focusColor: Colors.blue.withOpacity(0.5),
-                          ),
-                          validator: (subTitle) {
-                            note.setSubTitle(subTitle!);
-                            // if (subTitle == null || subTitle.isEmpty) {
-                            //   return "please enter some text!";
-                            // }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                    // if (widget.isCalendarPage)
-                    //   CupertinoDatePicker(
-                    //     minimumDate: DateTime.now(),
-                    //     minuteInterval: 1,
-                    //     mode: CupertinoDatePickerMode.date,
-                    //     // initialDateTime: DateTime.now(),
-                    //     onDateTimeChanged: (_) {},
-                    //   ),
-                    if (widget.isCalendarPage)
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                BlocProvider.of<CalenderBloc>(context)
-                                    .add(InitialCalenderEvent());
-                                showGeneralDialog<String>(
-                                  barrierLabel: "label",
-                                  barrierDismissible: true,
-                                  barrierColor: Colors.black54,
-                                  transitionDuration:
-                                      const Duration(milliseconds: 300),
-                                  context: context,
-                                  pageBuilder: (context, anim1, anim2) =>
-                                      customDialog(context),
+                            horizontal: 20.0, vertical: 5.0),
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                            // initialValue: note.title,
+                            controller: titleController,
+                            // autofocus: true,
+                            maxLines: 1,
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                              labelText: "عنوان",
+                              labelStyle: TextStyle(fontFamily: "Negar"),
 
-                                  // transitionBuilder:
-                                  //     (context, anim1, anim2, child) =>
-                                  //         ScaleTransition(
-                                  //   scale: Tween(begin: 0.0, end: 1.0)
-                                  //       .animate(anim1),
-                                  //   child: child,
-                                  // ),
-                                ).then((value) => print(value));
-                              },
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.black12),
-                              child: Text(
-                                selectedDate,
-                                textAlign: TextAlign.center,
-                              ),
+                              // border: const OutlineInputBorder(
+                              //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                              // ),
+                              // label: const Text("عنوان", style: TextStyle(fontFamily: "ANegar")),
                             ),
-                            const Text("تاریخ"),
+                            validator: (title) {
+                              note.setTitle(title!);
+                              if (title == null || title.isEmpty) {
+                                return "please enter some text!";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 5.0),
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                            // initialValue: note.subTitle,
+                            controller: subTitleController,
+                            maxLines: 4,
+                            minLines: 1,
+                            textInputAction: TextInputAction.done,
+                            decoration: const InputDecoration(
+                              labelText: "متن یادداشت",
+                              labelStyle: TextStyle(fontFamily: "Negar"),
+                              // border:  OutlineInputBorder(
+                              //   borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                              // ),
+                              // label:  Text("متن یادداشت", style: TextStyle(fontFamily: "ANegar")),
+                              // filled: true,
+                              // fillColor: Colors.grey,
+                              // hintText: "salam",
+                              // helperText: "hey",
+                              // focusColor: Colors.blue.withOpacity(0.5),
+                            ),
+                            validator: (subTitle) {
+                              note.setSubTitle(subTitle!);
+                              // if (subTitle == null || subTitle.isEmpty) {
+                              //   return "please enter some text!";
+                              // }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      // if (widget.isCalendarPage)
+                      //   CupertinoDatePicker(
+                      //     minimumDate: DateTime.now(),
+                      //     minuteInterval: 1,
+                      //     mode: CupertinoDatePickerMode.date,
+                      //     // initialDateTime: DateTime.now(),
+                      //     onDateTimeChanged: (_) {},
+                      //   ),
+                      if (widget.isCalendarPage)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  BlocProvider.of<CalenderBloc>(context)
+                                      .add(InitialCalenderEvent());
+                                  showGeneralDialog<String>(
+                                    barrierLabel: "label",
+                                    barrierDismissible: true,
+                                    barrierColor: Colors.black54,
+                                    transitionDuration:
+                                        const Duration(milliseconds: 300),
+                                    context: context,
+                                    pageBuilder: (context, anim1, anim2) =>
+                                        customDialog(context),
+
+                                    // transitionBuilder:
+                                    //     (context, anim1, anim2, child) =>
+                                    //         ScaleTransition(
+                                    //   scale: Tween(begin: 0.0, end: 1.0)
+                                    //       .animate(anim1),
+                                    //   child: child,
+                                    // ),
+                                  ).then((value) => print(value));
+                                },
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.black12),
+                                child: Text(
+                                  selectedDate,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const Text("تاریخ"),
+                            ],
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (int i = 0; i < 6; i++) coloredItem(i),
                           ],
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for (int i = 0; i < 6; i++) coloredItem(i),
-                        ],
+                      Container(
+                        width: double.infinity,
+                        height: 40,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                          onPressed: _confirmNote,
+                          child: const Text("ثبت"),
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        onPressed: _confirmNote,
-                        child: const Text("ثبت"),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -459,7 +471,9 @@ class _FormPageState extends State<FormPage> {
 
   void _confirmNote() {
     if (_formKey.currentState!.validate()) {
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      BlocProvider.of<CalenderBloc>(context).add(InitialCalenderEvent());
+      Navigator.pushReplacementNamed(context, CalendarPage.routeName);
 
       // ScaffoldMessenger.of(context).showSnackBar(
       //   const SnackBar(content: Text("done!")),

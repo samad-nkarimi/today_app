@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:today/models/date_details.dart';
 import 'package:today/screens/form_page.dart';
+import 'package:today/services/date_provider.dart';
 import './blocs/blocs.dart';
 import 'screens/calender_page.dart';
-import './database/database_provider.dart';
+import './services/database_provider.dart';
 import './models/models.dart';
 import 'screens/mood_page.dart';
 import './size/size_config.dart';
@@ -16,11 +18,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dp = DatabaseProvider();
   Notes notes = await dp.init();
+  DateProvider dateProvider = DateProvider();
+  dateProvider.initialization();
+  DateDetails dt = dateProvider.dateDetails;
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => NoteBloc(dp, notes)),
-        BlocProvider(create: (context) => CalenderBloc()),
+        BlocProvider(create: (context) => CalenderBloc(dateProvider, dt)),
         BlocProvider(create: (context) => ThemeSettingBloc()),
       ],
       child: const MyApp(),
