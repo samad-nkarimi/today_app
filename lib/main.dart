@@ -16,11 +16,11 @@ import 'screens/home_page.dart';
 void main() async {
   // Bloc.observer = SimpleBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
-  final dp = DatabaseProvider();
-  Notes notes = await dp.init();
   DateProvider dateProvider = DateProvider();
   dateProvider.initialization();
   DateDetails dt = dateProvider.dateDetails;
+  final dp = DatabaseProvider(dt);
+  Notes notes = await dp.init();
   runApp(
     MultiBlocProvider(
       providers: [

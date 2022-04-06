@@ -139,6 +139,7 @@ class _CalendarPageState extends State<CalendarPage> {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 50),
         children: [
           for (var i = 0; i < adequacies.length; i++)
             Container(

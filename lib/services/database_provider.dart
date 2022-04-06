@@ -1,10 +1,12 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:today/models/date_details.dart';
 import '../models/models.dart';
 
 class DatabaseProvider {
   static late Database database;
-
+  final DateDetails dt;
+  DatabaseProvider(this.dt);
   Future<Notes> init() async {
     final databasePath = join(await getDatabasesPath(), 'notes_database.db');
     // await deleteDatabase(databasePath);
@@ -53,8 +55,8 @@ class DatabaseProvider {
     for (int i = 0; i < notes.notesList.length; i++) {
       Note note = notes.notesList[i];
       if (!note.isTodayNote) continue;
-      int result =
-          DateTime(1401, 0, 16).compareTo(DateTime(note.year, note.month, 16));
+      int result = DateTime(dt.year, dt.month, dt.day)
+          .compareTo(DateTime(note.year, note.month, note.day));
       print("result: $result");
       if (result == 0) {
         //this note is belong to today
