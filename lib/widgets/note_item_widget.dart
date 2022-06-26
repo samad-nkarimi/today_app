@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:today/widgets/form_widget.dart';
+import 'package:today/screens/form_page.dart';
 import '../blocs/blocs.dart';
 import '../models/models.dart';
 
@@ -28,20 +28,24 @@ class _NoteItemState extends State<NoteItem> {
     // print(labelColor.toString());
 
     return Container(
-      height: 80,
+      height: 90,
 
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(cornerSize),
         // border: Border.all(width: 1, color: Colors.black),
         color: backColor,
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 1.0),
+      margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 1.0),
 
       // padding: const EdgeInsets.only(right: 8.0, left: 14.0),
       child: Dismissible(
         key: Key(widget.note.getId.toString()),
         confirmDismiss: (direction) async {
           print("confirm");
+          //just today notes could be done or undo
+          if (widget.note.isTodayNote) {
+            return false;
+          }
 
           if (direction == DismissDirection.endToStart) {
             // remove the note
@@ -104,8 +108,9 @@ class _NoteItemState extends State<NoteItem> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(snapshot.data! ? "undo" : "done",
-                          style: const TextStyle(color: Colors.white)),
+                      if (!widget.note.isTodayNote)
+                        Text(snapshot.data! ? "undo" : "done",
+                            style: const TextStyle(color: Colors.white)),
                       const Text(""),
                     ],
                   ),
@@ -124,27 +129,37 @@ class _NoteItemState extends State<NoteItem> {
   Widget _noteContentWidget() {
     return GestureDetector(
       onTap: () {
-        // copied from home page
-        showModalBottomSheet(
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) {
+              return FormPage(
+                initialData: widget.note,
+              );
+            },
           ),
-          context: context,
-          builder: (context) {
-            return Container(
-              // height: 300,
-              color: Colors.transparent,
-              child: FormWidget(
-                initialTitle: widget.note.title,
-                initialSubtitle: widget.note.subTitle,
-              ),
-            );
-          },
         );
+        // // copied from home page
+        // showModalBottomSheet(
+        //   isScrollControlled: true,
+        //   shape: const RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(30.0),
+        //       topRight: Radius.circular(30.0),
+        //     ),
+        //   ),
+        //   context: context,
+        //   builder: (context) {
+        //     return Container(
+        //       // height: 300,
+        //       color: Colors.transparent,
+        //       child: FormWidget(
+        //         initialTitle: widget.note.title,
+        //         initialSubtitle: widget.note.subTitle,
+        //       ),
+        //     );
+        //   },
+        // );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),
@@ -152,14 +167,16 @@ class _NoteItemState extends State<NoteItem> {
         padding: const EdgeInsets.only(right: 16.0, left: 14.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(cornerSize),
-          border: Border.all(width: 1, color: Colors.white),
+          border: Border.all(width: 1, color: Colors.white38),
           gradient: RadialGradient(
             colors: [
-              widget.note.isDone ? Colors.green : Color(0xFFBC00AA),
-              Color(0xFF00C8CF),
+              widget.note.isDone
+                  ? Colors.green.shade700
+                  : const Color(0xFFBC00AA),
+              widget.note.isDone ? Colors.white : const Color(0xFF00C8CF),
             ],
             center: Alignment.topRight,
-            radius: 2.8, focalRadius: 2,
+            radius: 3.5, focalRadius: 3,
             // begin: Alignment.topRight,
             // end: Alignment.bottomLeft,
           ),
@@ -181,12 +198,19 @@ class _NoteItemState extends State<NoteItem> {
                   // if (!widget.note.isDone)
                   Flexible(
                     flex: 1,
-                    child: widget.note.isDone
-                        ? SvgPicture.asset(
-                            "assets/images/tick.svg",
-                            color: Colors.purple,
-                          )
-                        : SvgPicture.asset("assets/images/arrow.svg"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        widget.note.isDone
+                            ? SvgPicture.asset(
+                                "assets/images/tick.svg",
+                                color: Colors.purple,
+                              )
+                            : SvgPicture.asset("assets/images/arrow.svg"),
+                        Text(widget.note.dayName,
+                            style: const TextStyle(color: Colors.white)),
+                      ],
+                    ),
                   ),
                   // if (widget.note.isDone)
                   // SvgPicture.asset(
@@ -211,6 +235,7 @@ class _NoteItemState extends State<NoteItem> {
                             padding: const EdgeInsets.symmetric(vertical: 2.0),
                             child: Text(
                               widget.note.title,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
@@ -220,6 +245,8 @@ class _NoteItemState extends State<NoteItem> {
                           ),
                           Text(
                             widget.note.subTitle,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: Theme.of(context).textTheme.subtitle2,
                             textAlign: TextAlign.right,
                           ),
@@ -234,7 +261,7 @@ class _NoteItemState extends State<NoteItem> {
               alignment: Alignment.topCenter,
               child: SvgPicture.asset(
                 "assets/images/label_red.svg",
-                color: widget.note.labelColor,
+                color: widget.note.getColorFromIndex((widget.note.labelColor)),
               ),
             ),
           ],

@@ -15,7 +15,7 @@ class NewNoteIsAdded extends NoteState {
   const NewNoteIsAdded(Note note, Notes notes) : super(note, notes);
 
   @override
-  List<Object> get props => [note, notes];
+  List<Object> get props => [note, notes, notes.notesList.length];
 }
 
 //when app is started
@@ -37,9 +37,20 @@ class NotesUpdatedState extends NoteState {
   final Note note;
   final Notes notes;
   final bool isDone;
-  const NotesUpdatedState(this.note, this.notes, this.isDone)
+  final bool remove;
+  const NotesUpdatedState(this.note, this.notes, this.isDone,
+      {this.remove = false})
       : super(note, notes);
 
   @override
-  List<Object> get props => [note, notes, isDone];
+  List<Object> get props => [
+        note,
+        note.title,
+        note.subTitle,
+        notes,
+        notes.notesList,
+        notes.notesList.length,
+        isDone,
+        remove
+      ];
 }

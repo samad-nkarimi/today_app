@@ -18,6 +18,14 @@ class NewNoteWasSent extends NoteEvent {
       [note, note.id, note.title, note.subTitle, note.isDone, note.labelColor];
 }
 
+class NoteWasEdittedEvent extends NoteEvent {
+  const NoteWasEdittedEvent(Note note) : super(note);
+
+  @override
+  List<Object> get props =>
+      [note, note.id, note.title, note.subTitle, note.isDone, note.labelColor];
+}
+
 class NoteWasDoneEvent extends NoteEvent {
   const NoteWasDoneEvent(Note note) : super(note);
 

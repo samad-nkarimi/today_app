@@ -38,7 +38,7 @@ dependencies:
   store_redirect: ^2.0.0
 
   flutter_svg: ^0.23.0+1
-  jalali_calendar: ^1.0.4
+#  jalali_calendar: ^1.0.4
   table_calendar: ^3.0.3
   dotted_border: ^2.0.0+1
   sqflite: ^2.0.0+4
@@ -77,6 +77,9 @@ flutter:
   assets:
     - assets/images/sample_picture.jpg
     - assets/images/rose.jpg
+    - assets/images/light.jpg
+    - assets/images/earth.jpg
+    - assets/images/winter.jpg
     - assets/images/tick.svg
     - assets/images/label_red.svg
     - assets/images/label_green.svg
@@ -88,6 +91,9 @@ flutter:
     - assets/images/tick8_logo.png
     - assets/json/shamsi_holiday.json
     - assets/json/shamsi_adequacy.json
+    - assets/json/miladi_adequacy.json
+    - assets/json/ghamari_holiday.json
+    - assets/json/ghamari_adequacy.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

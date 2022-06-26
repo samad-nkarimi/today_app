@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:today/models/date_details.dart';
+import 'package:today/screens/form_page.dart';
+import 'package:today/services/date_provider.dart';
 import './blocs/blocs.dart';
 import 'screens/calender_page.dart';
-import './database/database_provider.dart';
+import './services/database_provider.dart';
 import './models/models.dart';
 import 'screens/mood_page.dart';
 import './size/size_config.dart';
@@ -15,29 +16,16 @@ import 'screens/home_page.dart';
 void main() async {
   // Bloc.observer = SimpleBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
-  final databasePath = join(await getDatabasesPath(), 'notes_database.db');
-  // await deleteDatabase(databasePath);
-  print(databasePath);
-  final database = await openDatabase(
-    databasePath,
-    onCreate: (db, version) async {
-      await db.execute(
-          'CREATE TABLE notes(id TEXT PRIMARY KEY, title TEXT, subtitle TEXT , istoday INTEGER)');
-    },
-    version: 1,
-  );
-  DatabaseProvider databaseProvider = DatabaseProvider(database);
-  Notes notes;
-  try {
-    notes = await databaseProvider.notes();
-  } catch (e) {
-    notes = Notes();
-  }
+  DateProvider dateProvider = DateProvider();
+  dateProvider.initialization();
+  DateDetails dt = dateProvider.dateDetails;
+  final dp = DatabaseProvider(dt);
+  Notes notes = await dp.init();
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NoteBloc(databaseProvider, notes)),
-        BlocProvider(create: (context) => CalenderBloc()),
+        BlocProvider(create: (context) => NoteBloc(dp, notes)),
+        BlocProvider(create: (context) => CalenderBloc(dateProvider, dt)),
         BlocProvider(create: (context) => ThemeSettingBloc()),
       ],
       child: const MyApp(),
@@ -69,6 +57,8 @@ class MyApp extends StatelessWidget {
                   "/": (context) => const HomePage(),
                   CalendarPage.routeName: (context) => const CalendarPage(),
                   MoodPage.routeName: (context) => const MoodPage(),
+                  FormPage.routeName: (context) =>
+                      FormPage(initialData: Note("", "")),
                 },
               );
             });

@@ -1,50 +1,60 @@
 // import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../database/database_provider.dart';
+import '../../services/database_provider.dart';
 import '../../models/models.dart';
 
 import './note_event.dart';
 import './note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  final DatabaseProvider _databaseProvider;
-  Notes _notes;
+  final DatabaseProvider databaseProvider;
+  Notes notes;
 
-  NoteBloc(this._databaseProvider, this._notes)
-      : super(StateInitialized(Note("", ""), _notes)) {
+  NoteBloc(this.databaseProvider, this.notes)
+      : super(StateInitialized(Note("", ""), notes)) {
     on<NewNoteWasSent>(
       (event, emit) async {
         // print(event.note.title);
 
-        _notes = state.notes;
-        _notes.addToNotes(event.note);
+        notes = state.notes;
+        notes.addToNotes(event.note);
         // print("isToday: ${event.note.isTodayNote}");
-        await _databaseProvider.insertNote(event.note);
+        await databaseProvider.insertNote(event.note);
         print("before: ${event.note.isTodayNote}");
-        emit(NewNoteIsAdded(event.note, _notes));
+        emit(NewNoteIsAdded(event.note, notes));
+      },
+    );
+
+    on<NoteWasEdittedEvent>(
+      (event, emit) async {
+        notes = state.notes;
+        notes.updateSingleNote(event.note);
+        await databaseProvider.insertNote(event.note); //will replace it
+        emit(NotesUpdatedState(event.note, notes, event.note.isDone));
       },
     );
 
     on<NoteWasRemovedEvent>(
       (event, emit) async {
-        _notes = state.notes;
-        _notes.removeFromNotes(event.note);
-        print("notes id: ${event.note.getId}");
-        await _databaseProvider.deleteNote(event.note);
-        emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
+        notes = state.notes;
+        print(notes.notesList.length);
+        notes.removeFromNotes(event.note);
+        print("${event.note.getId} was removed");
+        await databaseProvider.deleteNote(event.note);
+        print(notes.notesList.length);
+        emit(NotesUpdatedState(event.note, notes, event.note.isDone,
+            remove: true));
       },
     );
 
     on<NoteWasDoneEvent>(
       (event, emit) async {
-        _notes = state.notes;
-        _notes.updateSingleNote(event.note);
-        print("is done: ${!event.note.isDone}");
+        notes = state.notes;
         event.note.isDone = !event.note.isDone;
-        print("note id: ${event.note.getId}");
-        print(_notes);
-        // await _databaseProvider.deleteNote(event.note);
-        emit(NotesUpdatedState(event.note, _notes, event.note.isDone));
+        notes.updateSingleNote(event.note);
+        // print("is done: ${!event.note.isDone}");
+        await databaseProvider.insertNote(event.note); //will replace it
+        emit(NotesUpdatedState(event.note, notes, event.note.isDone));
       },
     );
   }
