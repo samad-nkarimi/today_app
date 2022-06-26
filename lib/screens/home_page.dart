@@ -87,109 +87,160 @@ class _HomePageState extends State<HomePage> {
             // color: Colors.blue.shade100,
             height: double.infinity,
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/earth.jpg"),
-                fit: BoxFit.cover,
-              ),
-              gradient: RadialGradient(
-                // begin: Alignment.topLeft,
-                // end: Alignment.bottomRight,
-                center: Alignment.topLeft,
-                radius: 1.4,
-                stops: [0.5, 1.0],
-                colors: [
-                  Color(0xFFB2AFFF),
-                  Color(0xFF883AD9),
-                  // Theme.of(context).scaffoldBackgroundColor,
-                  // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
-                ],
-              ),
+              color: Colors.white70,
+              // image: DecorationImage(
+              //   image: AssetImage("assets/images/earth.jpg"),
+              //   fit: BoxFit.cover,
+              // ),
+              // gradient: RadialGradient(
+              //   // begin: Alignment.topLeft,
+              //   // end: Alignment.bottomRight,
+              //   center: Alignment.topLeft,
+              //   radius: 1.4,
+              //   stops: [0.5, 1.0],
+              //   colors: [
+              //     Color(0xFFB2AFFF),
+              //     Color(0xFF883AD9),
+              //     // Theme.of(context).scaffoldBackgroundColor,
+              //     // Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),
+              //   ],
+              // ),
             ),
-            child: SingleChildScrollView(
-              child: Stack(
-                children: [
-                  BlocBuilder<NoteBloc, NoteState>(
-                    builder: (context, state) {
-                      List<Note> notes = state.notes.getTodayNotes;
-                      print("notes: $notes");
-                      print("state: $state");
-                      // if(state is NewNoteIsAdded)
-                      // noteCount++;
-                      return Container(
-                        // color: Theme.of(context).scaffoldBackgroundColor,
-                        padding: EdgeInsets.only(bottom: showBoardSize / 2),
-                        // decoration: BoxDecoration(
-                        //   // color: Colors.red,
-                        //   gradient: LinearGradient(
-                        //     begin: Alignment.topLeft,
-                        //     end: Alignment.bottomRight,
-                        //     stops: const [0.5, 1.0],
-                        //     colors: [
-                        //       // Colors.green,
-                        //       // Colors.red,
-                        //       Theme.of(context).scaffoldBackgroundColor,
-                        //       Theme.of(context)
-                        //           .scaffoldBackgroundColor
-                        //           .withOpacity(0.3),
-                        //     ],
-                        //   ),
-                        // ),
-
-                        child: Column(
-                          children: [
-                            topPicture(),
-                            // SizedBox(height: showBoardSize / 2 + 30),
-                            // if (notes.isEmpty) noNoteWidget(),
-                            // const SizedBox(height: 60),
-                            addNoteWidgetButton(),
-                            Container(
-                              // height: 400,
-                              child: ListView(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                physics: const NeverScrollableScrollPhysics(),
-                                reverse: true,
-                                children: [
-                                  for (int i = 0; i < notes.length; i++)
-                                    NoteItem(notes[i]),
-                                ],
-                              ),
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  snap: false,
+                  expandedHeight: 320,
+                  excludeHeaderSemantics: true,
+                  primary: true,
+                  collapsedHeight: 100,
+                  backgroundColor: Colors.white,
+                  automaticallyImplyLeading: false,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    // background: ,
+                    // centerTitle: true,
+                    // stretchModes: const [
+                    //   StretchMode.zoomBackground,
+                    //   StretchMode.blurBackground,
+                    //   StretchMode.fadeTitle
+                    // ],
+                    // collapseMode: CollapseMode.pin,
+                    titlePadding: EdgeInsets.zero,
+                    title: Container(
+                      height: 320,
+                      width: 360,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Container(
+                        height: 320,
+                        width: 360,
+                        padding: const EdgeInsets.only(
+                            // top: 100,
+                            // top: topPictureHeight - showBoardSize / 2,
                             ),
-
-                            // Container(
-                            //   margin: const EdgeInsets.symmetric(
-                            //       horizontal: 30, vertical: 30),
-                            //   height: 150,
-                            //   width: double.infinity,
-                            //   child: const Text(""),
-                            //   color: Colors.grey,
-                            // )
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  offset: Offset(2, 2))
+                            ]),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            const RemaningPercentWisget(),
+                            TodayInfoWidget(showBoardSize: showBoardSize),
+                            // const HourWidget(),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 100,
-                      // top: topPictureHeight - showBoardSize / 2,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const RemaningPercentWisget(),
-                        TodayInfoWidget(showBoardSize: showBoardSize),
-                        const HourWidget(),
-                      ],
+                      ),
                     ),
                   ),
-                  // Positioned(
-                  //   right: 0,
-                  //   top: 0,
-                  //   child: menuButton(),
-                  // ),
-                ],
+                ),
+
+                // const CustomAppBar(title: "the bests"),
+              ],
+              body: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    BlocBuilder<NoteBloc, NoteState>(
+                      builder: (context, state) {
+                        List<Note> notes = state.notes.getTodayNotes;
+                        print("notes: $notes");
+                        print("state: $state");
+                        // if(state is NewNoteIsAdded)
+                        // noteCount++;
+                        return Container(
+                          // color: Theme.of(context).scaffoldBackgroundColor,
+                          padding: EdgeInsets.only(bottom: showBoardSize / 2),
+                          // decoration: BoxDecoration(
+                          //   // color: Colors.red,
+                          //   gradient: LinearGradient(
+                          //     begin: Alignment.topLeft,
+                          //     end: Alignment.bottomRight,
+                          //     stops: const [0.5, 1.0],
+                          //     colors: [
+                          //       // Colors.green,
+                          //       // Colors.red,
+                          //       Theme.of(context).scaffoldBackgroundColor,
+                          //       Theme.of(context)
+                          //           .scaffoldBackgroundColor
+                          //           .withOpacity(0.3),
+                          //     ],
+                          //   ),
+                          // ),
+
+                          child: Column(
+                            children: [
+                              // topPicture(),
+                              // SizedBox(height: showBoardSize / 2 + 30),
+                              // if (notes.isEmpty) noNoteWidget(),
+                              // const SizedBox(height: 60),
+                              addNoteWidgetButton(),
+                              Container(
+                                // height: 400,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  reverse: true,
+                                  children: [
+                                    for (int i = 0; i < notes.length; i++)
+                                      NoteItem(notes[i]),
+                                  ],
+                                ),
+                              ),
+
+                              // Container(
+                              //   margin: const EdgeInsets.symmetric(
+                              //       horizontal: 30, vertical: 30),
+                              //   height: 150,
+                              //   width: double.infinity,
+                              //   child: const Text(""),
+                              //   color: Colors.grey,
+                              // )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+
+                    // Positioned(
+                    //   right: 0,
+                    //   top: 0,
+                    //   child: menuButton(),
+                    // ),
+                  ],
+                ),
               ),
             ),
           );
