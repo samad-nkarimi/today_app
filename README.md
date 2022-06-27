@@ -1,5 +1,9 @@
 # today_app
 
+<img src="shot/1.jpg" width="300"> | <img src="shot/2.jpg" width="300"> | <img src="shot/3.jpg" width="300">
+<img src="shot/4.jpg" width="300"> | <img src="shot/5.jpg" width="300"> | <img src="shot/6.jpg" width="300">
+
+
 A new Flutter project.
 
 ## Getting Started
